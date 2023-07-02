@@ -11,6 +11,6 @@ const initialState = {
 };
 export const profileReducer = () => {
     return (
-        <div>Homa</div>
+        <div></div>
     )
 }
