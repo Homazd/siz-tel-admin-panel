@@ -28,17 +28,7 @@ const Dashboard: React.FC = () => {
       >
         <div className="space-align-block">
           <Space align="center">
-            <Button
-              type="text"
-              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-              onClick={() => setCollapsed(!collapsed)}
-              style={{
-                fontSize: "16px",
-                width: 64,
-                height: 64,
-              }}
-            />
-            <h1>Welcome!</h1>
+            <h1>Welcome to Admin Panel!</h1>
           </Space>
         </div>
       </Header>
@@ -48,6 +38,8 @@ const Dashboard: React.FC = () => {
           collapsible
           collapsed={collapsed}
           style={{ backgroundColor: "#5F8D4E" }}
+          onCollapse={(value) => setCollapsed(value)}
+          reverseArrow={false}
         >
           <div className="demo-logo-vertical" />
           <Menu
@@ -72,12 +64,23 @@ const Dashboard: React.FC = () => {
               },
             ]}
           />
+          <Button
+            type="text"
+            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+            onClick={() => setCollapsed(!collapsed)}
+            style={{
+              fontSize: "16px",
+              color: "white",
+              width: 64,
+              height: 64,
+            }}
+          />
         </Sider>
         <Content
           style={{
-            margin: "10px 10px",
+            // margin: "10px 10px",
             padding: 24,
-            minHeight: 1300,
+            minHeight: 1000,
             background: " #E5D9B6",
           }}
         >
