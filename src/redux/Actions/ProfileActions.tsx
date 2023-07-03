@@ -1,15 +1,19 @@
-import types from "../Types/ProfileTypes";
+import {
+  FETCH_PROFILES_BEGIN,
+  FETCH_PROFILES_SUCCESS,
+  FETCH_PROFILES_FAILURE,
+} from "../Types/ProfileTypes";
 
 export const fetchProfilesBegin = () => ({
-    type: FETCH_Profiles_BEGIN
+    type: FETCH_PROFILES_BEGIN
   });
   
   export const fetchProfilesSuccess = Profiles => ({
-    type: FETCH_Profiles_SUCCESS,
+    type: FETCH_PROFILES_SUCCESS,
     payload: { Profiles }
   });
   
   export const fetchProfilesFailure = error => ({
-    type: FETCH_Profiles_FAILURE,
+    type:  FETCH_PROFILES_FAILURE,
     payload: { error }
   });
