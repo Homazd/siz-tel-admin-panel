@@ -1,14 +1,19 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+interface Profile {
+  id: number;
+  IMSI: string;
+  connected: boolean;
+}
+interface ProfileResponse {
+  profiles: Profile[];
+}
 export const apiSlice = createApi({
   reducerPath: "api",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000" }),
-  tagTypes: ["Profile"],
+  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3500" }),
   endpoints: (builder) => ({
-    getProfiles: builder.query({
+    getProfiles: builder.query<ProfileResponse, void>({
       query: () => "/profiles",
-      transformResponse: (res: any) => res.reverse(),
-      providesTags: ["Profile"],
     }),
     addProfile: builder.mutation({
       query: (profile) => ({
@@ -16,7 +21,6 @@ export const apiSlice = createApi({
         method: "POST",
         body: profile,
       }),
-      invalidatesTags: ["Profile"],
     }),
     updateProfile: builder.mutation({
       query: (profile) => ({
@@ -24,7 +28,6 @@ export const apiSlice = createApi({
         method: "PATCH",
         body: profile,
       }),
-      invalidatesTags: ["Profile"],
     }),
     deleteProfile: builder.mutation({
       query: ({ id }) => ({
@@ -32,11 +35,11 @@ export const apiSlice = createApi({
         method: "DELETE",
         body: id,
       }),
-      invalidatesTags: ["Profile"],
     }),
   }),
 });
 
+// Export Hooks for usage in functional components
 export const {
   useGetProfilesQuery,
   useAddProfileMutation,

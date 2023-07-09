@@ -1,8 +1,8 @@
 import { Routes, Route } from "react-router-dom";
 import LoginPage from "./components/Login/Login";
 import Dashboard from "./components/Dashboard/Dashboard";
-import { useGetTodosQuery } from "../src/services/api";
-import { useEffect } from "react";
+// import { useEffect } from "react";
+// import { useDispatch } from "react-redux";
 
 function App() {
   // const dispatch = useDispatch();
@@ -20,18 +20,13 @@ function App() {
   // if (status === "failed") {
   //   return <div>{error}</div>;
   // }
-  const {
-    data: todos,
-    isLoading,
-    isSuccess,
-    isError,
-    error,
-  } = useGetTodosQuery();
 
-  useEffect(() => {
-    console.log("data is:", todos);
-    console.log(isLoading, isSuccess, isError, error);
-  }, []);
+
+  // useEffect(() => {
+  //   console.log("data is:", status);
+  //   console.log(status, users, error);
+  // }, []);
+
   return (
     <>
       <Routes>
