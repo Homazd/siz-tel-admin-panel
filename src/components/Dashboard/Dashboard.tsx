@@ -7,12 +7,36 @@ import {
   VideoCameraOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, Button, Space } from "antd";
+import {
+  useGetProfilesQuery,
+  useAddProfileMutation,
+  useDeleteProfileMutation,
+  useUpdateProfileMutation,
+} from "../../services/api";
 
 const { Header, Sider, Content } = Layout;
 
 const Dashboard: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const {
+    data: profiles,
+    isLoading,
+    isSuccess,
+    isError,
+    error,
+  } = useGetProfilesQuery();
+  const [addProfile] = useAddProfileMutation();
+  const [updateProfile] = useUpdateProfileMutation();
+  const [deleteProfile] = useDeleteProfileMutation();
 
+  let content;
+  if (isLoading) {
+    content = <p>Loading ...</p>;
+  } else if (isSuccess) {
+    content = JSON.stringify(profiles);
+  } else if (isError) {
+    content = <p>{error}</p>;
+  }
   return (
     <Layout>
       <Header
@@ -85,6 +109,7 @@ const Dashboard: React.FC = () => {
           }}
         >
           Search
+          {content}
         </Content>
       </Layout>
     </Layout>
