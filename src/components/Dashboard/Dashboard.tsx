@@ -6,6 +6,10 @@ import {
   UserOutlined,
   VideoCameraOutlined,
 } from "@ant-design/icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faUpload } from '@fortawesome/free-solid-svg-icons'
+
+
 import { Layout, Menu, Button, Space } from "antd";
 import {
   useGetProfilesQuery,
@@ -18,6 +22,7 @@ const { Header, Sider, Content } = Layout;
 
 const Dashboard: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const [newProfile, setNewProfile] = useState("");
   const {
     data: profiles,
     isLoading,
@@ -29,14 +34,58 @@ const Dashboard: React.FC = () => {
   const [updateProfile] = useUpdateProfileMutation();
   const [deleteProfile] = useDeleteProfileMutation();
 
+  const handleSubmit = (e : any) => {
+    e.preventDefault();
+    addProfile({ id: 2, IMSI: 3445545, connected: false})
+    setNewProfile("");
+  };
+
+  const newItemSection = (
+    <form onSubmit={handleSubmit}>
+      <label htmlFor="new-profile">Enter a new profile item</label>
+      <div className="new-profile">
+        <input
+          type="text"
+          id="new-profile"
+          value={newProfile}
+          onChange={(e) => setNewProfile(e.target.value)}
+          placeholder="Enter new profile"
+        />
+      </div>
+      <button className="submit">
+        <FontAwesomeIcon icon={faUpload} />
+      </button>
+    </form>
+  );
+
   let content;
   if (isLoading) {
     content = <p>Loading ...</p>;
   } else if (isSuccess) {
-    content = JSON.stringify(profiles);
+    console.log("profiles is: ", profiles);
+    
+    content = profiles.map(profile => { //JSON.stringify(todos)
+      return (
+          <article key={profile.id}>
+              <div className="profile">
+                  <input
+                      type="checkbox"
+                      checked={profile.completed}
+                      id={profile.id}
+                      onChange={() => updateProfile({ ...profile, connected: !profile.connected })}
+                  />
+                  <label htmlFor={profile.id}>{profile.IMSI}</label>
+              </div>
+              <button className="trash" onClick={() => deleteProfile({ id: profile.id })}>
+                  <FontAwesomeIcon icon={faTrash} />
+              </button>
+          </article>
+      )
+    })
   } else if (isError) {
     content = <p>{error}</p>;
   }
+
   return (
     <Layout>
       <Header
@@ -109,7 +158,11 @@ const Dashboard: React.FC = () => {
           }}
         >
           Search
-          {content}
+          <main>
+            <h1>Profile List</h1>
+            {newItemSection}
+            {content}
+          </main>
         </Content>
       </Layout>
     </Layout>
