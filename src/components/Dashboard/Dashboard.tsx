@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -34,6 +34,11 @@ const Dashboard: React.FC = () => {
   const [updateProfile] = useUpdateProfileMutation();
   const [deleteProfile] = useDeleteProfileMutation();
 
+
+  useEffect(() => {
+console.log("profile is:", profiles);
+
+  }, [])
   const handleSubmit = (e : any) => {
     e.preventDefault();
     addProfile({ id: 2, IMSI: 3445545, connected: false})
@@ -61,8 +66,10 @@ const Dashboard: React.FC = () => {
   let content;
   if (isLoading) {
     content = <p>Loading ...</p>;
-  } else if (isSuccess) {
-    console.log("profiles is: ", profiles);
+  } else if (isSuccess) { 
+
+           
+    console.log("profiles is: ", profiles); 
     
     content = profiles.map(profile => { //JSON.stringify(todos)
       return (

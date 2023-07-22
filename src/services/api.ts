@@ -10,7 +10,7 @@ interface ProfileResponse {
 }
 export const apiSlice = createApi({
   reducerPath: "api",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3500" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000" }),
   endpoints: (builder) => ({
     getProfiles: builder.query<ProfileResponse, void>({
       query: () => "/profiles",
