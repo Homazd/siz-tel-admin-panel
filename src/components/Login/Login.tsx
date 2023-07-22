@@ -1,4 +1,6 @@
-import React, { useState, FormEvent } from "react";
+import React, { useState } from "react";
+import axios from "axios";
+
 // Mantine Components
 import {
   Paper,
@@ -8,8 +10,6 @@ import {
   Checkbox,
   Button,
   Title,
-  Text,
-  Anchor,
   rem,
 } from "@mantine/core";
 
@@ -42,11 +42,42 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
+interface Credentials {
+  email: string;
+  password: string;
+}
+
 export default function LoginPage() {
-  // const [username, setUsername] = useState("");
-  // const [password, setPassword] = useState("");
+  const [credentials, setCredentials] = useState<Credentials>({
+    email: "",
+    password: "",
+  });
+
   const { classes } = useStyles();
 
+  const handleInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    setCredentials({
+      ...credentials,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    try {
+      const response = await axios.post(
+        "http://example.com/api/login",
+        credentials
+      );
+      console.log(response.data);
+      // Handle successful login
+    } catch (error) {
+      console.error("error is", error);      
+      // Handle login error
+    }
+  };
   // const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
   //   setUsername(event.target.value);
   // };
@@ -84,25 +115,37 @@ export default function LoginPage() {
   return (
     <div className={classes.wrapper}>
       <Paper className={classes.form} radius={0} p={30}>
-        <Title order={2} className={classes.title} ta="center" mt="md" mb={50}>
-          Welcome back!
-        </Title>
+        <form onSubmit={handleSubmit}>
+          <div>
+            <Title
+              order={2}
+              className={classes.title}
+              ta="center"
+              mt="md"
+              mb={50}
+            >
+              Welcome back!
+            </Title>
 
-        <TextInput
-          label="Email address"
-          placeholder="hello@gmail.com"
-          size="md"
-        />
-        <PasswordInput
-          label="Password"
-          placeholder="Your password"
-          mt="md"
-          size="md"
-        />
-        <Checkbox label="Keep me logged in" mt="xl" size="md" />
-        <Button fullWidth mt="xl" size="md">
-          Login
-        </Button>
+            <TextInput
+              label="Email address"
+              placeholder="hello@gmail.com"
+              size="md"
+              onChange={handleInputChange}
+            />
+            <PasswordInput
+              label="Password"
+              placeholder="Your password"
+              mt="md"
+              size="md"
+              onChange={handleInputChange}
+            />
+            <Checkbox label="Keep me logged in" mt="xl" size="md" />
+          </div>
+          <Button type="submit" fullWidth mt="xl" size="md">
+            Login
+          </Button>
+        </form>
       </Paper>
     </div>
   );
