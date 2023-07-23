@@ -1,46 +1,19 @@
 import React, { useState } from "react";
 import axios from "axios";
-
 // Mantine Components
 import {
   Paper,
-  createStyles,
   TextInput,
   PasswordInput,
   Checkbox,
   Button,
   Title,
-  rem,
 } from "@mantine/core";
+import backImage from "../../images/background-admin.png";
+// Styles
+import { labelStyles, checkboxLabelStyle } from "./style.module";
 
 // import { useNavigate } from "react-router-dom";
-
-const useStyles = createStyles((theme) => ({
-  wrapper: {
-    minHeight: rem(900),
-    backgroundSize: "cover",
-    backgroundImage:
-      "url(https://images.unsplash.com/photo-1484242857719-4b9144542727?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1280&q=80)",
-  },
-
-  form: {
-    borderRight: `${rem(1)} solid ${
-      theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.colors.gray[3]
-    }`,
-    minHeight: rem(900),
-    maxWidth: rem(450),
-    paddingTop: rem(80),
-
-    [theme.fn.smallerThan("sm")]: {
-      maxWidth: "100%",
-    },
-  },
-
-  title: {
-    color: theme.colorScheme === "dark" ? theme.white : theme.black,
-    fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-  },
-}));
 
 interface Credentials {
   email: string;
@@ -52,8 +25,6 @@ export default function LoginPage() {
     email: "",
     password: "",
   });
-
-  const { classes } = useStyles();
 
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -72,9 +43,12 @@ export default function LoginPage() {
         credentials
       );
       console.log(response.data);
+      const { access_token } = response.data;
+      localStorage.setItem("access_token", access_token);
+
       // Handle successful login
     } catch (error) {
-      console.error("error is", error);      
+      console.error("error is", error);
       // Handle login error
     }
   };
@@ -113,36 +87,58 @@ export default function LoginPage() {
   // };
 
   return (
-    <div className={classes.wrapper}>
-      <Paper className={classes.form} radius={0} p={30}>
-        <form onSubmit={handleSubmit}>
-          <div>
+    <div
+      className="bg-cover min-h-full"
+      style={{ backgroundImage: `url(${backImage})` }}
+    >
+      <Paper className="p-[30px] rounded-none max-w-md min-h-screen">
+        <form onSubmit={handleSubmit} className="grid grid-cols-1">
+          <div className="">
             <Title
               order={2}
-              className={classes.title}
+              className="text-3xl font-bold text-center block"
               ta="center"
               mt="md"
               mb={50}
             >
               Welcome back!
             </Title>
-
             <TextInput
+              name="email"
               label="Email address"
               placeholder="hello@gmail.com"
               size="md"
               onChange={handleInputChange}
+              styles={{
+                label: labelStyles,
+              }}
             />
             <PasswordInput
+              name="password"
               label="Password"
               placeholder="Your password"
               mt="md"
               size="md"
               onChange={handleInputChange}
+              styles={{
+                label: labelStyles,
+              }}
             />
-            <Checkbox label="Keep me logged in" mt="xl" size="md" />
+            <Checkbox
+              label="Keep me logged in"
+              mt="xl"
+              size="md"
+              styles={{
+                label: checkboxLabelStyle,
+              }}
+            />
           </div>
-          <Button type="submit" fullWidth mt="xl" size="md">
+          <Button
+            type="submit"
+            className="w-full mt-14 bg-blue-600"
+            size="md"
+            onClick={() => console.log(credentials)}
+          >
             Login
           </Button>
         </form>

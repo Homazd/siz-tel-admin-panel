@@ -1,3 +1,14 @@
 {
-  "profiles": []
+  "profiles": [
+    {
+      "id": 2,
+      "IMSI": 3445545,
+      "connected": false
+    },
+    {
+      "id": 3,
+      "IMSI": 4545545,
+      "connected": true
+    }
+  ]
 }
