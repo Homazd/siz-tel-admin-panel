@@ -11,9 +11,11 @@ interface ProfileResponse {
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000" }),
+  tagTypes: ["Profiles"],
   endpoints: (builder) => ({
     getProfiles: builder.query<ProfileResponse, void>({
       query: () => "/profiles",
+      providesTags: ["Profiles"],
     }),
     addProfile: builder.mutation({
       query: (profile) => ({
@@ -21,6 +23,7 @@ export const apiSlice = createApi({
         method: "POST",
         body: profile,
       }),
+      invalidatesTags: ["Profiles"],
     }),
     updateProfile: builder.mutation({
       query: (profile) => ({
@@ -28,6 +31,7 @@ export const apiSlice = createApi({
         method: "PATCH",
         body: profile,
       }),
+      invalidatesTags: ["Profiles"],
     }),
     deleteProfile: builder.mutation({
       query: ({ id }) => ({
@@ -35,6 +39,7 @@ export const apiSlice = createApi({
         method: "DELETE",
         body: id,
       }),
+      invalidatesTags: ["Profiles"],
     }),
   }),
 });
