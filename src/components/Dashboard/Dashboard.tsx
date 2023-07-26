@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -19,11 +19,16 @@ import {
 
 const { Header, Sider, Content } = Layout;
 
+interface Profile {
+  id: string;
+  IMSI: string;
+  connected: boolean;
+}
 const Dashboard: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [newProfile, setNewProfile] = useState("");
   const {
-    data: profiles,
+    data: profiles = [],
     isLoading,
     isSuccess,
     isError,
@@ -38,12 +43,15 @@ const Dashboard: React.FC = () => {
   // }, []);
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    addProfile({ id: 2, IMSI: 3445545, connected: false });
+    addProfile(e.target["IMSI"]);
+    e.target.reset();
+    console.log("submit is:", e.target);
+
     setNewProfile("");
   };
 
   const newItemSection = (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={(e) => handleSubmit(e)}>
       <label htmlFor="new-profile">Enter a new profile item</label>
       <div className="new-profile">
         <input
@@ -51,10 +59,10 @@ const Dashboard: React.FC = () => {
           id="new-profile"
           value={newProfile}
           onChange={(e) => setNewProfile(e.target.value)}
-          placeholder="Enter new profile"
+          placeholder="Enter new IMSI ..."
         />
       </div>
-      <button className="submit">
+      <button type="submit">
         <FontAwesomeIcon icon={faUpload} />
       </button>
     </form>
@@ -66,14 +74,14 @@ const Dashboard: React.FC = () => {
   } else if (isSuccess) {
     console.log("profiles is: ", profiles);
 
-    content = profiles.map((profile) => {
+    content = profiles.map((profile: Profile) => {
       //JSON.stringify(todos)
       return (
         <article key={profile.id}>
           <div className="profile">
             <input
               type="checkbox"
-              checked={profile.completed}
+              checked={profile.connected}
               id={profile.id}
               onChange={() =>
                 updateProfile({ ...profile, connected: !profile.connected })
@@ -91,7 +99,7 @@ const Dashboard: React.FC = () => {
       );
     });
   } else if (isError) {
-    content = <p>{error}</p>;
+    content = <p>{error.status}</p>;
   }
 
   return (

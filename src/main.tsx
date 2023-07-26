@@ -5,12 +5,12 @@ import App from "./App";
 import { MantineProvider } from "@mantine/core";
 
 import "./index.css";
-import { ApiProvider } from "@reduxjs/toolkit/query/react";
-import { apiSlice } from "./services/api";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <ApiProvider api={apiSlice}>
+    <Provider store={store}>
       <Router>
         <MantineProvider
           // theme={{ colorScheme: "dark" }}
@@ -20,6 +20,6 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
           <App />
         </MantineProvider>
       </Router>
-    </ApiProvider>
+    </Provider>
   </React.StrictMode>
 );
