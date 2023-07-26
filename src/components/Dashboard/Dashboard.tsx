@@ -7,8 +7,7 @@ import {
   VideoCameraOutlined,
 } from "@ant-design/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faUpload } from '@fortawesome/free-solid-svg-icons'
-
+import { faTrash, faUpload } from "@fortawesome/free-solid-svg-icons";
 
 import { Layout, Menu, Button, Space } from "antd";
 import {
@@ -34,14 +33,12 @@ const Dashboard: React.FC = () => {
   const [updateProfile] = useUpdateProfileMutation();
   const [deleteProfile] = useDeleteProfileMutation();
 
-
-  useEffect(() => {
-console.log("profile is:", profiles);
-
-  }, [])
-  const handleSubmit = (e : any) => {
+  // useEffect(() => {
+  //   console.log("profile is:", profiles);
+  // }, []);
+  const handleSubmit = (e: any) => {
     e.preventDefault();
-    addProfile({ id: 2, IMSI: 3445545, connected: false})
+    addProfile({ id: 2, IMSI: 3445545, connected: false });
     setNewProfile("");
   };
 
@@ -66,29 +63,33 @@ console.log("profile is:", profiles);
   let content;
   if (isLoading) {
     content = <p>Loading ...</p>;
-  } else if (isSuccess) { 
+  } else if (isSuccess) {
+    console.log("profiles is: ", profiles);
 
-           
-    console.log("profiles is: ", profiles); 
-    
-    content = profiles.map(profile => { //JSON.stringify(todos)
+    content = profiles.map((profile) => {
+      //JSON.stringify(todos)
       return (
-          <article key={profile.id}>
-              <div className="profile">
-                  <input
-                      type="checkbox"
-                      checked={profile.completed}
-                      id={profile.id}
-                      onChange={() => updateProfile({ ...profile, connected: !profile.connected })}
-                  />
-                  <label htmlFor={profile.id}>{profile.IMSI}</label>
-              </div>
-              <button className="trash" onClick={() => deleteProfile({ id: profile.id })}>
-                  <FontAwesomeIcon icon={faTrash} />
-              </button>
-          </article>
-      )
-    })
+        <article key={profile.id}>
+          <div className="profile">
+            <input
+              type="checkbox"
+              checked={profile.completed}
+              id={profile.id}
+              onChange={() =>
+                updateProfile({ ...profile, connected: !profile.connected })
+              }
+            />
+            <label htmlFor={profile.id}>{profile.IMSI}</label>
+          </div>
+          <button
+            className="trash"
+            onClick={() => deleteProfile({ id: profile.id })}
+          >
+            <FontAwesomeIcon icon={faTrash} />
+          </button>
+        </article>
+      );
+    });
   } else if (isError) {
     content = <p>{error}</p>;
   }
