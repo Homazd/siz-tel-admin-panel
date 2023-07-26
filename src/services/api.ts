@@ -17,7 +17,7 @@ export const apiSlice = createApi({
       query: () => "/profiles",
       providesTags: ["Profiles"],
     }),
-    addProfile: builder.mutation({
+    addProfile: builder.mutation<Profile, Profile>({
       query: (IMSI) => ({
         url: "/profiles",
         method: "POST",
