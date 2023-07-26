@@ -8,6 +8,8 @@ import {
 } from "@ant-design/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faUpload } from "@fortawesome/free-solid-svg-icons";
+// Images
+import logoImage from "../../images/logo.png";
 
 import { Layout, Menu, Button, Space } from "antd";
 import {
@@ -51,7 +53,7 @@ const Dashboard: React.FC = () => {
   };
 
   const newItemSection = (
-    <form onSubmit={(e) => handleSubmit(e)}>
+    <form onSubmit={(e) => handleSubmit(e)} className=" border-2 border-white">
       <label htmlFor="new-profile">Enter a new profile item</label>
       <div className="new-profile">
         <input
@@ -62,8 +64,8 @@ const Dashboard: React.FC = () => {
           placeholder="Enter new IMSI ..."
         />
       </div>
-      <button type="submit">
-        <FontAwesomeIcon icon={faUpload} />
+      <button type="submit" className="border-2 border-white">
+        <FontAwesomeIcon icon={faUpload} style={{ color: "#fbfdf7" }} />{" "}
       </button>
     </form>
   );
@@ -77,7 +79,7 @@ const Dashboard: React.FC = () => {
     content = profiles.map((profile: Profile) => {
       //JSON.stringify(todos)
       return (
-        <article key={profile.id}>
+        <article key={profile.id} className=" border-2 border-white">
           <div className="profile">
             <input
               type="checkbox"
@@ -87,7 +89,9 @@ const Dashboard: React.FC = () => {
                 updateProfile({ ...profile, connected: !profile.connected })
               }
             />
-            <label htmlFor={profile.id}>{profile.IMSI}</label>
+            <label htmlFor={profile.id} className="text-white">
+              {profile.IMSI}
+            </label>
           </div>
           <button
             className="trash"
@@ -112,7 +116,7 @@ const Dashboard: React.FC = () => {
           height: 64,
           paddingInline: 50,
           lineHeight: "64px",
-          backgroundColor: "#A4BE7B",
+          backgroundColor: "#144272",
         }}
       >
         <div className="space-align-block">
@@ -126,13 +130,15 @@ const Dashboard: React.FC = () => {
           trigger={null}
           collapsible
           collapsed={collapsed}
-          style={{ backgroundColor: "#5F8D4E" }}
+          style={{ backgroundColor: "#2C74B3" }}
           onCollapse={(value) => setCollapsed(value)}
           reverseArrow={false}
         >
-          <div className="demo-logo-vertical" />
+          <div className="grid place-content-center h-24">
+            <img className="w-16" src={logoImage} alt="logo" />
+          </div>
           <Menu
-            style={{ backgroundColor: "#5F8D4E" }}
+            style={{ backgroundColor: "#2C74B3" }}
             mode="inline"
             defaultSelectedKeys={["1"]}
             items={[
@@ -170,12 +176,14 @@ const Dashboard: React.FC = () => {
             // margin: "10px 10px",
             padding: 24,
             minHeight: 1000,
-            background: " #E5D9B6",
+            background: "#0A2647",
+            margin: 0,
+            minWidth: "100%",
           }}
         >
-          Search
-          <main>
-            <h1>Profile List</h1>
+          <span className="text-white">Search</span>
+          <main className="m-0">
+            <h1 className="text-white">Profile List</h1>
             {newItemSection}
             {content}
           </main>
