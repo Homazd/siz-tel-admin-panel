@@ -145,18 +145,14 @@ const Dashboard: React.FC = () => {
               {
                 key: "1",
                 icon: <UserOutlined />,
-                label: "nav 1",
+                label: "Profiles",
               },
               {
                 key: "2",
-                icon: <VideoCameraOutlined />,
-                label: "nav 2",
+                icon: <UserOutlined />,
+                label: "Admin Info",
               },
-              {
-                key: "3",
-                icon: <UploadOutlined />,
-                label: "nav 3",
-              },
+
             ]}
           />
           <Button
