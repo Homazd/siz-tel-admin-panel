@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+// Hooks
+import { Navigate } from "react-router-dom";
 // Mantine Components
 import {
   Paper,
@@ -13,8 +15,6 @@ import backImage from "../../images/background-admin.png";
 // Styles
 import { labelStyles, checkboxLabelStyle } from "./style.module";
 
-// import { useNavigate } from "react-router-dom";
-
 interface Credentials {
   email: string;
   password: string;
@@ -25,6 +25,7 @@ export default function LoginPage() {
     email: "",
     password: "",
   });
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -45,6 +46,7 @@ export default function LoginPage() {
       console.log(response.data);
       const { access_token } = response.data;
       localStorage.setItem("access_token", access_token);
+      setLoggedIn(true);
 
       // Handle successful login
     } catch (error) {
@@ -87,62 +89,66 @@ export default function LoginPage() {
   // };
 
   return (
-    <div
-      className="bg-cover min-h-full"
-      style={{ backgroundImage: `url(${backImage})` }}
-    >
-      <Paper className="p-[30px] rounded-none max-w-md min-h-screen">
-        <form onSubmit={handleSubmit} className="grid grid-cols-1">
-          <div className="">
-            <Title
-              order={2}
-              className="text-3xl font-bold text-center block"
-              ta="center"
-              mt="md"
-              mb={50}
+    <>
+      {loggedIn && <Navigate to="/dashboard" replace={true} />}
+
+      <div
+        className="bg-cover min-h-full"
+        style={{ backgroundImage: `url(${backImage})` }}
+      >
+        <Paper className="p-[30px] rounded-none max-w-md min-h-screen">
+          <form onSubmit={handleSubmit} className="grid grid-cols-1">
+            <div className="">
+              <Title
+                order={2}
+                className="text-3xl font-bold text-center block"
+                ta="center"
+                mt="md"
+                mb={50}
+              >
+                Welcome back!
+              </Title>
+              <TextInput
+                name="email"
+                label="Email address"
+                placeholder="hello@gmail.com"
+                size="md"
+                onChange={handleInputChange}
+                styles={{
+                  label: labelStyles,
+                }}
+              />
+              <PasswordInput
+                name="password"
+                label="Password"
+                placeholder="Your password"
+                mt="md"
+                size="md"
+                onChange={handleInputChange}
+                styles={{
+                  label: labelStyles,
+                }}
+              />
+              <Checkbox
+                label="Keep me logged in"
+                mt="xl"
+                size="md"
+                styles={{
+                  label: checkboxLabelStyle,
+                }}
+              />
+            </div>
+            <Button
+              type="submit"
+              className="w-full mt-14 bg-blue-600"
+              size="md"
+              onClick={() => console.log(credentials)}
             >
-              Welcome back!
-            </Title>
-            <TextInput
-              name="email"
-              label="Email address"
-              placeholder="hello@gmail.com"
-              size="md"
-              onChange={handleInputChange}
-              styles={{
-                label: labelStyles,
-              }}
-            />
-            <PasswordInput
-              name="password"
-              label="Password"
-              placeholder="Your password"
-              mt="md"
-              size="md"
-              onChange={handleInputChange}
-              styles={{
-                label: labelStyles,
-              }}
-            />
-            <Checkbox
-              label="Keep me logged in"
-              mt="xl"
-              size="md"
-              styles={{
-                label: checkboxLabelStyle,
-              }}
-            />
-          </div>
-          <Button
-            type="submit"
-            className="w-full mt-14 bg-blue-600"
-            size="md"
-            onClick={() => console.log(credentials)}
-          >
-            Login
-          </Button>
-        </form>
-      </Paper>
-    </div>
+              Login
+            </Button>
+          </form>
+        </Paper>
+      </div>
+    </>
   );
 }
