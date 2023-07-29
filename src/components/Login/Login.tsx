@@ -16,13 +16,13 @@ import backImage from "../../images/background-admin.png";
 import { labelStyles, checkboxLabelStyle } from "./style.module";
 
 interface Credentials {
-  email: string;
+  username: string;
   password: string;
 }
 
 export default function LoginPage() {
   const [credentials, setCredentials] = useState<Credentials>({
-    email: "",
+    username: "",
     password: "",
   });
   const [loggedIn, setLoggedIn] = useState(false);
@@ -40,12 +40,12 @@ export default function LoginPage() {
     event.preventDefault();
     try {
       const response = await axios.post(
-        "http://example.com/api/login",
+        "http://192.168.0.205:8000/api/auth/login/",
         credentials
       );
       console.log(response.data);
-      const { access_token } = response.data;
-      localStorage.setItem("access_token", access_token);
+      // const { access_token } = response.data;
+      localStorage.setItem("access_token", response.data.key);
       setLoggedIn(true);
 
       // Handle successful login
@@ -109,8 +109,8 @@ export default function LoginPage() {
                 Welcome back!
               </Title>
               <TextInput
-                name="email"
-                label="Email address"
+                name="username"
+                label="username address"
                 placeholder="hello@gmail.com"
                 size="md"
                 onChange={handleInputChange}
