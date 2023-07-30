@@ -19,6 +19,8 @@ import {
   useUpdateProfileMutation,
 } from "../../services/api";
 
+import InputWithButton from "../Dashboard/components/SearchInput";
+
 const { Header, Sider, Content } = Layout;
 
 interface Profile {
@@ -152,7 +154,6 @@ const Dashboard: React.FC = () => {
                 icon: <UserOutlined />,
                 label: "Admin Info",
               },
-
             ]}
           />
           <Button
@@ -177,7 +178,10 @@ const Dashboard: React.FC = () => {
             minWidth: "100%",
           }}
         >
-          <span className="text-white">Search</span>
+          <div className="grid place-content-center">
+            <span className="text-white">Search</span>
+            <InputWithButton />
+          </div>
           <main className="m-0">
             <h1 className="text-white">Profile List</h1>
             {newItemSection}
