@@ -16,6 +16,8 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
           // theme={{ colorScheme: "dark" }}
           withGlobalStyles
           withNormalizeCSS
+          withCSSVariables
+          theme={{ colorScheme: "dark" }}
         >
           <App />
         </MantineProvider>

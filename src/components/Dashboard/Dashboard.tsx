@@ -20,6 +20,7 @@ import {
 } from "../../services/api";
 
 import InputWithButton from "../Dashboard/components/SearchInput";
+import InputButton from "./components/inputButton/inputButton";
 
 const { Header, Sider, Content } = Layout;
 
@@ -31,13 +32,13 @@ interface Profile {
 const Dashboard: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [newProfile, setNewProfile] = useState("");
-  const {
-    data: profiles = [],
-    isLoading,
-    isSuccess,
-    isError,
-    error,
-  } = useGetProfilesQuery();
+  // const {
+  //   data: profiles = [],
+  //   isLoading,
+  //   isSuccess,
+  //   isError,
+  //   error,
+  // } = useGetProfilesQuery();
   const [addProfile] = useAddProfileMutation();
   const [updateProfile] = useUpdateProfileMutation();
   const [deleteProfile] = useDeleteProfileMutation();
@@ -54,59 +55,59 @@ const Dashboard: React.FC = () => {
     setNewProfile("");
   };
 
-  const newItemSection = (
-    <form onSubmit={(e) => handleSubmit(e)} className=" border-2 border-white">
-      <label htmlFor="new-profile">Enter a new profile item</label>
-      <div className="new-profile">
-        <input
-          type="text"
-          id="new-profile"
-          value={newProfile}
-          onChange={(e) => setNewProfile(e.target.value)}
-          placeholder="Enter new IMSI ..."
-        />
-      </div>
-      <button type="submit" className="border-2 border-white">
-        <FontAwesomeIcon icon={faUpload} style={{ color: "#fbfdf7" }} />{" "}
-      </button>
-    </form>
-  );
+  // const newItemSection = (
+  //   <form onSubmit={(e) => handleSubmit(e)} className=" border-2 border-white">
+  //     <label htmlFor="new-profile">Enter a new profile item</label>
+  //     <div className="new-profile">
+  //       <input
+  //         type="text"
+  //         id="new-profile"
+  //         value={newProfile}
+  //         onChange={(e) => setNewProfile(e.target.value)}
+  //         placeholder="Enter new IMSI ..."
+  //       />
+  //     </div>
+  //     <button type="submit" className="border-2 border-white">
+  //       <FontAwesomeIcon icon={faUpload} style={{ color: "#fbfdf7" }} />{" "}
+  //     </button>
+  //   </form>
+  // );
 
-  let content;
-  if (isLoading) {
-    content = <p>Loading ...</p>;
-  } else if (isSuccess) {
-    console.log("profiles is: ", profiles);
+  // let content;
+  // if (isLoading) {
+  //   content = <p>Loading ...</p>;
+  // } else if (isSuccess) {
+  //   console.log("profiles is: ", profiles);
 
-    content = profiles.map((profile: Profile) => {
-      //JSON.stringify(todos)
-      return (
-        <article key={profile.id} className=" border-2 border-white">
-          <div className="profile">
-            <input
-              type="checkbox"
-              checked={profile.connected}
-              id={profile.id}
-              onChange={() =>
-                updateProfile({ ...profile, connected: !profile.connected })
-              }
-            />
-            <label htmlFor={profile.id} className="text-white">
-              {profile.IMSI}
-            </label>
-          </div>
-          <button
-            className="trash"
-            onClick={() => deleteProfile({ id: profile.id })}
-          >
-            <FontAwesomeIcon icon={faTrash} />
-          </button>
-        </article>
-      );
-    });
-  } else if (isError) {
-    content = <p>{error.status}</p>;
-  }
+  //   content = profiles.map((profile: Profile) => {
+  //     //JSON.stringify(todos)
+  //     return (
+  //       <article key={profile.id} className=" border-2 border-white">
+  //         <div className="profile">
+  //           <input
+  //             type="checkbox"
+  //             checked={profile.connected}
+  //             id={profile.id}
+  //             onChange={() =>
+  //               updateProfile({ ...profile, connected: !profile.connected })
+  //             }
+  //           />
+  //           <label htmlFor={profile.id} className="text-white">
+  //             {profile.IMSI}
+  //           </label>
+  //         </div>
+  //         <button
+  //           className="trash"
+  //           onClick={() => deleteProfile({ id: profile.id })}
+  //         >
+  //           <FontAwesomeIcon icon={faTrash} />
+  //         </button>
+  //       </article>
+  //     );
+  //   });
+  // } else if (isError) {
+  //   content = <p>{error.status}</p>;
+  // }
 
   return (
     <Layout>
@@ -175,18 +176,19 @@ const Dashboard: React.FC = () => {
             minHeight: 1000,
             background: "#0A2647",
             margin: 0,
-            minWidth: "100%",
+            maxWidth: "100%",
           }}
         >
           <div className="grid place-content-center">
             <span className="text-white">Search</span>
             <InputWithButton />
           </div>
-          <main className="m-0">
+          <InputButton />
+          {/* <main className="m-0">
             <h1 className="text-white">Profile List</h1>
             {newItemSection}
             {content}
-          </main>
+          </main> */}
         </Content>
       </Layout>
     </Layout>
