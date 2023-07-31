@@ -6,32 +6,32 @@ import {
   UserOutlined,
   VideoCameraOutlined,
 } from "@ant-design/icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faUpload } from "@fortawesome/free-solid-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faTrash, faUpload } from "@fortawesome/free-solid-svg-icons";
 // Images
 import logoImage from "../../images/logo.png";
 
 import { Layout, Menu, Button, Space } from "antd";
-import {
-  useGetProfilesQuery,
-  useAddProfileMutation,
-  useDeleteProfileMutation,
-  useUpdateProfileMutation,
-} from "../../services/api";
-
+// import {
+//   useGetProfilesQuery,
+//   useAddProfileMutation,
+//   useDeleteProfileMutation,
+//   useUpdateProfileMutation,
+// } from "../../services/api";
+// Components
 import InputWithButton from "../Dashboard/components/SearchInput";
-import InputButton from "./components/inputButton/inputButton";
+import InputButton from "../Dashboard/components/InputButton/inputButton";
 
 const { Header, Sider, Content } = Layout;
 
-interface Profile {
-  id: string;
-  IMSI: string;
-  connected: boolean;
-}
+// interface Profile {
+//   id: string;
+//   IMSI: string;
+//   connected: boolean;
+// }
 const Dashboard: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const [newProfile, setNewProfile] = useState("");
+  // const [newProfile, setNewProfile] = useState("");
   // const {
   //   data: profiles = [],
   //   isLoading,
@@ -39,21 +39,21 @@ const Dashboard: React.FC = () => {
   //   isError,
   //   error,
   // } = useGetProfilesQuery();
-  const [addProfile] = useAddProfileMutation();
-  const [updateProfile] = useUpdateProfileMutation();
-  const [deleteProfile] = useDeleteProfileMutation();
+  // const [addProfile] = useAddProfileMutation();
+  // const [updateProfile] = useUpdateProfileMutation();
+  // const [deleteProfile] = useDeleteProfileMutation();
 
   // useEffect(() => {
   //   console.log("profile is:", profiles);
   // }, []);
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    addProfile(e.target["IMSI"]);
-    e.target.reset();
-    console.log("submit is:", e.target);
+  // const handleSubmit = (e: any) => {
+  //   e.preventDefault();
+  //   addProfile(e.target["IMSI"]);
+  //   e.target.reset();
+  //   console.log("submit is:", e.target);
 
-    setNewProfile("");
-  };
+  //   setNewProfile("");
+  // };
 
   // const newItemSection = (
   //   <form onSubmit={(e) => handleSubmit(e)} className=" border-2 border-white">
@@ -122,7 +122,7 @@ const Dashboard: React.FC = () => {
           backgroundColor: "#144272",
         }}
       >
-        <div className="space-align-block">
+        <div className="">
           <Space align="center">
             <h1>Welcome to Admin Panel!</h1>
           </Space>
