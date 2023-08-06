@@ -1,11 +1,21 @@
 import { useDisclosure } from "@mantine/hooks";
 import { Modal, Button, Group, Divider, ModalProps } from "@mantine/core";
 import Input from "../../../Global/Input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useGetSubscribersQuery } from "../../../../services/api";
 
 function InputButton() {
   const [opened, { open, close }] = useDisclosure(false);
   const [msisdnClicked, setMsisdnClicked] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+
+  const {
+    data: Subscribers,
+    isLoading,
+    isSuccess,
+    isError,
+    error,
+  } = useGetSubscribersQuery("12345");
 
   const contentStyles: Partial<ModalProps["styles"]> = {
     content: {
@@ -13,8 +23,14 @@ function InputButton() {
       margin: "auto",
     },
   };
-  const handleOnAdd = () => setMsisdnClicked(true);
+  const handleOnAdd = () => {
+    setMsisdnClicked(true);
+    setIsVisible(false);
+  };
 
+  useEffect(() => {
+    console.log(Subscribers, isLoading, isSuccess, isError, error);
+  }, []);
   return (
     <>
       <Modal
@@ -34,12 +50,22 @@ function InputButton() {
             errorMessage="is required"
           />
           <div className="grid">
-            <Button
-              className="font-bold bg-sky-500 w-28 justify-items-center"
-              onClick={handleOnAdd}
-            >
-              +
-            </Button>
+            {isVisible && (
+              <Button
+                className="font-bold bg-sky-500 w-28 justify-items-center"
+                onClick={handleOnAdd}
+              >
+                +
+              </Button>
+            )}
+            {!isVisible && (
+              <Button
+                className="font-bold bg-red-500 w-28"
+                onClick={() => setIsVisible(true)}
+              >
+                \00D7
+              </Button>
+            )}
           </div>
           {msisdnClicked && (
             <Input label="MSISDN" withAsterisk errorMessage="is required" />

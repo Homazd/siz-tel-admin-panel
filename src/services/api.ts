@@ -1,54 +1,76 @@
+import { Subscribers } from "@reduxjs/toolkit/dist/query/core/apiState";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-interface Profile {
+interface Subscriber {
   id: number;
   IMSI: string;
   connected: boolean;
 }
-interface ProfileResponse {
-  profiles: Profile[];
+interface SubscriberResponse {
+  subscribers: Subscriber[];
 }
 export const apiSlice = createApi({
   reducerPath: "api",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000" }),
-  tagTypes: ["Profiles"],
+  baseQuery: fetchBaseQuery({
+    baseUrl: "http://localhost:3000",
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem('access_token')
+      if (token) {
+        headers.set("Authorization", `Bearer ${token}`);
+      }
+
+      return headers;
+    },
+  }),
+
+  tagTypes: ["Subscribers"],
   endpoints: (builder) => ({
-    getProfiles: builder.query<ProfileResponse, void>({
-      query: () => "/profiles",
-      providesTags: ["Profiles"],
-    }),
-    addProfile: builder.mutation<Profile, Profile>({
+    getSubscribers: builder.query<SubscriberResponse, string>({
       query: (IMSI) => ({
-        url: "/profiles",
+        url: "subscribers",
+        params: { IMSI },
+      }),
+      transformResponse: (response: { data: SubscriberResponse}, meta, arg) => response.data,
+      transformErrorResponse: {
+        response: { status: string | number},
+        meta,
+        arg
+      } => Response.status,
+
+      providesTags: ["Subscribers"],
+    }),
+    addSubscriber: builder.mutation<Subscriber, Subscriber>({
+      query: (IMSI) => ({
+        url: "/subscribers",
         method: "POST",
         body: { IMSI },
         headers: { "Content-Type": "application/json" },
       }),
-      invalidatesTags: ["Profiles"],
+      invalidatesTags: ["Subscribers"],
     }),
-    updateProfile: builder.mutation({
-      query: (profile) => ({
-        url: `/profiles/${profile.id}`,
+    updateSubscriber: builder.mutation({
+      query: (subscriber) => ({
+        url: `/subscriber/${subscriber.IMSI}`,
         method: "PATCH",
-        body: profile,
+        body: subscriber,
       }),
-      invalidatesTags: ["Profiles"],
+      invalidatesTags: ["Subscribers"],
     }),
-    deleteProfile: builder.mutation({
+    deleteSubscriber: builder.mutation({
       query: ({ id }) => ({
         url: `/profiles/${id}`,
         method: "DELETE",
         body: id,
       }),
-      invalidatesTags: ["Profiles"],
+      invalidatesTags: ["Subscribers"],
     }),
   }),
 });
 
 // Export Hooks for usage in functional components
 export const {
-  useGetProfilesQuery,
-  useAddProfileMutation,
-  useUpdateProfileMutation,
-  useDeleteProfileMutation,
+  useGetSubscribersQuery,
+  useAddSubscriberMutation,
+  useUpdateSubscriberMutation,
+  useDeleteSubscriberMutation,
 } = apiSlice;
