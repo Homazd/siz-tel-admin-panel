@@ -148,7 +148,7 @@ const Dashboard: React.FC = () => {
               {
                 key: "1",
                 icon: <UserOutlined />,
-                label: "Profiles",
+                label: "Subscribers",
               },
               {
                 key: "2",

@@ -1,3 +1,3 @@
-export const  FETCH_PROFILES_BEGIN = "FETCH_PROFILES_BEGIN";
-export const FETCH_PROFILES_SUCCESS = 'FETCH_PROFILES_SUCCESS';
-export const FETCH_PROFILES_FAILURE = 'FETCH_PROFILES_FAILURE'
+export const  FETCH_Subscribers_BEGIN = "FETCH_Subscribers_BEGIN";
+export const FETCH_Subscribers_SUCCESS = 'FETCH_Subscribers_SUCCESS';
+export const FETCH_Subscribers_FAILURE = 'FETCH_Subscribers_FAILURE'
