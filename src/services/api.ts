@@ -1,14 +1,11 @@
-import { Subscribers } from "@reduxjs/toolkit/dist/query/core/apiState";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-interface Subscriber {
+export interface SubscriberType {
   id: number;
   IMSI: string;
   connected: boolean;
 }
-interface SubscriberResponse {
-  subscribers: Subscriber[];
-}
+
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
@@ -25,21 +22,15 @@ export const apiSlice = createApi({
 
   tagTypes: ["Subscribers"],
   endpoints: (builder) => ({
-    getSubscribers: builder.query<SubscriberResponse, string>({
+    getSubscribers: builder.query<SubscriberType, string>({
       query: (IMSI) => ({
         url: "subscribers",
         params: { IMSI },
       }),
-      transformResponse: (response: { data: SubscriberResponse}, meta, arg) => response.data,
-      transformErrorResponse: {
-        response: { status: string | number},
-        meta,
-        arg
-      } => Response.status,
-
+   
       providesTags: ["Subscribers"],
     }),
-    addSubscriber: builder.mutation<Subscriber, Subscriber>({
+    addSubscriber: builder.mutation<SubscriberType, SubscriberType>({
       query: (IMSI) => ({
         url: "/subscribers",
         method: "POST",
