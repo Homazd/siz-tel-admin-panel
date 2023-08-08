@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Routes, Route, useNavigate, Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -12,7 +12,8 @@ import {
 // Images
 import logoImage from "../../images/logo.png";
 
-import { Layout, Menu, Button, Space } from "antd";
+import { Layout, Menu, Space } from "antd";
+import { Button } from "@mantine/core";
 // import {
 //   useGetProfilesQuery,
 //   useAddProfileMutation,
@@ -122,8 +123,7 @@ const Dashboard: React.FC = () => {
   const handleOnProfile = () => {
     navigate("/dashboard/profile");
     setIsProfileOpen(true);
-    console.log('isProfileOpen', isProfileOpen);
-    
+    console.log("isProfileOpen", isProfileOpen);
   };
 
   return (
@@ -166,13 +166,22 @@ const Dashboard: React.FC = () => {
                 key: "1",
                 icon: <UserOutlined />,
                 label: (
-                  <button onClick={handleOnSubscribers}>Subscribers</button>
+                  <Button
+                    onClick={handleOnSubscribers}
+                    className="text-blue-400"
+                  >
+                    Subscribers
+                  </Button>
                 ),
               },
               {
                 key: "2",
                 icon: <UserOutlined />,
-                label: <button onClick={handleOnProfile}>Profile</button>,
+                label: (
+                  <Button onClick={handleOnProfile} className="text-blue-400">
+                    Profile
+                  </Button>
+                ),
               },
             ]}
           />
