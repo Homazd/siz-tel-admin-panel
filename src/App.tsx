@@ -1,20 +1,27 @@
-import { Routes, Route } from "react-router-dom";
-import LoginPage from "./components/Login/Login";
-import Dashboard from "./components/Dashboard/Dashboard";
-import ProtectedRoute from "./components/routes/protectedRoute";
-// import { useEffect } from "react";
-// import { useDispatch } from "react-redux";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+// Views
+import LoginPage from "./views/Login/Login";
+import Dashboard from "./views/Dashboard";
+import Subscribers from "./views/Subscribers";
+import Profile from "./views/Profile";
+// import ProtectedRoute from "./components/Routes/protectedRoute";
 
 function App() {
   return (
     <>
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/" element={<ProtectedRoute />}>
-          <Route path="/dashboard" element={<Dashboard />} />
+      <Router>
+        <Routes>
+          <Route path="/login" element={<LoginPage />}/>
+          {/* <Route path="/login" element={<LoginPage />} /> */}
+          {/* <Route path="/" element={<ProtectedRoute />}> */}
+          <Route path="/dashboard" element={<Dashboard />}>
+            <Route path="subscribers" element={<Subscribers />} />
+            <Route path="profile" element={<Profile />} />
+          </Route>
           {/* <Route path="profile" element={<Profile />} /> */}
-        </Route>
-      </Routes>
+          {/* </Route> */}
+        </Routes>
+      </Router>
     </>
   );
 }

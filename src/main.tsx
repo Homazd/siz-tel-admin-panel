@@ -1,4 +1,3 @@
-import { BrowserRouter as Router } from "react-router-dom";
 import * as React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
@@ -11,7 +10,6 @@ import { store } from "./redux/store";
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
-      <Router>
         <MantineProvider
           // theme={{ colorScheme: "dark" }}
           withGlobalStyles
@@ -34,7 +32,6 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         >
           <App />
         </MantineProvider>
-      </Router>
     </Provider>
   </React.StrictMode>
 );

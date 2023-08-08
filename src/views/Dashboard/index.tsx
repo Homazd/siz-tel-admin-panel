@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Routes, Route, useNavigate, Link } from "react-router-dom";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  UploadOutlined,
+  // UploadOutlined,
   UserOutlined,
-  VideoCameraOutlined,
+  // VideoCameraOutlined,
 } from "@ant-design/icons";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faTrash, faUpload } from "@fortawesome/free-solid-svg-icons";
@@ -19,8 +20,9 @@ import { Layout, Menu, Button, Space } from "antd";
 //   useUpdateProfileMutation,
 // } from "../../services/api";
 // Components
-import InputWithButton from "../Dashboard/components/SearchInput";
-import InputButton from "../Dashboard/components/InputButton/inputButton";
+
+import Subscribers from "../Subscribers";
+import Profile from "../Profile";
 
 const { Header, Sider, Content } = Layout;
 
@@ -31,6 +33,9 @@ const { Header, Sider, Content } = Layout;
 // }
 const Dashboard: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const navigate = useNavigate();
+
   // const [newProfile, setNewProfile] = useState("");
   // const {
   //   data: profiles = [],
@@ -109,6 +114,18 @@ const Dashboard: React.FC = () => {
   //   content = <p>{error.status}</p>;
   // }
 
+  const handleOnSubscribers = () => {
+    navigate("/dashboard/subscribers");
+    setIsProfileOpen(false);
+  };
+
+  const handleOnProfile = () => {
+    navigate("/dashboard/profile");
+    setIsProfileOpen(true);
+    console.log('isProfileOpen', isProfileOpen);
+    
+  };
+
   return (
     <Layout>
       <Header
@@ -148,12 +165,14 @@ const Dashboard: React.FC = () => {
               {
                 key: "1",
                 icon: <UserOutlined />,
-                label: "Subscribers",
+                label: (
+                  <button onClick={handleOnSubscribers}>Subscribers</button>
+                ),
               },
               {
                 key: "2",
                 icon: <UserOutlined />,
-                label: "Admin Info",
+                label: <button onClick={handleOnProfile}>Profile</button>,
               },
             ]}
           />
@@ -179,16 +198,11 @@ const Dashboard: React.FC = () => {
             maxWidth: "100%",
           }}
         >
-          <div className="grid place-content-center">
-            <span className="text-white">Search</span>
-            <InputWithButton />
-          </div>
-          <InputButton />
-          {/* <main className="m-0">
-            <h1 className="text-white">Profile List</h1>
-            {newItemSection}
-            {content}
-          </main> */}
+          <Routes>
+            <Route path="/dashboard/subscribers" element={<Subscribers />} />
+            <Route path="/dashboard/profile" element={<Profile />} />
+          </Routes>
+          {isProfileOpen ? <Profile /> : <Subscribers />}
         </Content>
       </Layout>
     </Layout>

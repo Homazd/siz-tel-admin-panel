@@ -1,8 +1,8 @@
 import { useDisclosure } from "@mantine/hooks";
 import { Modal, Button, Group, Divider, ModalProps } from "@mantine/core";
-import Input from "../../../Global/Input";
+import Input from "../../../components/Input";
 import { useEffect, useState } from "react";
-import { useGetSubscribersQuery } from "../../../../services/api";
+import { useGetSubscribersQuery } from "../../../services/api";
 
 function InputButton() {
   const [opened, { open, close }] = useDisclosure(false);
