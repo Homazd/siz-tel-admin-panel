@@ -7,113 +7,41 @@ import {
   UserOutlined,
   // VideoCameraOutlined,
 } from "@ant-design/icons";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faTrash, faUpload } from "@fortawesome/free-solid-svg-icons";
 // Images
 import logoImage from "../../images/logo.png";
-
 import { Layout, Menu, Space } from "antd";
-import { Button } from "@mantine/core";
-// import {
-//   useGetProfilesQuery,
-//   useAddProfileMutation,
-//   useDeleteProfileMutation,
-//   useUpdateProfileMutation,
-// } from "../../services/api";
-// Components
+import { Button as AntButton } from "antd";
+import {
+  Button,
+  useMantineColorScheme,
+  ActionIcon,
+  Group,
+  createStyles,
+} from "@mantine/core";
+import { IconSun, IconMoonStars } from "@tabler/icons-react";
 
+// Components
 import Subscribers from "../Subscribers";
 import Profile from "../Profile";
 
 const { Header, Sider, Content } = Layout;
 
-// interface Profile {
-//   id: string;
-//   IMSI: string;
-//   connected: boolean;
-// }
+const useStyles = createStyles((theme) => ({
+  header: {
+    backgroundColor: theme.fn.variant({
+      variant: "filled",
+      color: theme.primaryColor,
+    }).background,
+    borderBottom: 0,
+  },
+}));
+
 const Dashboard: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const navigate = useNavigate();
-
-  // const [newProfile, setNewProfile] = useState("");
-  // const {
-  //   data: profiles = [],
-  //   isLoading,
-  //   isSuccess,
-  //   isError,
-  //   error,
-  // } = useGetProfilesQuery();
-  // const [addProfile] = useAddProfileMutation();
-  // const [updateProfile] = useUpdateProfileMutation();
-  // const [deleteProfile] = useDeleteProfileMutation();
-
-  // useEffect(() => {
-  //   console.log("profile is:", profiles);
-  // }, []);
-  // const handleSubmit = (e: any) => {
-  //   e.preventDefault();
-  //   addProfile(e.target["IMSI"]);
-  //   e.target.reset();
-  //   console.log("submit is:", e.target);
-
-  //   setNewProfile("");
-  // };
-
-  // const newItemSection = (
-  //   <form onSubmit={(e) => handleSubmit(e)} className=" border-2 border-white">
-  //     <label htmlFor="new-profile">Enter a new profile item</label>
-  //     <div className="new-profile">
-  //       <input
-  //         type="text"
-  //         id="new-profile"
-  //         value={newProfile}
-  //         onChange={(e) => setNewProfile(e.target.value)}
-  //         placeholder="Enter new IMSI ..."
-  //       />
-  //     </div>
-  //     <button type="submit" className="border-2 border-white">
-  //       <FontAwesomeIcon icon={faUpload} style={{ color: "#fbfdf7" }} />{" "}
-  //     </button>
-  //   </form>
-  // );
-
-  // let content;
-  // if (isLoading) {
-  //   content = <p>Loading ...</p>;
-  // } else if (isSuccess) {
-  //   console.log("profiles is: ", profiles);
-
-  //   content = profiles.map((profile: Profile) => {
-  //     //JSON.stringify(todos)
-  //     return (
-  //       <article key={profile.id} className=" border-2 border-white">
-  //         <div className="profile">
-  //           <input
-  //             type="checkbox"
-  //             checked={profile.connected}
-  //             id={profile.id}
-  //             onChange={() =>
-  //               updateProfile({ ...profile, connected: !profile.connected })
-  //             }
-  //           />
-  //           <label htmlFor={profile.id} className="text-white">
-  //             {profile.IMSI}
-  //           </label>
-  //         </div>
-  //         <button
-  //           className="trash"
-  //           onClick={() => deleteProfile({ id: profile.id })}
-  //         >
-  //           <FontAwesomeIcon icon={faTrash} />
-  //         </button>
-  //       </article>
-  //     );
-  //   });
-  // } else if (isError) {
-  //   content = <p>{error.status}</p>;
-  // }
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const { classes } = useStyles();
 
   const handleOnSubscribers = () => {
     navigate("/dashboard/subscribers");
@@ -129,20 +57,43 @@ const Dashboard: React.FC = () => {
   return (
     <Layout>
       <Header
-        className="space-align-container"
+        className={classes.header}
         style={{
           textAlign: "center",
-          color: "#fff",
+          // color: "#fff",
           height: 64,
           paddingInline: 50,
           lineHeight: "64px",
-          backgroundColor: "#144272",
+          // backgroundColor: "#144272",
         }}
       >
-        <div className="">
+        <div className="flex justify-center relative">
           <Space align="center">
-            <h1>Welcome to Admin Panel!</h1>
+            <h1 className="text-white text-center">Welcome to Admin Panel!</h1>
           </Space>
+          <Group position="center" my="xl">
+            <ActionIcon
+            className="absolute right-0 bg-white"
+              onClick={() => toggleColorScheme()}
+              size="lg"
+              sx={(theme) => ({
+                backgroundColor:
+                  theme.colorScheme === "dark"
+                    ? theme.colors.dark[1]
+                    : theme.colors.gray[8],
+                color:
+                  theme.colorScheme === "dark"
+                    ? theme.colors.yellow[4]
+                    : theme.colors.blue[6],
+              })}
+            >
+              {colorScheme === "dark" ? (
+                <IconSun size="1.2rem" />
+              ) : (
+                <IconMoonStars size="1.2rem" />
+              )}
+            </ActionIcon>
+          </Group>
         </div>
       </Header>
       <Layout hasSider>
@@ -150,7 +101,12 @@ const Dashboard: React.FC = () => {
           trigger={null}
           collapsible
           collapsed={collapsed}
-          style={{ backgroundColor: "#2C74B3" }}
+          // style={{
+          //   backgroundColor: ${({theme})} =>
+          //     theme.colorScheme === "dark"
+          //       ? theme.colors.dark[8]
+          //       : theme.colorScheme.gray[0];
+          // }}
           onCollapse={(value) => setCollapsed(value)}
           reverseArrow={false}
         >
@@ -158,7 +114,7 @@ const Dashboard: React.FC = () => {
             <img className="w-16" src={logoImage} alt="logo" />
           </div>
           <Menu
-            style={{ backgroundColor: "#2C74B3" }}
+            // style={{ backgroundColor: "#2C74B3" }}
             mode="inline"
             defaultSelectedKeys={["1"]}
             items={[
@@ -185,13 +141,13 @@ const Dashboard: React.FC = () => {
               },
             ]}
           />
-          <Button
+          <AntButton
             type="text"
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             onClick={() => setCollapsed(!collapsed)}
             style={{
               fontSize: "16px",
-              color: "white",
+              // color: "white",
               width: 64,
               height: 64,
             }}
@@ -202,7 +158,7 @@ const Dashboard: React.FC = () => {
             // margin: "10px 10px",
             padding: 24,
             minHeight: 1000,
-            background: "#0A2647",
+            // background: "#0A2647",
             margin: 0,
             maxWidth: "100%",
           }}
