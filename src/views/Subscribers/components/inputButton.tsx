@@ -1,6 +1,6 @@
 import { useDisclosure } from "@mantine/hooks";
 import { Modal, Button, Group, Divider, ModalProps } from "@mantine/core";
-import Input from "../../../components/Input";
+import ReusableInput from "../../../components/Input";
 import { useEffect, useState } from "react";
 import { useGetSubscribersQuery } from "../../../services/api";
 
@@ -28,6 +28,10 @@ function InputButton() {
     setIsVisible(false);
   };
 
+  const handleOnMulti = () => {
+    setIsVisible(true);
+    setMsisdnClicked(false);
+  };
   useEffect(() => {
     console.log(Subscribers, isLoading, isSuccess, isError, error);
   }, []);
@@ -43,34 +47,76 @@ function InputButton() {
         <div>
           <h3>Subscriber Configuration</h3>
           <Divider />
-          <Input
+          <ReusableInput
+            name="IMSI"
             placeholder="Enter IMSI"
             label="IMSI"
             withAsterisk={true}
-            errorMessage="is required"
           />
-          <div className="grid">
+          <div className="grid place-content-center">
             {isVisible && (
               <Button
-                className="font-bold bg-sky-500 w-28 justify-items-center"
+                className="font-bold bg-sky-500 w-28 m-12"
                 onClick={handleOnAdd}
               >
                 +
               </Button>
             )}
             {!isVisible && (
-              <Button
-                className="font-bold bg-red-500 w-28"
-                onClick={() => setIsVisible(true)}
-              >
-                \00D7
-              </Button>
+              <>
+                <Button
+                  className="font-bold bg-red-500 w-28 mb-2"
+                  onClick={handleOnMulti}
+                >
+                  ×
+                </Button>
+                <Button
+                  className="font-bold bg-sky-500 w-28 justify-items-center "
+                  onClick={handleOnAdd}
+                >
+                  +
+                </Button>
+              </>
             )}
+            {msisdnClicked ? (
+              <ReusableInput
+                name="MSISDN"
+                label="MSISDN"
+                required
+                className="w-[300px]"
+              />
+            ) : null}
           </div>
-          {msisdnClicked && (
-            <Input label="MSISDN" withAsterisk errorMessage="is required" />
-          )}
-          <Button className="font-bold">Submit</Button>
+          <div className="flex">
+            <ReusableInput
+              name="K"
+              label="Subscriber Key (K)"
+              required
+              className="w-[400px] mr-6"
+            />
+            <ReusableInput
+              name="AMF"
+              label="Authentication Management Field (AMF)"
+              withAsterisk
+              className="w-[300px]"
+            />
+          </div>
+          <div className="flex  mt-3">
+            <ReusableInput
+              name="USIM"
+              label="USIM Type"
+              required
+              className="w-[300px] mr-6"
+            />
+            <ReusableInput
+              name="op"
+              label="Operator Key (OPc/OP)"
+              required
+              className="w-[500px]"
+            />
+          </div>
+          
+          <Button className="font-bold bg-blue-500 mt-3">Submit</Button>
         </div>
       </Modal>
 
