@@ -2,7 +2,6 @@ import { useState } from "react";
 import {
   Switch,
   Group,
-  useMantineColorScheme,
   useMantineTheme,
   ColorSchemeProvider,
   ColorScheme,
