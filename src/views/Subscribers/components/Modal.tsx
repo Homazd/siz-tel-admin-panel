@@ -1,10 +1,10 @@
 import { useDisclosure } from "@mantine/hooks";
 import { Modal, Button, Group, Divider, ModalProps } from "@mantine/core";
 import ReusableInput from "../../../components/Input";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { useGetSubscribersQuery } from "../../../services/api";
 
-function InputButton() {
+function SubscriberModal() {
   const [opened, { open, close }] = useDisclosure(false);
   const [msisdnClicked, setMsisdnClicked] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
@@ -32,9 +32,10 @@ function InputButton() {
     setIsVisible(true);
     setMsisdnClicked(false);
   };
-  useEffect(() => {
-    console.log(Subscribers, isLoading, isSuccess, isError, error);
-  }, []);
+  // useEffect(() => {
+  //   console.log(Subscribers, isLoading, isSuccess, isError, error);
+  // }, []);
+  
   return (
     <>
       <Modal
@@ -129,4 +130,4 @@ function InputButton() {
   );
 }
 
-export default InputButton;
+export default SubscriberModal;

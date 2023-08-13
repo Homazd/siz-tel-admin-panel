@@ -1,14 +1,14 @@
-import InputButton from "./components/inputButton";
-import InputWithButton from "./components/SearchInput";
+import IMSIInput from "./components/IMSIInput";
+import SubscriberModal from "./components/Modal";
 
 function Subscribers() {
   return (
     <>
       <div className="grid place-content-center">
-        <span className="text-white">Search</span>
-        <InputWithButton />
+        <span className="text-white">PSearch</span>
+        <IMSIInput />
       </div>
-      <InputButton />
+      <SubscriberModal />
     </>
   );
 }

@@ -14,7 +14,7 @@ const StyledInput = styled(TextInput)`
     margin: 0 auto;
   }
 `;
-function InputWithButton(props: TextInputProps) {
+function IMSIInput(props: TextInputProps) {
   const theme = useMantineTheme();
 
   return (
@@ -43,4 +43,4 @@ function InputWithButton(props: TextInputProps) {
     />
   );
 }
-export default InputWithButton;
+export default IMSIInput;
