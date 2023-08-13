@@ -4,7 +4,8 @@ import ReusableInput from "../../../../components/Input";
 import { useState } from "react";
 import { useGetSubscribersQuery } from "../../../../services/api";
 import SubscriberConfig from "./components/Configuration";
-import Slice from "./components/Slice"
+import Slice from "./components/Slice";
+import Session from "./components/Session";
 
 function SubscriberModal() {
   const [opened, { open, close }] = useDisclosure(false);
@@ -80,8 +81,9 @@ function SubscriberModal() {
               <ReusableInput label="MSISDN" required className="w-[300px]" />
             ) : null}
           </div>
-         <SubscriberConfig />
-         <Slice />
+          <SubscriberConfig />
+          <Slice />
+          <Session />
 
           <Button className="font-bold bg-blue-500 mt-3">Submit</Button>
         </div>
