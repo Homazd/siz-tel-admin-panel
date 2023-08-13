@@ -1,5 +1,5 @@
 import IMSIInput from "./components/IMSIInput";
-import SubscriberModal from "./components/Modal";
+import SubscriberModal from "./components/Modal/index";
 
 function Subscribers() {
   return (
