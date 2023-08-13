@@ -1,8 +1,10 @@
 import { useDisclosure } from "@mantine/hooks";
 import { Modal, Button, Group, Divider, ModalProps } from "@mantine/core";
-import ReusableInput from "../../../components/Input";
-import {  useState } from "react";
-import { useGetSubscribersQuery } from "../../../services/api";
+import ReusableInput from "../../../../components/Input";
+import { useState } from "react";
+import { useGetSubscribersQuery } from "../../../../services/api";
+import SubscriberConfig from "./components/Configuration";
+import Slice from "./components/Slice"
 
 function SubscriberModal() {
   const [opened, { open, close }] = useDisclosure(false);
@@ -35,7 +37,7 @@ function SubscriberModal() {
   // useEffect(() => {
   //   console.log(Subscribers, isLoading, isSuccess, isError, error);
   // }, []);
-  
+
   return (
     <>
       <Modal
@@ -48,12 +50,7 @@ function SubscriberModal() {
         <div>
           <h3>Subscriber Configuration</h3>
           <Divider />
-          <ReusableInput
-            name="IMSI"
-            placeholder="Enter IMSI"
-            label="IMSI"
-            withAsterisk={true}
-          />
+          <ReusableInput required placeholder="Enter IMSI" label="IMSI" />
           <div className="grid place-content-center">
             {isVisible && (
               <Button
@@ -80,43 +77,12 @@ function SubscriberModal() {
               </>
             )}
             {msisdnClicked ? (
-              <ReusableInput
-                name="MSISDN"
-                label="MSISDN"
-                required
-                className="w-[300px]"
-              />
+              <ReusableInput label="MSISDN" required className="w-[300px]" />
             ) : null}
           </div>
-          <div className="flex">
-            <ReusableInput
-              name="K"
-              label="Subscriber Key (K)"
-              required
-              className="w-[400px] mr-6"
-            />
-            <ReusableInput
-              name="AMF"
-              label="Authentication Management Field (AMF)"
-              withAsterisk
-              className="w-[300px]"
-            />
-          </div>
-          <div className="flex  mt-3">
-            <ReusableInput
-              name="USIM"
-              label="USIM Type"
-              required
-              className="w-[300px] mr-6"
-            />
-            <ReusableInput
-              name="op"
-              label="Operator Key (OPc/OP)"
-              required
-              className="w-[500px]"
-            />
-          </div>
-          
+         <SubscriberConfig />
+         <Slice />
+
           <Button className="font-bold bg-blue-500 mt-3">Submit</Button>
         </div>
       </Modal>

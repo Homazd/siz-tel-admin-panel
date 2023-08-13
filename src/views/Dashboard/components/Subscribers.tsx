@@ -1,4 +1,3 @@
-import React from "react";
 import { useGetSubscribersQuery } from "../../../services/api";
 
 const SubscribersComponent = () => {
