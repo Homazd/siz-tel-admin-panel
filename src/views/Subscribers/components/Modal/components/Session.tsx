@@ -1,6 +1,11 @@
+// Mantine Components
 import { Divider, Select } from "@mantine/core";
+// Components
 import ReusableInput from "../../../../../components/Input";
-import qciItems from ""
+// Static data
+import qciItems from "@/data/qci.json";
+const apr = Array.from({ length: 15 }, (_, index) => index + 1);
+
 const Session = () => {
   return (
     <div className="mt-10">
@@ -42,9 +47,9 @@ const Session = () => {
         className="mt-3 w-[425px]"
         required
         clearable
-        data={qciItems.map((option) => ({
-          value: option.title,
-          label: option.title,
+        data={apr.map((num) => ({
+          value: num.toString(),
+          label: num.toString(),
         }))}
       />
     </div>
