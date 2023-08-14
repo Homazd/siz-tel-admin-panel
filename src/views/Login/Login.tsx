@@ -47,6 +47,7 @@ export default function LoginPage() {
       // const { access_token } = response.data;
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("access_token", JSON.stringify(response.data.key));
+      localStorage.setItem("username", credentials.username);
       setLoggedIn(true);
 
       // Handle successful login

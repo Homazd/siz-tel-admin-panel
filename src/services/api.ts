@@ -12,8 +12,10 @@ export const apiSlice = createApi({
     baseUrl: "http://localhost:3000/dashboard/subscribers",
     prepareHeaders: (headers) => {
       const token = localStorage.getItem("access_token");
-      if (token) {
+      const username = localStorage.getItem("username");
+      if (token && username) {
         headers.set("Authorization", `Bearer ${token}`);
+        headers.set("username", username);
       }
 
       return headers;
@@ -22,10 +24,11 @@ export const apiSlice = createApi({
 
   tagTypes: ["Subscribers"],
   endpoints: (builder) => ({
-    getSubscribers: builder.query<SubscriberType, string>({
-      query: (imsi) => ({
-        url: `${imsi}`,
-      }),
+    getSubscribers: builder.query<
+      SubscriberType,
+      { username: string; imsi: number }
+    >({
+      query: ({ username, imsi }) => `data/${imsi}?username=${username}`,
 
       providesTags: ["Subscribers"],
     }),
