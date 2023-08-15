@@ -28,7 +28,10 @@ export const apiSlice = createApi({
       SubscriberType,
       { username: string; imsi: number }
     >({
-      query: ({ username, imsi }) => `data/${imsi}?username=${username}`,
+      query: ({ username, imsi }) => ({
+        url: `data/${imsi}?username=${username}`,
+        method: "GET",
+      }),
 
       providesTags: ["Subscribers"],
     }),

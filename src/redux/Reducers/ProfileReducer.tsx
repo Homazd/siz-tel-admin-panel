@@ -17,27 +17,27 @@ const initialState: UserState = {
   users: [],
   error: null,
 };
-export const fetchUsers = createAsyncThunk("users/fetchUsers", async () => {
+export const fetchSubscribers = createAsyncThunk("subscribers/fetchSubscribers", async () => {
   const response = await axios.get(
     "https://jsonplaceholder.typicode.com/users"
   );
   return response.data;
 });
 
-export const userSlice = createSlice({
-  name: "users",
+export const subscribersSlice = createSlice({
+  name: "subscribers",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchUsers.pending, (state) => {
+      .addCase(fetchSubscribers.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(fetchUsers.fulfilled, (state, action: PayloadAction<User[]>) => {
+      .addCase(fetchSubscribers.fulfilled, (state, action: PayloadAction<User[]>) => {
         state.status = "succeeded";
         state.users = action.payload;
       })
-      .addCase(fetchUsers.rejected, (state, action) => {
+      .addCase(fetchSubscribers.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message ?? "Something went wrong";
       });
