@@ -1,4 +1,4 @@
-import { useGetSubscribersQuery } from "../../../services/api";
+import { useGetSubscribersQuery } from "../../../services/subscribers";
 
 const SubscribersComponent = () => {
   const {

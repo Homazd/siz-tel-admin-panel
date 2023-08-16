@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
-import { apiSlice } from "../services/api";
+import { subscriberApi } from "../services/subscribers";
 import authReducer from "@/redux/features/profiles/authSlice";
 import subscriberReducer from "./features/subscribers/subscriberSlice";
 
@@ -8,13 +8,13 @@ import subscriberReducer from "./features/subscribers/subscriberSlice";
 // over the createStore function
 export const store = configureStore({
   reducer: {
-    [apiSlice.reducerPath]: apiSlice.reducer,
+    [subscriberApi.reducerPath]: subscriberApi.reducer,
     authState: authReducer,
     subscriber: subscriberReducer,
   },
   devTools: import.meta.env.NODE_ENV !== "production",
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({}).concat(apiSlice.middleware),
+    getDefaultMiddleware({}).concat(subscriberApi.middleware),
 });
 
 setupListeners(store.dispatch);
