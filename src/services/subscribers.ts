@@ -6,8 +6,9 @@ export interface SubscriberType {
   connected: boolean;
 }
 
-export const apiSlice = createApi({
-  reducerPath: "api",
+export const subscriberApi = createApi({
+  reducerPath: "subscriberApi",
+  tagTypes: ["Subscribers"],
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:3000/dashboard/subscribers",
     prepareHeaders: (headers) => {
@@ -21,8 +22,6 @@ export const apiSlice = createApi({
       return headers;
     },
   }),
-
-  tagTypes: ["Subscribers"],
   endpoints: (builder) => ({
     getSubscribers: builder.query<
       SubscriberType,
@@ -69,4 +68,4 @@ export const {
   useAddSubscriberMutation,
   useUpdateSubscriberMutation,
   useDeleteSubscriberMutation,
-} = apiSlice;
+} = subscriberApi;

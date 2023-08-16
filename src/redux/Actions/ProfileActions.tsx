@@ -4,7 +4,7 @@ import {
   FETCH_SUBSCRIBER_FAILURE,
 } from "../Types/subscribers";
 
-import { SubscriberType } from "../../services/api";
+import { SubscriberType } from "../../services/subscribers";
 
 export const fetchSUBSCRIBERSBegin = () => ({
   type: FETCH_SUBSCRIBER_BEGIN,

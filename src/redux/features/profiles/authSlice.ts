@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface AuthState {
-  profile?: IProfile | null;
+  profile: IProfile | null;
   isAuthenticated: boolean;
 }
 
@@ -18,9 +18,12 @@ export const authSlice = createSlice({
       state.isAuthenticated = true;
       state.profile = action.payload;
     },
-    logout: () => initialState,
-    profileInfo: (state, action: PayloadAction) => {
-      state.profile = action.payload.profile;
+    logout: (state) => {
+        state.isAuthenticated = false;
+        state.profile = null;
+    },
+    profileInfo: (state, action: PayloadAction<IProfile>) => {
+      state.profile = action.payload;
     },
   },
 });

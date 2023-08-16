@@ -2,7 +2,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { Modal, Button, Group, Divider, ModalProps } from "@mantine/core";
 import ReusableInput from "../../../../components/Input";
 import { useState } from "react";
-import { useGetSubscribersQuery } from "../../../../services/api";
+import { useGetSubscribersQuery } from "../../../../services/subscribers";
 import SubscriberConfig from "./components/Configuration";
 import Slice from "./components/Slice";
 import Session from "./components/Session";
