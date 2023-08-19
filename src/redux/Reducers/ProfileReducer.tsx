@@ -17,12 +17,15 @@ const initialState: UserState = {
   users: [],
   error: null,
 };
-export const fetchSubscribers = createAsyncThunk("subscribers/fetchSubscribers", async () => {
-  const response = await axios.get(
-    "https://jsonplaceholder.typicode.com/users"
-  );
-  return response.data;
-});
+export const fetchSubscribers = createAsyncThunk(
+  "subscribers/fetchSubscribers",
+  async () => {
+    const response = await axios.get(
+      "https://jsonplaceholder.typicode.com/users"
+    );
+    return response.data;
+  }
+);
 
 export const subscribersSlice = createSlice({
   name: "subscribers",
@@ -33,10 +36,13 @@ export const subscribersSlice = createSlice({
       .addCase(fetchSubscribers.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(fetchSubscribers.fulfilled, (state, action: PayloadAction<User[]>) => {
-        state.status = "succeeded";
-        state.users = action.payload;
-      })
+      .addCase(
+        fetchSubscribers.fulfilled,
+        (state, action: PayloadAction<User[]>) => {
+          state.status = "succeeded";
+          state.users = action.payload;
+        }
+      )
       .addCase(fetchSubscribers.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message ?? "Something went wrong";
@@ -44,8 +50,8 @@ export const subscribersSlice = createSlice({
   },
 });
 
-export const selectAllUsers = (state: RootState) => state.users;
-export const selectUsersStatus = (state: RootState) => state.users;
-export const selectUsersError = (state: RootState) => state.users;
+export const selectAllUsers = (state: RootState) => state.subscriber;
+export const selectUsersStatus = (state: RootState) => state.subscriber;
+export const selectUsersError = (state: RootState) => state.subscriber;
 
-export default userSlice.reducer;
+export default subscribersSlice.reducer;
