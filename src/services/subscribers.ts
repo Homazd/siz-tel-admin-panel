@@ -43,11 +43,16 @@ export const subscriberApi = createApi({
       }),
       invalidatesTags: ["Subscribers"],
     }),
-    updateSubscriber: builder.mutation({
-      query: (subscriber) => ({
-        url: `/subscriber/${subscriber.IMSI}`,
+    //
+
+    updateSubscriber: builder.mutation<
+      SubscriberType,
+      Pick<SubscriberType, "IMSI"> & Partial<SubscriberType>
+    >({
+      query: ({ IMSI, ...patch }) => ({
+        url: `/subscriber/${IMSI}`,
         method: "PATCH",
-        body: subscriber,
+        body: patch,
       }),
       invalidatesTags: ["Subscribers"],
     }),
