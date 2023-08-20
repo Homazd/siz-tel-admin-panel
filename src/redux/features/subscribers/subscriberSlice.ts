@@ -1,4 +1,3 @@
-import { subscribersSlice } from "@/redux/Reducers/ProfileReducer";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface Subscriber {
@@ -21,4 +20,4 @@ const SubscriberSlice = createSlice({
   },
 });
 export const { fetchSubscriberSuccess } = SubscriberSlice.actions;
-export default subscribersSlice.reducer;
+export default SubscriberSlice.reducer;

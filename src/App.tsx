@@ -50,7 +50,7 @@ function App() {
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             {/* <Route path="/" element={<ProtectedRoute />}> */}
-            <Route path="/dashboard" element={<Dashboard />}>
+            <Route path="/dashboard/*" element={<Dashboard />}>
               <Route path="subscribers" element={<Subscribers />} />
               <Route path="profile" element={<Profile />} />
             </Route>

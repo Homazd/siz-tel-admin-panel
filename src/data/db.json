@@ -1,7 +1,8 @@
 {
-  "profiles": [
+  "subscribers": [
     {
-      "id": 1
+      "IMSI": 1,
+      "name": "jjglkf"
     }
   ]
 }
