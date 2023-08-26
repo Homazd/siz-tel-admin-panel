@@ -2,7 +2,6 @@ import { useDisclosure } from "@mantine/hooks";
 import { Modal, Button, Group, Divider, ModalProps } from "@mantine/core";
 import ReusableInput from "../../../../components/Input";
 import { useState } from "react";
-import { useGetSubscribersQuery } from "../../../../services/subscribers";
 import SubscriberConfig from "./components/Configuration";
 import Slice from "./components/Slice";
 import Session from "./components/Session";
@@ -12,13 +11,7 @@ function SubscriberModal() {
   const [msisdnClicked, setMsisdnClicked] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
 
-  const {
-    data: Subscribers,
-    isLoading,
-    isSuccess,
-    isError,
-    error,
-  } = useGetSubscribersQuery("12345");
+ 
 
   const contentStyles: Partial<ModalProps["styles"]> = {
     content: {

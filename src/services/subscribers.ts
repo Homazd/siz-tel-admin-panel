@@ -1,34 +1,30 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export interface SubscriberType {
-  id: number;
-  IMSI: string;
-  connected: boolean;
+  imsi: string;
+  descreption?: string;
 }
 
 export const subscriberApi = createApi({
   reducerPath: "subscriberApi",
   tagTypes: ["Subscribers"],
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:3000/dashboard/subscribers",
+    baseUrl: "http://192.168.0.205:8000",
     prepareHeaders: (headers) => {
       const token = localStorage.getItem("access_token");
-      const username = localStorage.getItem("username");
-      if (token && username) {
+      // const username = localStorage.getItem("username");
+      if (token) {
         headers.set("Authorization", `Bearer ${token}`);
-        headers.set("username", username);
+        // headers.set("username", username);
       }
 
       return headers;
     },
   }),
   endpoints: (builder) => ({
-    getSubscribers: builder.query<
-      SubscriberType,
-      { username: string; imsi: number }
-    >({
-      query: ({ username, imsi }) => ({
-        url: `data/${imsi}?username=${username}`,
+    getSubscribers: builder.query<SubscriberType, { imsi: string }>({
+      query: ({ imsi }) => ({
+        url: `/mon/${imsi}`,
         method: "GET",
       }),
 
@@ -47,10 +43,10 @@ export const subscriberApi = createApi({
 
     updateSubscriber: builder.mutation<
       SubscriberType,
-      Pick<SubscriberType, "IMSI"> & Partial<SubscriberType>
+      Pick<SubscriberType, "imsi"> & Partial<SubscriberType>
     >({
-      query: ({ IMSI, ...patch }) => ({
-        url: `/subscriber/${IMSI}`,
+      query: ({ imsi, ...patch }) => ({
+        url: `/subscriber/${imsi}`,
         method: "PATCH",
         body: patch,
       }),

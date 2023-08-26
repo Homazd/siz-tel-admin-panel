@@ -1,3 +1,5 @@
+import { ChangeEvent } from 'react';
+
 import {
   TextInput,
   TextInputProps,
@@ -6,6 +8,10 @@ import {
 } from "@mantine/core";
 import { IconSearch, IconArrowRight, IconArrowLeft } from "@tabler/icons-react";
 import styled from "@emotion/styled";
+import { useState } from "react";
+import { useGetSubscribersQuery } from "../../../services/subscribers";
+
+
 
 const StyledInput = styled(TextInput)`
   & .mantine-TextInput-wrapper {
@@ -14,8 +20,28 @@ const StyledInput = styled(TextInput)`
     margin: 0 auto;
   }
 `;
+export interface SubscriberType {
+  imsi: string;
+}
+
 function IMSIInput(props: TextInputProps) {
+  const [value, setValue] = useState<string>('');
   const theme = useMantineTheme();
+
+  const {
+    data: Subscribers,
+    isLoading,
+    isSuccess,
+    isError,
+    error,
+  } = useGetSubscribersQuery({ imsi : value});
+
+  const handleOnInput = (event : ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    setValue(event.target.value);
+    console.log("value is:", value)
+    console.log(Subscribers, isLoading, isSuccess, isError, error)
+  }
 
   return (
     <StyledInput
@@ -39,6 +65,8 @@ function IMSIInput(props: TextInputProps) {
       }
       placeholder="IMSI"
       rightSectionWidth={22}
+      value={value}
+      onChange={handleOnInput}
       {...props}
     />
   );

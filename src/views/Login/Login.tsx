@@ -27,6 +27,10 @@ export default function LoginPage() {
   });
   const [loggedIn, setLoggedIn] = useState(false);
 
+  const formData = new FormData();
+  formData.append("username", credentials.username);
+  formData.append("password", credentials.password);
+
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ): void => {
@@ -40,14 +44,19 @@ export default function LoginPage() {
     event.preventDefault();
     try {
       const response = await axios.post(
-        "http://192.168.0.205:8000/api/auth/login/",
-        credentials
+        "http://192.168.0.205:8000/token",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
-      console.log(response.data);
+      console.log("resonse.data is:", response.data);
       // const { access_token } = response.data;
       localStorage.setItem("isLoggedIn", "true");
-      localStorage.setItem("access_token", JSON.stringify(response.data.key));
-      localStorage.setItem("username", credentials.username);
+      localStorage.setItem("access_token", response.data.access_token);
+      // localStorage.setItem("username", credentials.username);
       setLoggedIn(true);
 
       // Handle successful login
