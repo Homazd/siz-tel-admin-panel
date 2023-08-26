@@ -28,7 +28,7 @@ function IMSIInput(props: TextInputProps) {
   const theme = useMantineTheme();
 
   const {
-    data: Subscribers,
+    data: Subscriber,
     isLoading,
     isSuccess,
     isError,
@@ -43,7 +43,9 @@ function IMSIInput(props: TextInputProps) {
   const handleOnInput = (event: ChangeEvent<HTMLInputElement>) => {
     setIsTyping(true);
     setValue(event.target.value);
-    // console.log(Subscribers, isLoading, isSuccess, isError, error);
+    console.log(Subscriber, isLoading, isSuccess, isError, error);
+    console.log(Subscriber.imsi);
+    
   };
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     setIsTyping(false);
@@ -51,33 +53,39 @@ function IMSIInput(props: TextInputProps) {
     // handle form submit
   }
   return (
-    <form onSubmit={handleSubmit}>
-      <StyledInput
-        icon={<IconSearch size="1.1rem" stroke={1.5} />}
-        radius="xl"
-        size="lg"
-        rightSection={
-          <ActionIcon
-            size={22}
-            radius="xl"
-            color={theme.primaryColor}
-            variant="filled"
-            maw={320}
-          >
-            {theme.dir === "ltr" ? (
-              <IconArrowRight size="1.1rem" stroke={1.5} />
-            ) : (
-              <IconArrowLeft size="1.1rem" stroke={1.5} />
-            )}
-          </ActionIcon>
-        }
-        placeholder="IMSI"
-        rightSectionWidth={22}
-        value={value}
-        onChange={handleOnInput}
-        {...props}
-      />
-    </form>
+    <>
+      <form onSubmit={handleSubmit}>
+        <StyledInput
+          icon={<IconSearch size="1.1rem" stroke={1.5} />}
+          radius="xl"
+          size="lg"
+          rightSection={
+            <ActionIcon
+              size={22}
+              radius="xl"
+              color={theme.primaryColor}
+              variant="filled"
+              maw={320}
+            >
+              {theme.dir === "ltr" ? (
+                <IconArrowRight size="1.1rem" stroke={1.5} />
+              ) : (
+                <IconArrowLeft size="1.1rem" stroke={1.5} />
+              )}
+            </ActionIcon>
+          }
+          placeholder="IMSI"
+          rightSectionWidth={22}
+          value={value}
+          onChange={handleOnInput}
+          {...props}
+        />
+      </form>
+      {isLoading && <div>Loading...</div>}
+      {isError && <div>Error Fetching Subscriber data</div>}
+      {isSuccess && <div>{Subscriber.imsi}</div>}
+ 
+    </>
   );
 }
 export default IMSIInput;

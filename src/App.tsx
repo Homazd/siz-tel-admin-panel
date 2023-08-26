@@ -11,6 +11,9 @@ import {
   ColorSchemeProvider,
   ColorScheme,
 } from "@mantine/core";
+// Redux Toolkit 
+import { ApiProvider } from "@reduxjs/toolkit/dist/query/react";
+import { subscriberApi } from "./services/subscribers";
 
 // import ProtectedRoute from "./components/Routes/protectedRoute";
 
@@ -21,6 +24,7 @@ function App() {
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
 
   return (
+    <ApiProvider api={ subscriberApi}>
     <ColorSchemeProvider
       colorScheme={colorScheme}
       toggleColorScheme={toggleColorScheme}
@@ -60,6 +64,7 @@ function App() {
         </Router>
       </MantineProvider>
     </ColorSchemeProvider>
+    </ApiProvider>
   );
 }
 
