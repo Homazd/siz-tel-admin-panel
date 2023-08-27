@@ -70,7 +70,6 @@ const Slice = () => {
             <List.Item className="text-red-500 mt-2">
               At least one slice is required
             </List.Item>
-            <List.Item>Blah blah blah</List.Item>
           </List>
           <Button
             className="font-bold bg-sky-500 w-48 space-x-10 mt-2 mx-10"

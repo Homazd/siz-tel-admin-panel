@@ -24,6 +24,7 @@ const StyledInput = styled(TextInput)`
 `;
 export interface SubscriberType {
   imsi: string;
+  security: object;
 }
 
 function IMSIInput(props: TextInputProps) {
@@ -49,8 +50,11 @@ function IMSIInput(props: TextInputProps) {
     setIsTyping(true);
     setValue(event.target.value);
     console.log(Subscriber, isLoading, isSuccess, isError, error);
-    console.log(Subscriber.imsi);
+    if (Subscriber !== undefined) {
+      console.log("subscriber is: ", Subscriber.ambr);
+    }
   };
+
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     setIsTyping(false);
     event.preventDefault();
@@ -90,10 +94,53 @@ function IMSIInput(props: TextInputProps) {
         {isError && <div>Error Fetching Subscriber data</div>}
         {isSuccess && (
           <>
-            <Modal opened={opened} onClose={() => setOpened(false)} title="IMSI">
-              Hi Babe
+            <Modal
+              opened={opened}
+              onClose={() => setOpened(false)}
+              className="w-[600px]"
+              size="75%"
+            >
+              <div className="h-10 bg-gray-300 text-[22px]">
+                {Subscriber.imsi}{" "}
+              </div>{" "}
+              <div className="mt-6">
+                <h3 className="font-bold mb-3">Subscriber Configuration</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    {Subscriber.imeisv}
+                    {Subscriber.security.k}
+                    {Subscriber.security.opc}
+                  </div>
+                  <div>
+                    <p>
+                      {Subscriber.ambr.downlink.value} Gbps
+                      <span className="text-gray-300 text-sm">...DL</span>
+                    </p>
+                    <span>{Subscriber.ambr.uplink.value} Gbps</span>
+                    <span className="text-gray-300 text-sm">...UL</span>
+                  </div>
+                </div>
+                <div className="mt-6">
+                  <h3 className="font-bold mb-3">SST:1 (Default S-NSSAI)</h3>
+
+                  <div className="grid grid-cols-8">
+                    <div className="col-span-1 text-gray-400 text-sm">DNN/APN</div>
+                    <div className="col-span-1 text-gray-400 text-sm">Type</div>
+                    <div className="col-span-1 text-gray-400 text-sm">5QI/QCI</div>
+                    <div className="col-span-1 text-gray-400 text-sm">ARP</div>
+                    <div className="col-span-1 text-gray-400 text-sm">Capability</div>
+                    <div className="col-span-1 text-gray-400 text-sm">Vulnerability</div>
+                    <div className="col-span-1 text-gray-400 text-sm">MBR DL/UL</div>
+                    <div className="col-span-1 text-gray-400 text-sm">GBR DL/UL</div>
+                  </div>
+                  <div className="grid grid-cols-8">
+                    <div>{}</div>
+
+                  </div>
+                </div>
+              </div>
             </Modal>
-            <Group position="center" onClick={() => setOpened(true) }>
+            <Group position="center" onClick={() => setOpened(true)}>
               <Box
                 component="a"
                 target="_blank"
