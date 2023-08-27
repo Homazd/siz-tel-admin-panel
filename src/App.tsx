@@ -11,7 +11,7 @@ import {
   ColorSchemeProvider,
   ColorScheme,
 } from "@mantine/core";
-// Redux Toolkit 
+// Redux Toolkit
 import { ApiProvider } from "@reduxjs/toolkit/dist/query/react";
 import { subscriberApi } from "./services/subscribers";
 
@@ -24,46 +24,46 @@ function App() {
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
 
   return (
-    <ApiProvider api={ subscriberApi}>
-    <ColorSchemeProvider
-      colorScheme={colorScheme}
-      toggleColorScheme={toggleColorScheme}
-    >
-      <MantineProvider
-        theme={{
-          colorScheme,
-          colors: {
-            dark: [
-              "#d5d7e0",
-              "#acaebf",
-              "#8c8fa3",
-              "#666980",
-              "#4d4f66",
-              "#34354a",
-              "#2b2c3d",
-              "#1d1e30",
-              "#0c0d21",
-              "#01010a",
-            ],
-          },
-        }}
-        withGlobalStyles
-        withNormalizeCSS
+    <ApiProvider api={subscriberApi}>
+      <ColorSchemeProvider
+        colorScheme={colorScheme}
+        toggleColorScheme={toggleColorScheme}
       >
-        <Router>
-          <Routes>
-            <Route path="/" element={<LoginPage />} />
-            {/* <Route path="/" element={<ProtectedRoute />}> */}
-            <Route path="/dashboard/*" element={<Dashboard />}>
-              <Route path="subscribers" element={<Subscribers />} />
-              <Route path="profile" element={<Profile />} />
-            </Route>
-            {/* <Route path="profile" element={<Profile />} /> */}
-            {/* </Route> */}
-          </Routes>
-        </Router>
-      </MantineProvider>
-    </ColorSchemeProvider>
+        <MantineProvider
+          theme={{
+            colorScheme,
+            colors: {
+              dark: [
+                "#d5d7e0",
+                "#acaebf",
+                "#8c8fa3",
+                "#666980",
+                "#4d4f66",
+                "#34354a",
+                "#2b2c3d",
+                "#1d1e30",
+                "#0c0d21",
+                "#01010a",
+              ],
+            },
+          }}
+          withGlobalStyles
+          withNormalizeCSS
+        >
+          <Router>
+            <Routes>
+              <Route path="/" element={<LoginPage />} />
+              {/* <Route path="/" element={<ProtectedRoute />}> */}
+              <Route path="/dashboard/*" element={<Dashboard />}>
+                <Route path="subscribers" element={<Subscribers />} />
+                <Route path="profile" element={<Profile />} />
+              </Route>
+              {/* <Route path="profile" element={<Profile />} /> */}
+              {/* </Route> */}
+            </Routes>
+          </Router>
+        </MantineProvider>
+      </ColorSchemeProvider>
     </ApiProvider>
   );
 }
