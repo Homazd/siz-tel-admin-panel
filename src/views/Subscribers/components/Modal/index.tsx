@@ -1,17 +1,25 @@
-import { useDisclosure } from "@mantine/hooks";
-import { Modal, Button, Group, Divider, ModalProps } from "@mantine/core";
-import ReusableInput from "../../../../components/Input";
+// Hooks
 import { useState } from "react";
+// Mantine Hooks
+import { useDisclosure } from "@mantine/hooks";
+// Mantine Components
+import { Modal, Button, Group, ModalProps } from "@mantine/core";
+// Components
 import SubscriberConfig from "./components/Configuration";
 import Slice from "./components/Slice";
 import Session from "./components/Session";
 
 function SubscriberModal() {
   const [opened, { open, close }] = useDisclosure(false);
-  const [msisdnClicked, setMsisdnClicked] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
+  const [hiddenSession, setHiddenSession] = useState(false);
 
- 
+  const handleOnDelete = () => {
+    setHiddenSession(true);
+  };
+
+  const handleOnAdd = () => {
+    setHiddenSession(false);
+  };
 
   const contentStyles: Partial<ModalProps["styles"]> = {
     content: {
@@ -19,18 +27,6 @@ function SubscriberModal() {
       margin: "auto",
     },
   };
-  const handleOnAdd = () => {
-    setMsisdnClicked(true);
-    setIsVisible(false);
-  };
-
-  const handleOnMulti = () => {
-    setIsVisible(true);
-    setMsisdnClicked(false);
-  };
-  // useEffect(() => {
-  //   console.log(Subscribers, isLoading, isSuccess, isError, error);
-  // }, []);
 
   return (
     <>
@@ -41,45 +37,15 @@ function SubscriberModal() {
         styles={contentStyles}
         className="bg-gray-300 rounded-lg shadow-lg w-[800px]"
       >
-        <div>
-          <h3>Subscriber Configuration</h3>
-          <Divider />
-          <ReusableInput required placeholder="Enter IMSI" label="IMSI" />
-          <div className="grid place-content-center">
-            {isVisible && (
-              <Button
-                className="font-bold bg-sky-500 w-28 m-12"
-                onClick={handleOnAdd}
-              >
-                +
-              </Button>
-            )}
-            {!isVisible && (
-              <>
-                <Button
-                  className="font-bold bg-red-500 w-28 mb-2"
-                  onClick={handleOnMulti}
-                >
-                  ×
-                </Button>
-                <Button
-                  className="font-bold bg-sky-500 w-28 justify-items-center "
-                  onClick={handleOnAdd}
-                >
-                  +
-                </Button>
-              </>
-            )}
-            {msisdnClicked ? (
-              <ReusableInput label="MSISDN" required className="w-[300px]" />
-            ) : null}
-          </div>
-          <SubscriberConfig />
-          <Slice />
-          <Session />
+        <SubscriberConfig />
+        <Slice
+          hiddenSession={hiddenSession}
+          onClickDelete={handleOnDelete}
+          onClickAdd={handleOnAdd}
+        />
+        <Session hiddenSession={hiddenSession} />
 
-          <Button className="font-bold bg-blue-500 mt-3">Submit</Button>
-        </div>
+        <Button className="font-bold bg-blue-500 mt-3">Submit</Button>
       </Modal>
 
       <Group position="center">

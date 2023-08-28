@@ -17,21 +17,21 @@ const StyledCheckbox = styled(Checkbox)`
     place-content: center start;
   }
 `;
-const Slice = () => {
-  const [checked, setChecked] = useState(true);
-  const [hiddenSlice, setHiddenSlice] = useState(false);
 
-  const handleOnClick = () => {
-    setHiddenSlice(true);
-  };
-  const handleOnAdd = () => {
-    setHiddenSlice(false);
-  };
+interface SlicePropsTypes {
+  hiddenSession: boolean;
+  onClickDelete: any;
+  onClickAdd: any;
+}
+const Slice: React.FC<SlicePropsTypes> = ({hiddenSession, onClickDelete, onClickAdd}) => {
+  const [checked, setChecked] = useState(true);
+
+
   return (
     <div className="mt-10">
       <h3>Slice Configuration</h3>
       <Divider />
-      {!hiddenSlice ? (
+      {!hiddenSession ? (
         <div className="flex">
           <Radio.Group name="SST" label="SST" withAsterisk>
             <Group mt="xs">
@@ -59,7 +59,7 @@ const Slice = () => {
           )}
           <Button
             className="font-bold bg-red-500 w-28 ml-6 mt-6"
-            onClick={handleOnClick}
+            onClick={onClickDelete}
           >
             ×
           </Button>
@@ -73,14 +73,14 @@ const Slice = () => {
           </List>
           <Button
             className="font-bold bg-sky-500 w-48 space-x-10 mt-2 mx-10"
-            onClick={handleOnAdd}
+            onClick={onClickAdd}
           >
             +
           </Button>
         </div>
       )}
     </div>
-  );
+  )
 };
 
 export default Slice;

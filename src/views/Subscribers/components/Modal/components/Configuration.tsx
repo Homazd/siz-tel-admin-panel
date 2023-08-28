@@ -1,11 +1,59 @@
+import { useState } from "react"
 // Components
 import ReusableInput from "../../../../../components/Input";
 // Mantine Components
-import { Select } from "@mantine/core"
+import { Select, Divider, Button } from "@mantine/core"
 
 const SubscriberConfig = () => {
+  const [isMSIVisible, setIsMSIVisible] = useState(true);
+  const [msisdnClicked, setMsisdnClicked] = useState(false)
+
+ const handleOnAdd = () => {
+    setMsisdnClicked(true);
+    setIsMSIVisible(false);
+  };
+
+  const handleOnMulti = () => {
+    setIsMSIVisible(true);
+    setMsisdnClicked(false);
+  };
+
 return (
     <>
+      <div>
+          <h3>Subscriber Configuration</h3>
+          <Divider />
+          <ReusableInput required placeholder="Enter IMSI" label="IMSI" />
+          <div className="grid place-content-center">
+            {isMSIVisible && (
+              <Button
+                className="font-bold bg-sky-500 w-28 m-12"
+                onClick={handleOnAdd}
+              >
+                +
+              </Button>
+            )}
+            {!isMSIVisible && (
+              <>
+                <Button
+                  className="font-bold bg-red-500 w-28 mb-2"
+                  onClick={handleOnMulti}
+                >
+                  ×
+                </Button>
+                <Button
+                  className="font-bold bg-sky-500 w-28 justify-items-center "
+                  onClick={handleOnAdd}
+                >
+                  +
+                </Button>
+              </>
+            )}
+            {/* {msisdnClicked ? (
+              <ReusableInput label="MSISDN" required className="w-[300px]" />
+            ) : null} */}
+          </div>
+          </div>
     <div className="flex">
     <ReusableInput
       label="Subscriber Key (K)"
