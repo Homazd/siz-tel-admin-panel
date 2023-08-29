@@ -1,6 +1,6 @@
 import { useState } from "react";
 // Mantine Components
-import { Divider, Select, Button } from "@mantine/core";
+import { Divider, Select, Button, List } from "@mantine/core";
 // Components
 import ReusableInput from "../../../../../components/Input";
 // Static data
@@ -12,15 +12,18 @@ interface SessionProps {
   hiddenSession: boolean;
 }
 const Session: React.FC<SessionProps> = ({ hiddenSession }) => {
-  const [sessionVisible, setSessionVisible] = useState(true);
+  const [sessionVisible, setSessionVisible] = useState(false);
 
   const onClickDelete = () => {
-    setSessionVisible(false);
+    setSessionVisible(true);
   };
 
+  const onClickAdd = () => {
+    setSessionVisible(false);
+  }
   return (
     <div>
-      {!hiddenSession && (
+      {!hiddenSession ? (
         <div>
           {!sessionVisible && (
             <div className="mt-10">
@@ -154,6 +157,20 @@ const Session: React.FC<SessionProps> = ({ hiddenSession }) => {
             </div>
           )}
         </div>
+      ) : (
+        <div className="flex place-content-between">
+        <List>
+          <List.Item className="text-red-500 mt-2">
+            At least one Session is required
+          </List.Item>
+        </List>
+        <Button
+          className="font-bold bg-sky-500 w-48 space-x-10 mt-2 mx-10"
+          onClick={onClickAdd}
+        >
+          +
+        </Button>
+      </div>
       )}
     </div>
   );

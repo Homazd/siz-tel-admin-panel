@@ -8,6 +8,7 @@ import { Modal, Button, Group, ModalProps } from "@mantine/core";
 import SubscriberConfig from "./components/Configuration";
 import Slice from "./components/Slice";
 import Session from "./components/Session";
+import PccRules from "./components/PccRules";
 
 function SubscriberModal() {
   const [opened, { open, close }] = useDisclosure(false);
@@ -44,6 +45,7 @@ function SubscriberModal() {
           onClickAdd={handleOnAdd}
         />
         <Session hiddenSession={hiddenSession} />
+        <PccRules />
 
         <Button className="font-bold bg-blue-500 mt-3">Submit</Button>
       </Modal>

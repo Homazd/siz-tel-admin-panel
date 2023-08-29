@@ -20,8 +20,8 @@ const StyledCheckbox = styled(Checkbox)`
 
 interface SlicePropsTypes {
   hiddenSession: boolean;
-  onClickDelete: any;
-  onClickAdd: any;
+  onClickDelete: () => void;
+  onClickAdd:() => void;
 }
 const Slice: React.FC<SlicePropsTypes> = ({hiddenSession, onClickDelete, onClickAdd}) => {
   const [checked, setChecked] = useState(true);
