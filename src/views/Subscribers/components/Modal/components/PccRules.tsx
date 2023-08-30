@@ -4,6 +4,8 @@ import { Button, Divider, Select } from "@mantine/core";
 // Static data
 import ReusableInput from "@/components/Input";
 import qciItems from "@/data/qci.json";
+// Components
+import FlowContent from "./Flow";
 
 const apr = Array.from({ length: 15 }, (_, index) => index + 1);
 
