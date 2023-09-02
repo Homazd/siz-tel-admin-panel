@@ -1,8 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export interface SubscriberType {
-  imsi: string;
- security: object;
+  imsi: string ;
 }
 
 export const subscriberApi = createApi({
@@ -15,7 +14,6 @@ export const subscriberApi = createApi({
       // const username = localStorage.getItem("username");
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
-        // headers.set("username", username);
       }
 
       return headers;
@@ -31,10 +29,10 @@ export const subscriberApi = createApi({
       providesTags: ["Subscribers"],
     }),
     addSubscriber: builder.mutation<SubscriberType, SubscriberType>({
-      query: (IMSI) => ({
-        url: "/subscribers",
+      query: (newSubscriber) => ({
+        url: "/mon/",
         method: "POST",
-        body: { IMSI },
+        body: newSubscriber,
         headers: { "Content-Type": "application/json" },
       }),
       invalidatesTags: ["Subscribers"],

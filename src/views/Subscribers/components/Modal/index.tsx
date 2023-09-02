@@ -2,6 +2,9 @@
 import { useState } from "react";
 // Mantine Hooks
 import { useDisclosure } from "@mantine/hooks";
+import { useForm } from "@mantine/form";
+import { useAddSubscriberMutation } from "@/services/subscribers";
+
 // Mantine Components
 import { Modal, Button, Group, ModalProps } from "@mantine/core";
 // Components
@@ -13,7 +16,13 @@ import PccRules from "./components/PccRules";
 function SubscriberModal() {
   const [opened, { open, close }] = useDisclosure(false);
   const [hiddenSession, setHiddenSession] = useState(false);
+  const [createSubscriber] = useAddSubscriberMutation();
 
+  const form = useForm({
+    initialValues: {
+      imsi: "55",
+    },
+  });
   const handleOnDelete = () => {
     setHiddenSession(true);
   };
@@ -28,6 +37,13 @@ function SubscriberModal() {
       margin: "auto",
     },
   };
+  const handleSubmit = () => {
+    const { imsi } = form.values;
+    console.log("imsi is:", imsi);
+    createSubscriber({ imsi });
+  };
+  // const handleChange = (event: React.FormEvent) =>
+  //   form.setFieldValue("imsi", event.target.value);
 
   return (
     <>
@@ -38,16 +54,21 @@ function SubscriberModal() {
         styles={contentStyles}
         className="bg-gray-300 rounded-lg shadow-lg w-[800px]"
       >
-        <SubscriberConfig />
+        {/* <form onSubmit={form.onSubmit(handleSubmit)} className="block"> */}
+        <SubscriberConfig value={form.values.imsi} onChange={(value) => form.setFieldValue('imsi', value)} />
+        {/* </form> */}
         <Slice
           hiddenSession={hiddenSession}
           onClickDelete={handleOnDelete}
           onClickAdd={handleOnAdd}
-        />
+          />
         <Session hiddenSession={hiddenSession} />
         <PccRules />
 
-        <Button className="font-bold bg-blue-500 mt-3">Submit</Button>
+        <Button className="font-bold bg-blue-500 mt-3" type="submit">
+          Submit
+        </Button>
+        
       </Modal>
 
       <Group position="center">

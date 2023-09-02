@@ -51,7 +51,7 @@ function IMSIInput(props: TextInputProps) {
     setValue(event.target.value);
     console.log(Subscriber, isLoading, isSuccess, isError, error);
     if (Subscriber !== undefined) {
-      console.log("subscriber is: ", Subscriber.ambr);
+      // console.log("subscriber is: ", Subscriber.ambr);
     }
   };
 
@@ -107,16 +107,16 @@ function IMSIInput(props: TextInputProps) {
                 <h3 className="font-bold mb-3">Subscriber Configuration</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    {Subscriber.imeisv}
+                    {/* {Subscriber.imeisv}
                     {Subscriber.security.k}
-                    {Subscriber.security.opc}
+                    {Subscriber.security.opc} */}
                   </div>
                   <div>
                     <p>
-                      {Subscriber.ambr.downlink.value} Gbps
+                      {/* {Subscriber.ambr.downlink.value} Gbps */}
                       <span className="text-gray-300 text-sm">...DL</span>
                     </p>
-                    <span>{Subscriber.ambr.uplink.value} Gbps</span>
+                    {/* <span>{Subscriber.ambr.uplink.value} Gbps</span> */}
                     <span className="text-gray-300 text-sm">...UL</span>
                   </div>
                 </div>
