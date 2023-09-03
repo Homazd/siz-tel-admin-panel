@@ -1,8 +1,6 @@
 import { useState } from "react";
 // Mantine Components
-import { Divider, Select, Button, List } from "@mantine/core";
-// Components
-import ReusableInput from "../../../../../components/Input";
+import { Divider, Select, Button, List, TextInput } from "@mantine/core";
 // Static data
 import qciItems from "@/data/qci.json";
 
@@ -10,27 +8,27 @@ const apr = Array.from({ length: 15 }, (_, index) => index + 1);
 
 interface SessionProps {
   hiddenSession: boolean;
+  onClickDeleteSession: () => void;
+  onClickAddSession: () => void;
 }
-const Session: React.FC<SessionProps> = ({ hiddenSession }) => {
-  const [sessionVisible, setSessionVisible] = useState(false);
-
-  const onClickDelete = () => {
-    setSessionVisible(true);
-  };
-
-  const onClickAdd = () => {
-    setSessionVisible(false);
-  }
+const Session: React.FC<SessionProps> = ({
+  hiddenSession,
+  onClickAddSession,
+  onClickDeleteSession,
+}) => {
   return (
     <div>
-      {!hiddenSession ? (
+      {hiddenSession ? (
         <div>
-          {!sessionVisible && (
+          {hiddenSession && (
             <div className="mt-10">
               <h3>Session Configuration</h3>
               <Divider />
               <div className="flex mt-6">
-                <ReusableInput
+                <TextInput
+                  classNames={{
+                    label: "static",
+                  }}
                   label="DNN/APN"
                   required
                   placeholder="Internet"
@@ -40,6 +38,9 @@ const Session: React.FC<SessionProps> = ({ hiddenSession }) => {
                   label="Type"
                   placeholder="IPv4v6"
                   required
+                  classNames={{
+                    label: "static",
+                  }}
                   clearable
                   data={[
                     { value: "ipv4", label: "IPv4" },
@@ -48,9 +49,9 @@ const Session: React.FC<SessionProps> = ({ hiddenSession }) => {
                   ]}
                   className="ml-6 w-[100px]"
                 />
-                  <Button
+                <Button
                   className="font-bold bg-red-500 w-28 ml-6 mt-6"
-                  onClick={onClickDelete}
+                  onClick={onClickDeleteSession}
                 >
                   ×
                 </Button>
@@ -59,6 +60,9 @@ const Session: React.FC<SessionProps> = ({ hiddenSession }) => {
               <Select
                 label="5QI/QCI"
                 className="mt-3 w-[425px]"
+                classNames={{
+                  label: "static",
+                }}
                 required
                 clearable
                 data={qciItems.map((option) => ({
@@ -69,6 +73,9 @@ const Session: React.FC<SessionProps> = ({ hiddenSession }) => {
               <Select
                 label="ARP Priority Level (1-15)"
                 className="mt-3 w-[425px]"
+                classNames={{
+                  label: "static",
+                }}
                 required
                 clearable
                 data={apr.map((num) => ({
@@ -80,6 +87,9 @@ const Session: React.FC<SessionProps> = ({ hiddenSession }) => {
                 <Select
                   label="Capability"
                   className="mt-3 w-[200px]"
+                  classNames={{
+                    label: "static",
+                  }}
                   required
                   clearable
                   data={[
@@ -89,6 +99,9 @@ const Session: React.FC<SessionProps> = ({ hiddenSession }) => {
                 />
                 <Select
                   label="Vulnerability"
+                  classNames={{
+                    label: "static",
+                  }}
                   className="mt-3 w-[200px] ml-6"
                   required
                   clearable
@@ -99,7 +112,10 @@ const Session: React.FC<SessionProps> = ({ hiddenSession }) => {
                 />
               </div>
               <div className="flex mt-3">
-                <ReusableInput
+                <TextInput
+                  classNames={{
+                    label: "static",
+                  }}
                   label="Session-AMBR Downlink"
                   required
                   placeholder="1"
@@ -109,6 +125,9 @@ const Session: React.FC<SessionProps> = ({ hiddenSession }) => {
                   label="unit"
                   className="ml-6 w-[150px]"
                   clearable
+                  classNames={{
+                    label: "static",
+                  }}
                   placeholder="Gbps"
                   data={[
                     { value: "bps", label: "bps" },
@@ -120,7 +139,10 @@ const Session: React.FC<SessionProps> = ({ hiddenSession }) => {
                 />
               </div>
               <div className="flex mt-3">
-                <ReusableInput
+                <TextInput
+                  classNames={{
+                    label: "static",
+                  }}
                   label="Session-AMBR Uplink"
                   required
                   placeholder="1"
@@ -129,6 +151,9 @@ const Session: React.FC<SessionProps> = ({ hiddenSession }) => {
                 <Select
                   label="unit"
                   className="ml-6 w-[150px]"
+                  classNames={{
+                    label: "static",
+                  }}
                   clearable
                   placeholder="Gbps"
                   data={[
@@ -141,15 +166,33 @@ const Session: React.FC<SessionProps> = ({ hiddenSession }) => {
                 />
               </div>
               <div className="flex mt-3">
-                <ReusableInput label="UE IPv4 Address" className="w-[200px]" />
-                <ReusableInput
+                <TextInput
+                  classNames={{
+                    label: "static",
+                  }}
+                  label="UE IPv4 Address"
+                  className="w-[200px]"
+                />
+                <TextInput
+                  classNames={{
+                    label: "static",
+                  }}
                   label="UE IPv6 Address"
                   className="w-[200px] ml-6"
                 />
               </div>
               <div className="flex mt-3">
-                <ReusableInput label="SMF IPv4 Address" className="w-[200px]" />
-                <ReusableInput
+                <TextInput
+                  classNames={{
+                    label: "static",
+                  }}
+                  label="SMF IPv4 Address"
+                  className="w-[200px]"
+                />
+                <TextInput
+                  classNames={{
+                    label: "static",
+                  }}
                   label="SMF IPv6 Address"
                   className="w-[200px] ml-6"
                 />
@@ -158,19 +201,23 @@ const Session: React.FC<SessionProps> = ({ hiddenSession }) => {
           )}
         </div>
       ) : (
-        <div className="flex place-content-between">
-        <List>
-          <List.Item className="text-red-500 mt-2">
-            At least one Session is required
-          </List.Item>
-        </List>
-        <Button
-          className="font-bold bg-sky-500 w-48 space-x-10 mt-2 mx-10"
-          onClick={onClickAdd}
-        >
-          +
-        </Button>
-      </div>
+        <div className="mt-10">
+          <h3>Session Configuration</h3>
+          <Divider />
+          <div className="flex">
+            <List>
+              <List.Item className="text-red-500 mt-2">
+                At least one Session is required
+              </List.Item>
+            </List>
+            <Button
+              className="font-bold bg-sky-500 w-48 space-x-10 mt-2 mx-10"
+              onClick={onClickAddSession}
+            >
+              +
+            </Button>
+          </div>
+        </div>
       )}
     </div>
   );

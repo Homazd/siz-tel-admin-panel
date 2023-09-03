@@ -2,11 +2,12 @@
 import { useState } from "react";
 // Mantine Hooks
 import { useDisclosure } from "@mantine/hooks";
+// Mantine Form
 import { useForm } from "@mantine/form";
+// Services
 import { useAddSubscriberMutation } from "@/services/subscribers";
-
 // Mantine Components
-import { Modal, Button, Group, ModalProps } from "@mantine/core";
+import { Modal, Button, Group, ModalProps, Box } from "@mantine/core";
 // Components
 import SubscriberConfig from "./components/Configuration";
 import Slice from "./components/Slice";
@@ -15,7 +16,8 @@ import PccRules from "./components/PccRules";
 
 function SubscriberModal() {
   const [opened, { open, close }] = useDisclosure(false);
-  const [hiddenSession, setHiddenSession] = useState(false);
+  const [hiddenSession, setHiddenSession] = useState(true);
+  const [hiddenSlice, setHiddenSlice] = useState(false);
   const [createSubscriber] = useAddSubscriberMutation();
 
   const form = useForm({
@@ -24,11 +26,18 @@ function SubscriberModal() {
     },
   });
   const handleOnDelete = () => {
-    setHiddenSession(true);
+    setHiddenSlice(true);
   };
 
   const handleOnAdd = () => {
+    setHiddenSlice(false);
+  };
+  const onClickDeleteSession = () => {
     setHiddenSession(false);
+  };
+
+  const onClickAddSession = () => {
+    setHiddenSession(true);
   };
 
   const contentStyles: Partial<ModalProps["styles"]> = {
@@ -54,21 +63,32 @@ function SubscriberModal() {
         styles={contentStyles}
         className="bg-gray-300 rounded-lg shadow-lg w-[800px]"
       >
-        {/* <form onSubmit={form.onSubmit(handleSubmit)} className="block"> */}
-        <SubscriberConfig value={form.values.imsi} onChange={(value) => form.setFieldValue('imsi', value)} />
-        {/* </form> */}
-        <Slice
-          hiddenSession={hiddenSession}
-          onClickDelete={handleOnDelete}
-          onClickAdd={handleOnAdd}
-          />
-        <Session hiddenSession={hiddenSession} />
-        <PccRules />
+        <Box maw={900} mx="auto">
+          <form
+            onSubmit={form.onSubmit(handleSubmit)}
+            className="block relative"
+          >
+            <SubscriberConfig
+              value={form.values.imsi}
+              onChange={(value) => form.setFieldValue("imsi", value)}
+            />
+            <Slice
+              hiddenSlice={hiddenSlice}
+              onClickDelete={handleOnDelete}
+              onClickAdd={handleOnAdd}
+            />
+            <Session
+              hiddenSession={hiddenSession}
+              onClickDeleteSession={onClickDeleteSession}
+              onClickAddSession={onClickAddSession}
+            />
+            <PccRules />
 
-        <Button className="font-bold bg-blue-500 mt-3" type="submit">
-          Submit
-        </Button>
-        
+            <Button className="font-bold bg-blue-500 mt-3" type="submit">
+              Submit
+            </Button>
+          </form>
+        </Box>
       </Modal>
 
       <Group position="center">
