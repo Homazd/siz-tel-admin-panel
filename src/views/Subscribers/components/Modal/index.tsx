@@ -23,6 +23,8 @@ function SubscriberModal() {
   const form = useForm({
     initialValues: {
       imsi: "55",
+      msisdn: "",
+      subK: "",
     },
   });
   const handleOnDelete = () => {
@@ -47,8 +49,8 @@ function SubscriberModal() {
     },
   };
   const handleSubmit = () => {
-    const { imsi } = form.values;
-    console.log("imsi is:", imsi);
+    const { imsi, msisdn, subK } = form.values;
+    console.log("data is:", imsi, msisdn, subK);
     createSubscriber({ imsi });
   };
   // const handleChange = (event: React.FormEvent) =>
@@ -69,8 +71,12 @@ function SubscriberModal() {
             className="block relative"
           >
             <SubscriberConfig
-              value={form.values.imsi}
+              imsi={form.values.imsi}
               onChange={(value) => form.setFieldValue("imsi", value)}
+              msisdn={form.values.msisdn}
+              onChangeMsisdn={(value) => form.setFieldValue("msisdn", value)}
+              subK={form.values.subK}
+              onChangeSubK={(value) => form.setFieldValue("subK", value)}
             />
             <Slice
               hiddenSlice={hiddenSlice}

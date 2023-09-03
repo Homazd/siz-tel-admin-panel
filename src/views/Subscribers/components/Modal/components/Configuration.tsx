@@ -3,10 +3,21 @@ import React, { useState } from "react";
 import { Select, Divider, Button, TextInput } from "@mantine/core";
 
 interface ConfigProps {
-  value: string;
-  onChange: (value: string) => void;
+  imsi: string;
+  onChange: (imsi: string) => void;
+  msisdn: string;
+  onChangeMsisdn: (msisdn: string) => void;
+  subK: string;
+  onChangeSubK: (subK: string) => void;
 }
-const SubscriberConfig: React.FC<ConfigProps> = ({ value, onChange }) => {
+const SubscriberConfig: React.FC<ConfigProps> = ({
+  imsi,
+  onChange,
+  msisdn,
+  onChangeMsisdn,
+  subK,
+  onChangeSubK,
+}) => {
   const [isMSIVisible, setIsMSIVisible] = useState(true);
   const [msisdnClicked, setMsisdnClicked] = useState(false);
 
@@ -33,7 +44,7 @@ const SubscriberConfig: React.FC<ConfigProps> = ({ value, onChange }) => {
             label: "static",
           }}
           className="mt-3"
-          value={value}
+          value={imsi}
           onChange={(event) => onChange(event.currentTarget.value)}
         />
         <div className="grid place-content-center">
@@ -58,6 +69,10 @@ const SubscriberConfig: React.FC<ConfigProps> = ({ value, onChange }) => {
                       }}
                       required
                       className="w-[300px]"
+                      value={msisdn}
+                      onChange={(event) =>
+                        onChangeMsisdn(event.currentTarget.value)
+                      }
                     />
                   </>
                 ) : null}
@@ -88,6 +103,8 @@ const SubscriberConfig: React.FC<ConfigProps> = ({ value, onChange }) => {
           }}
           required
           className="w-[400px] mr-6"
+          value={subK}
+          onChange={(event) => onChangeSubK(event.currentTarget.value)}
         />
         <TextInput
           label="Authentication Management Field (AMF)"
@@ -110,7 +127,7 @@ const SubscriberConfig: React.FC<ConfigProps> = ({ value, onChange }) => {
         <TextInput
           label="Operator Key (OPc/OP)"
           classNames={{
-            label: 'static'
+            label: "static",
           }}
           required
           className="w-[500px]"
@@ -120,7 +137,7 @@ const SubscriberConfig: React.FC<ConfigProps> = ({ value, onChange }) => {
         <TextInput
           label="UE-AMBR Downlink"
           classNames={{
-            label: 'static'
+            label: "static",
           }}
           placeholder="1"
           required
@@ -129,7 +146,7 @@ const SubscriberConfig: React.FC<ConfigProps> = ({ value, onChange }) => {
         <Select
           label="Unit"
           classNames={{
-            label: 'static'
+            label: "static",
           }}
           placeholder="Gbps"
           data={[
@@ -145,7 +162,7 @@ const SubscriberConfig: React.FC<ConfigProps> = ({ value, onChange }) => {
         <TextInput
           label="UE-AMBR Uplink"
           classNames={{
-            label: 'static'
+            label: "static",
           }}
           placeholder="1"
           required
@@ -154,7 +171,7 @@ const SubscriberConfig: React.FC<ConfigProps> = ({ value, onChange }) => {
         <Select
           label="Unit"
           classNames={{
-            label: 'static'
+            label: "static",
           }}
           placeholder="Gbps"
           data={[
