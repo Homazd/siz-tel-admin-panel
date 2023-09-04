@@ -1,23 +1,40 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
-interface Subscriber {
-  imsi: number;
+export interface DataType {
+  imsi: string;
+  msisdn: string;
+  subK: string;
+  amf: string;
+  usimType: string;
+  opKey: string;
 }
-interface SubsriberState {
-  subscribers: Subscriber[];
+export interface FormState {
+  data: DataType;
+  isLoading: boolean;
+  isError: boolean;
 }
-const initialState: SubsriberState = {
-  subscribers: [],
+
+export const initialState: FormState = {
+  data: {
+    imsi: "321",
+    msisdn: "",
+    subK: "",
+    amf: "",
+    usimType: "",
+    opKey: "",
+  },
+  isLoading: false,
+  isError: false,
 };
+
 const SubscriberSlice = createSlice({
-  name: "subscriber",
+  name: "data",
   initialState,
   reducers: {
-    fetchSubscriberSuccess: (state, action: PayloadAction<Subscriber[]>) => {
-      state.subscribers = action.payload;
+    updateField: (state, action) => {
+      state.data = action.payload;
     },
-    // updateProfileSuccess: (state, action: PayloadAction<Subscriber>) => {},
   },
 });
-export const { fetchSubscriberSuccess } = SubscriberSlice.actions;
+export const { updateField } = SubscriberSlice.actions;
 export default SubscriberSlice.reducer;

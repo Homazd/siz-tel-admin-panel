@@ -1,26 +1,23 @@
 import React, { useState } from "react";
 // Mantine Components
 import { Select, Divider, Button, TextInput } from "@mantine/core";
+import {
+  FormState,
+  initialState
+} from "@/redux/features/subscribers/subscriberSlice";
 
-interface ConfigProps {
-  imsi: string;
-  onChange: (imsi: string) => void;
-  msisdn: string;
-  onChangeMsisdn: (msisdn: string) => void;
-  subK: string;
-  onChangeSubK: (subK: string) => void;
-}
-const SubscriberConfig: React.FC<ConfigProps> = ({
-  imsi,
-  onChange,
-  msisdn,
-  onChangeMsisdn,
-  subK,
-  onChangeSubK,
-}) => {
+const SubscriberConfig = () => {
   const [isMSIVisible, setIsMSIVisible] = useState(true);
   const [msisdnClicked, setMsisdnClicked] = useState(false);
+  const [formData, setFormData] = useState<FormState>(initialState);
 
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
   const handleOnAdd = () => {
     setMsisdnClicked(true);
     setIsMSIVisible(false);
@@ -44,8 +41,8 @@ const SubscriberConfig: React.FC<ConfigProps> = ({
             label: "static",
           }}
           className="mt-3"
-          value={imsi}
-          onChange={(event) => onChange(event.currentTarget.value)}
+          value={formData.data.imsi || ''}
+          onChange={handleChange}
         />
         <div className="grid place-content-center">
           {isMSIVisible && (
@@ -69,10 +66,8 @@ const SubscriberConfig: React.FC<ConfigProps> = ({
                       }}
                       required
                       className="w-[300px]"
-                      value={msisdn}
-                      onChange={(event) =>
-                        onChangeMsisdn(event.currentTarget.value)
-                      }
+                      value={formData.data.msisdn}
+                      onChange={handleChange}
                     />
                   </>
                 ) : null}
@@ -103,8 +98,8 @@ const SubscriberConfig: React.FC<ConfigProps> = ({
           }}
           required
           className="w-[400px] mr-6"
-          value={subK}
-          onChange={(event) => onChangeSubK(event.currentTarget.value)}
+          value={formData.data.subK}
+          onChange={handleChange}
         />
         <TextInput
           label="Authentication Management Field (AMF)"
@@ -123,13 +118,17 @@ const SubscriberConfig: React.FC<ConfigProps> = ({
           }}
           required
           className="w-[300px] mr-6"
+          value={formData.data.usimType}
+          onChange={handleChange}
         />
         <TextInput
           label="Operator Key (OPc/OP)"
           classNames={{
             label: "static",
           }}
+          value={formData.data.opKey}
           required
+          onChange={handleChange}
           className="w-[500px]"
         />
       </div>

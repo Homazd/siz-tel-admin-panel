@@ -1,14 +1,14 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-export interface SubscriberType {
-  imsi: string ;
-}
+import {
+  FormState,
+  DataType,
+} from "@/redux/features/subscribers/subscriberSlice";
 
 export const subscriberApi = createApi({
   reducerPath: "subscriberApi",
   tagTypes: ["Subscribers"],
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://192.168.0.205:8000",
+    baseUrl: "http://192.168.0.203:8008",
     prepareHeaders: (headers) => {
       const token = localStorage.getItem("access_token");
       // const username = localStorage.getItem("username");
@@ -20,15 +20,15 @@ export const subscriberApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getSubscribers: builder.query<SubscriberType, { imsi: string }>({
-      query: ({ imsi }) => ({
-        url: `/mon/${imsi}`,
+    getSubscribers: builder.query<Partial<DataType>, DataType>({
+      query: (data) => ({
+        url: `/mon/${data.imsi}`,
         method: "GET",
       }),
 
       providesTags: ["Subscribers"],
     }),
-    addSubscriber: builder.mutation<SubscriberType, SubscriberType>({
+    addSubscriber: builder.mutation<FormState, FormState>({
       query: (newSubscriber) => ({
         url: "/mon/",
         method: "POST",
@@ -40,13 +40,15 @@ export const subscriberApi = createApi({
     //
 
     updateSubscriber: builder.mutation<
-      SubscriberType,
-      Pick<SubscriberType, "imsi"> & Partial<SubscriberType>
-    >({
-      query: ({ imsi, ...patch }) => ({
-        url: `/subscriber/${imsi}`,
+      DataType, Partial<DataType>>({
+      query: (data) => ({
+        url: `/subscriber/${data.imsi}`,
         method: "PATCH",
-        body: patch,
+        headers: {
+          'Content-Type': 'application/json',
+          imsi: data.imsi,
+        },
+        body: data,
       }),
       invalidatesTags: ["Subscribers"],
     }),

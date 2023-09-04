@@ -29,7 +29,7 @@ export interface SubscriberType {
 
 function IMSIInput(props: TextInputProps) {
   const [value, setValue] = useState<string>("");
-  const [isTyping, setIsTyping] = useState(false);
+  // const [isTyping, setIsTyping] = useState(false);
   const [opened, setOpened] = useState(false);
   const theme = useMantineTheme();
 
@@ -39,12 +39,7 @@ function IMSIInput(props: TextInputProps) {
     isSuccess,
     isError,
     error,
-  } = useGetSubscribersQuery(
-    { imsi: value },
-    {
-      skip: isTyping,
-    }
-  );
+  } = useGetSubscribersQuery('123');
 
   const handleOnInput = (event: ChangeEvent<HTMLInputElement>) => {
     setIsTyping(true);

@@ -10,7 +10,7 @@ export const store = configureStore({
   reducer: {
     [subscriberApi.reducerPath]: subscriberApi.reducer,
     authState: authReducer,
-    subscriber: subscriberReducer,
+    form: subscriberReducer,
   },
   devTools: import.meta.env.NODE_ENV !== "production",
   middleware: (getDefaultMiddleware) =>
