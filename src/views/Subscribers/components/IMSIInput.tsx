@@ -29,7 +29,7 @@ export interface SubscriberType {
 
 function IMSIInput(props: TextInputProps) {
   const [value, setValue] = useState<string>("");
-  // const [isTyping, setIsTyping] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const [opened, setOpened] = useState(false);
   const theme = useMantineTheme();
 
@@ -39,11 +39,15 @@ function IMSIInput(props: TextInputProps) {
     isSuccess,
     isError,
     error,
-  } = useGetSubscribersQuery('123');
+  } = useGetSubscribersQuery(value, {
+    skip: isTyping,
+  });
 
   const handleOnInput = (event: ChangeEvent<HTMLInputElement>) => {
     setIsTyping(true);
     setValue(event.target.value);
+    console.log(value);
+
     console.log(Subscriber, isLoading, isSuccess, isError, error);
     if (Subscriber !== undefined) {
       // console.log("subscriber is: ", Subscriber.ambr);
@@ -119,18 +123,29 @@ function IMSIInput(props: TextInputProps) {
                   <h3 className="font-bold mb-3">SST:1 (Default S-NSSAI)</h3>
 
                   <div className="grid grid-cols-8">
-                    <div className="col-span-1 text-gray-400 text-sm">DNN/APN</div>
+                    <div className="col-span-1 text-gray-400 text-sm">
+                      DNN/APN
+                    </div>
                     <div className="col-span-1 text-gray-400 text-sm">Type</div>
-                    <div className="col-span-1 text-gray-400 text-sm">5QI/QCI</div>
+                    <div className="col-span-1 text-gray-400 text-sm">
+                      5QI/QCI
+                    </div>
                     <div className="col-span-1 text-gray-400 text-sm">ARP</div>
-                    <div className="col-span-1 text-gray-400 text-sm">Capability</div>
-                    <div className="col-span-1 text-gray-400 text-sm">Vulnerability</div>
-                    <div className="col-span-1 text-gray-400 text-sm">MBR DL/UL</div>
-                    <div className="col-span-1 text-gray-400 text-sm">GBR DL/UL</div>
+                    <div className="col-span-1 text-gray-400 text-sm">
+                      Capability
+                    </div>
+                    <div className="col-span-1 text-gray-400 text-sm">
+                      Vulnerability
+                    </div>
+                    <div className="col-span-1 text-gray-400 text-sm">
+                      MBR DL/UL
+                    </div>
+                    <div className="col-span-1 text-gray-400 text-sm">
+                      GBR DL/UL
+                    </div>
                   </div>
                   <div className="grid grid-cols-8">
                     <div>{}</div>
-
                   </div>
                 </div>
               </div>

@@ -20,9 +20,9 @@ export const subscriberApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getSubscribers: builder.query<Partial<DataType>, DataType>({
-      query: (data) => ({
-        url: `/mon/${data.imsi}`,
+    getSubscribers: builder.query({
+      query: (imsi) => ({
+        url: `/mon/${imsi}`,
         method: "GET",
       }),
 
