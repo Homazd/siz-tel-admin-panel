@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChangeEvent, FormEvent } from "react";
 // Mantine
 import {
-  TextInput,
   TextInputProps,
   ActionIcon,
   useMantineTheme,
@@ -11,17 +10,16 @@ import {
   Group,
 } from "@mantine/core";
 import { IconSearch, IconArrowRight, IconArrowLeft } from "@tabler/icons-react";
-import styled from "@emotion/styled";
-import { useGetSubscribersQuery } from "../../../services/subscribers";
+import { useGetSubscribersQuery } from "../../../../../../services/subscribers";
 import { ModalsProvider } from "@mantine/modals";
+// Styles
+import StyledInput from "./style";
 
-const StyledInput = styled(TextInput)`
-  & .mantine-TextInput-wrapper {
-    width: 700px;
-    text-align: center;
-    margin: 0 auto;
-  }
-`;
+enum sessionTypes {
+  IPv4 = 1,
+  IPv6,
+  IPv4v6
+}
 export interface SubscriberType {
   imsi: string;
   security: object;
@@ -33,6 +31,10 @@ function IMSIInput(props: TextInputProps) {
   const [opened, setOpened] = useState(false);
   const theme = useMantineTheme();
 
+  useEffect(() => {
+    console.log(value);
+  });
+
   const {
     data: Subscriber,
     isLoading,
@@ -42,15 +44,19 @@ function IMSIInput(props: TextInputProps) {
   } = useGetSubscribersQuery(value, {
     skip: isTyping,
   });
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      console.log(Subscriber, isLoading, isSuccess, isError, error);
+    }
+  };
 
   const handleOnInput = (event: ChangeEvent<HTMLInputElement>) => {
     setIsTyping(true);
     setValue(event.target.value);
-    console.log(value);
 
-    console.log(Subscriber, isLoading, isSuccess, isError, error);
     if (Subscriber !== undefined) {
-      // console.log("subscriber is: ", Subscriber.ambr);
+      console.log("subscriber imsi is:", Subscriber.imsi);
+      console.log("subscriber is: ", Subscriber.ambr);
     }
   };
 
@@ -86,6 +92,7 @@ function IMSIInput(props: TextInputProps) {
             rightSectionWidth={22}
             value={value}
             onChange={handleOnInput}
+            onKeyDown={handleKeyPress}
             {...props}
           />
         </form>
@@ -97,25 +104,41 @@ function IMSIInput(props: TextInputProps) {
               opened={opened}
               onClose={() => setOpened(false)}
               className="w-[600px]"
+              withCloseButton={false}
+              classNames={{ body: 'pt-0 pl-0' }}
               size="75%"
             >
-              <div className="h-10 bg-gray-300 text-[22px]">
-                {Subscriber.imsi}{" "}
+              <div className="h-[50px] bg-gray-100 text-[20px] pt-2">
+                <span className="p-6">IMSI: {Subscriber.imsi}</span>
               </div>{" "}
-              <div className="mt-6">
-                <h3 className="font-bold mb-3">Subscriber Configuration</h3>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    {/* {Subscriber.imeisv}
-                    {Subscriber.security.k}
-                    {Subscriber.security.opc} */}
-                  </div>
-                  <div>
+              <div className="mt-6 pl-3">
+                <h3 className="font-bold mb-3 text-[18px]">Subscriber Configuration</h3>
+                <div className="grid grid-cols-2 gap-[200px]">
+                  <div className="col-span-1 text-[16px]">
+                    {/* <p>{Subscriber.imeisv}...</p> */}
                     <p>
-                      {/* {Subscriber.ambr.downlink.value} Gbps */}
+                      {Subscriber.security.k}
+                      <span className="text-gray-400 text-[14px]">...K</span>
+                    </p>
+                    <p>
+                      {Subscriber.security.opc}
+                      <span className="text-gray-400 text-[14px]">...OPc</span>
+                    </p>
+                    <p>
+                      {Subscriber.security.amf}
+                      <span className="text-gray-400 text-[14px]">...AMF</span>
+                    </p>
+                    <p>
+                      {Subscriber.security.sqn}
+                      <span className="text-gray-400 text-[14px]">...SQN</span>
+                    </p>
+                  </div>
+                  <div className="col-span-1">
+                    <p>
+                      {Subscriber.ambr.downlink.value} Gbps
                       <span className="text-gray-300 text-sm">...DL</span>
                     </p>
-                    {/* <span>{Subscriber.ambr.uplink.value} Gbps</span> */}
+                    <span>{Subscriber.ambr.uplink.value} Gbps</span>
                     <span className="text-gray-300 text-sm">...UL</span>
                   </div>
                 </div>
@@ -144,8 +167,9 @@ function IMSIInput(props: TextInputProps) {
                       GBR DL/UL
                     </div>
                   </div>
-                  <div className="grid grid-cols-8">
-                    <div>{}</div>
+                  <div className="grid grid-cols-8 mt-3">
+                    <div className="col-span-1 text-sm">{Subscriber.slice[0].session[0].name}</div>
+                    <div className="col-span-1 text-sm">{Subscriber.slice[0].session[0].type}</div>
                   </div>
                 </div>
               </div>
