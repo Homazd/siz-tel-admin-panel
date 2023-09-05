@@ -15,11 +15,6 @@ import { ModalsProvider } from "@mantine/modals";
 // Styles
 import StyledInput from "./style";
 
-enum sessionTypes {
-  IPv4 = 1,
-  IPv6,
-  IPv4v6
-}
 export interface SubscriberType {
   imsi: string;
   security: object;
@@ -31,10 +26,6 @@ function IMSIInput(props: TextInputProps) {
   const [opened, setOpened] = useState(false);
   const theme = useMantineTheme();
 
-  useEffect(() => {
-    console.log(value);
-  });
-
   const {
     data: Subscriber,
     isLoading,
@@ -44,6 +35,53 @@ function IMSIInput(props: TextInputProps) {
   } = useGetSubscribersQuery(value, {
     skip: isTyping,
   });
+
+  useEffect(() => {
+    console.log(value);
+  });
+
+  const sessionType = () => {
+    const sessionItem = Subscriber.slice[0].session[0].type;
+    switch (sessionItem) {
+      case 1:
+        return "IPv4";
+      case 2:
+        return "IPv6";
+      case 3:
+        return "IPv4v6";
+      default:
+        break;
+    }
+  };
+
+  const capabilityApr = () => {
+    const aprCapability =
+      Subscriber.slice[0].session[0].qos.arp.pre_emption_capability;
+    switch (aprCapability) {
+      case 1:
+        return "Disabled";
+      case 2:
+        return "Enabled";
+
+      default:
+        break;
+    }
+  };
+
+  const vulnerabilitySST = () => {
+    const vulnerability =
+      Subscriber.slice[0].session[0].qos.arp.pre_emption_vulnerability;
+    switch (vulnerability) {
+      case 1:
+        return "Disabled";
+      case 2:
+        return "Enabled";
+
+      default:
+        break;
+    }
+  };
+
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       console.log(Subscriber, isLoading, isSuccess, isError, error);
@@ -105,14 +143,16 @@ function IMSIInput(props: TextInputProps) {
               onClose={() => setOpened(false)}
               className="w-[600px]"
               withCloseButton={false}
-              classNames={{ body: 'pt-0 pl-0' }}
+              classNames={{ body: "pt-0 pl-0" }}
               size="75%"
             >
               <div className="h-[50px] bg-gray-100 text-[20px] pt-2">
                 <span className="p-6">IMSI: {Subscriber.imsi}</span>
               </div>{" "}
               <div className="mt-6 pl-3">
-                <h3 className="font-bold mb-3 text-[18px]">Subscriber Configuration</h3>
+                <h3 className="font-bold mb-3 text-[18px]">
+                  Subscriber Configuration
+                </h3>
                 <div className="grid grid-cols-2 gap-[200px]">
                   <div className="col-span-1 text-[16px]">
                     {/* <p>{Subscriber.imeisv}...</p> */}
@@ -168,8 +208,19 @@ function IMSIInput(props: TextInputProps) {
                     </div>
                   </div>
                   <div className="grid grid-cols-8 mt-3">
-                    <div className="col-span-1 text-sm">{Subscriber.slice[0].session[0].name}</div>
-                    <div className="col-span-1 text-sm">{Subscriber.slice[0].session[0].type}</div>
+                    <div className="col-span-1 text-sm">
+                      {Subscriber.slice[0].session[0].name}
+                    </div>
+                    <div className="col-span-1 text-sm">{sessionType()}</div>
+                    <div className="col-span-1 text-sm">
+                      {Subscriber.slice[0].session[0].qos.index}
+                    </div>
+                    <div className="col-span-1 text-sm">
+                      {Subscriber.slice[0].session[0].qos.arp.priority_level}
+                    </div>
+                    <div className="col-span-1 text-sm">{capabilityApr()}</div>
+                    <div className="col-span-1 text-sm">{vulnerabilitySST()}</div>
+                    <div className="col-span-1 text-sm">{}</div>
                   </div>
                 </div>
               </div>
