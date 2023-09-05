@@ -16,7 +16,7 @@ const SubscriberConfig = () => {
     event.preventDefault();
 
     const { name, value } = event.target;
-    console.log(name);
+    console.log(event.target);
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
@@ -26,7 +26,6 @@ const SubscriberConfig = () => {
  const handleChangeSelect = (event : string | null) => {
   // const { name, value } = event.target;
   console.log(event);
-  console.log()
   // setFormData((prevFormData) => ({
   //   ...prevFormData,
   //   [name]: value,
