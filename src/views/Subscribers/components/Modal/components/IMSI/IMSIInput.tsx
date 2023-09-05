@@ -91,11 +91,6 @@ function IMSIInput(props: TextInputProps) {
   const handleOnInput = (event: ChangeEvent<HTMLInputElement>) => {
     setIsTyping(true);
     setValue(event.target.value);
-
-    if (Subscriber !== undefined) {
-      console.log("subscriber imsi is:", Subscriber.imsi);
-      console.log("subscriber is: ", Subscriber.ambr);
-    }
   };
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {

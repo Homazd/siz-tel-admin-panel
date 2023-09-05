@@ -28,11 +28,11 @@ export const subscriberApi = createApi({
 
       providesTags: ["Subscribers"],
     }),
-    addSubscriber: builder.mutation<FormState, FormState>({
-      query: (newSubscriber) => ({
+    addSubscriber: builder.mutation({
+      query: (data) => ({
         url: "/mon/",
         method: "POST",
-        body: newSubscriber,
+        body: data,
         headers: { "Content-Type": "application/json" },
       }),
       invalidatesTags: ["Subscribers"],
@@ -42,7 +42,7 @@ export const subscriberApi = createApi({
     updateSubscriber: builder.mutation<
       DataType, Partial<DataType>>({
       query: (data) => ({
-        url: `/subscriber/${data.imsi}`,
+        url: `/mon/${data.imsi}`,
         method: "PATCH",
         headers: {
           'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ export const subscriberApi = createApi({
     }),
     deleteSubscriber: builder.mutation({
       query: ({ id }) => ({
-        url: `/profiles/${id}`,
+        url: `/mon/${id}`,
         method: "DELETE",
         body: id,
       }),

@@ -7,6 +7,11 @@ export interface DataType {
   amf: string;
   usimType: string;
   opKey: string;
+  ueDownlink: string;
+  ueDownUnit: string | null;
+  ueUplink: string;
+  ueUplinkUnit: string;
+
 }
 export interface FormState {
   data: DataType;
@@ -22,6 +27,10 @@ export const initialState: FormState = {
     amf: "",
     usimType: "",
     opKey: "",
+    ueDownlink:"1",
+    ueDownUnit:"Gbps",
+    ueUplink:"1",
+    ueUplinkUnit:"Gbps"
   },
   isLoading: false,
   isError: false,

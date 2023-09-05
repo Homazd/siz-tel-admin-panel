@@ -9,7 +9,7 @@ import { useAddSubscriberMutation } from "@/services/subscribers";
 // Mantine Components
 import { Modal, Button, Group, ModalProps, Box } from "@mantine/core";
 // Components
-import SubscriberConfig from "./components/Configuration";
+import SubscriberConfig from "./components/SubscriberConfig";
 import Slice from "./components/Slice";
 import Session from "./components/Session";
 import PccRules from "./components/PccRules";
@@ -18,7 +18,7 @@ function SubscriberModal() {
   const [opened, { open, close }] = useDisclosure(false);
   const [hiddenSession, setHiddenSession] = useState(true);
   const [hiddenSlice, setHiddenSlice] = useState(false);
-  const [createSubscriber] = useAddSubscriberMutation();
+  const [addSubscriber, {isLoading, isError, isSuccess}] = useAddSubscriberMutation();
 
   const form = useForm({
     initialValues: {
@@ -51,7 +51,11 @@ function SubscriberModal() {
   const handleSubmit = () => {
     const { imsi, msisdn, subK } = form.values;
     console.log("data is:", imsi, msisdn, subK);
-    createSubscriber({ imsi });
+    const subscriber = {
+imsi: '',
+
+    }
+    addSubscriber(subscriber);
   };
   // const handleChange = (event: React.FormEvent) =>
   //   form.setFieldValue("imsi", event.target.value);
@@ -71,12 +75,12 @@ function SubscriberModal() {
             className="block relative"
           >
             <SubscriberConfig
-              imsi={form.values.imsi}
-              onChange={(value) => form.setFieldValue("imsi", value)}
-              msisdn={form.values.msisdn}
-              onChangeMsisdn={(value) => form.setFieldValue("msisdn", value)}
-              subK={form.values.subK}
-              onChangeSubK={(value) => form.setFieldValue("subK", value)}
+              // imsi={form.values.imsi}
+              // onChange={(value) => form.setFieldValue("imsi", value)}
+              // msisdn={form.values.msisdn}
+              // onChangeMsisdn={(value) => form.setFieldValue("msisdn", value)}
+              // subK={form.values.subK}
+              // onChangeSubK={(value) => form.setFieldValue("subK", value)}
             />
             <Slice
               hiddenSlice={hiddenSlice}
