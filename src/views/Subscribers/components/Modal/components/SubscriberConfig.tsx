@@ -1,68 +1,69 @@
 import React, { useState } from "react";
 // Mantine Components
-import { Select, Divider, Button, TextInput } from "@mantine/core";
-// import {
-//   DataType,
-//   initialState,
-// } from "@/redux/features/subscribers/subscriberSlice";
+import { Button, Divider, Select, TextInput } from "@mantine/core";
 
-interface ConfigType {
+interface InputChildProps {
   imsi: string;
-  msisdn: string;
+  handleImsi: (data: React.ChangeEvent<HTMLInputElement>) => void;
   subK: string;
-  amf: string;
-  usimType: string;
+  handleSubk: (data: React.ChangeEvent<HTMLInputElement>) => void;
+  // op: string | null;
+  // handleOp: (data: React.ChangeEvent<HTMLInputElement>) => void;
   opKey: string;
-  ueDownlink: string;
-  ueDownUnit: string | null;
-  ueUplink: string;
-  ueUplinkUnit: string | undefined | null;
+  handleOpKey: (data: React.ChangeEvent<HTMLInputElement>) => void;
+  amf: string;
+  handleAmf: (data: React.ChangeEvent<HTMLInputElement>) => void;
+  downValue: string;
+  upValue: string;
+  downUnit: string | null;
+  upUnit: string | null;
+  handleDownValue: (data: React.ChangeEvent<HTMLInputElement>) => void;
+  handleUpValue: (data: React.ChangeEvent<HTMLInputElement>) => void;
+  handleDownUnit: (data: any) => void;
+  handleUpUnit: (data: any) => void;
 }
 
-const ConfigInitialState: ConfigType = {
-  imsi: "",
-  msisdn: "",
-  subK: "",
-  amf: "",
-  usimType: "",
-  opKey: "",
-  ueDownlink: "1",
-  ueDownUnit: "Gbps",
-  ueUplink: "1",
-  ueUplinkUnit: "Gbps",
-};
-const SubscriberConfig = () => {
+// interface ConfigProps {
+
+//   selectDL: string | null;
+//   selectUL: string | null;
+//   setSelectDL: (data: string) => void;
+//   setSelectUL: (data: string) => void;
+// }
+
+const SubscriberConfig: React.FC<InputChildProps> = ({
+  imsi,
+  handleImsi,
+  subK,
+  handleSubk,
+  opKey,
+  handleOpKey,
+  amf,
+  handleAmf,
+  downValue,
+  handleDownValue,
+  downUnit,
+  handleDownUnit,
+  upValue,
+  handleUpValue,
+  upUnit,
+  handleUpUnit,
+}) => {
   const [isMSIVisible, setIsMSIVisible] = useState(true);
   const [msisdnClicked, setMsisdnClicked] = useState(false);
-  const [selectDL, setSelectDL] = useState<string | null>("Gbps");
-  const [selectUL, setSelectUL] = useState<string | null>("Gbps");
-  const [formData, setFormData] = useState<ConfigType>(ConfigInitialState);
 
-  const handleChange = (event: any) => {
-    if (typeof event === "string") {
-      const name = "Unit";
-      const value = event;
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [name]: value,
-      }));
-    } else {
-      event.preventDefault();
-
-      const { name, value } = event.target;
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [name]: value,
-      }));
-    }
-  };
-
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      console.log("form is:", formData);
-      formData.ueDownUnit = selectDL;
-      formData.ueUplinkUnit = selectUL;
-    }
+  const formData = {
+    imsi: "",
+    msisdn: "",
+    security: {
+      opc: "",
+      amf: "",
+      k: "",
+    },
+    ambr: {
+      downlink: { value: 1, unit: 1 },
+      uplink: { value: 1, unit: 1 },
+    },
   };
 
   const handleOnAdd = () => {
@@ -83,15 +84,14 @@ const SubscriberConfig = () => {
         <TextInput
           label="IMSI"
           name="imsi"
-          required
           placeholder="Enter IMSI"
           classNames={{
             label: "static",
           }}
           className="mt-3"
-          value={formData.imsi || ""}
-          onChange={handleChange}
-          onKeyDown={handleKeyPress}
+          value={imsi}
+          onChange={handleImsi}
+          // onKeyDown={handleKey}
         />
         <div className="grid place-content-center">
           {isMSIVisible && (
@@ -111,14 +111,13 @@ const SubscriberConfig = () => {
                       label="MSISDN"
                       name="msisdn"
                       placeholder="MSISDN"
-                      onKeyDown={handleKeyPress}
+                      // onKeyDown={handleKey}
                       classNames={{
                         label: "static",
                       }}
-                      required
                       className="w-[300px]"
                       value={formData.msisdn}
-                      onChange={handleChange}
+                      // onChange={handleForm}
                     />
                   </>
                 ) : null}
@@ -147,20 +146,18 @@ const SubscriberConfig = () => {
           classNames={{
             label: "static",
           }}
-          required
-          onKeyDown={handleKeyPress}
+          // onKeyDown={handleKey}
           className="w-[400px] mr-6"
           name="subK"
-          value={formData.subK}
-          onChange={handleChange}
+          value={subK}
+          onChange={handleSubk}
         />
         <TextInput
           label="Authentication Management Field (AMF)"
           name="amf"
-          required
-          value={formData.amf}
-          onChange={handleChange}
-          onKeyDown={handleKeyPress}
+          value={amf}
+          onChange={handleAmf}
+          // onKeyDown={handleKey}
           classNames={{
             label: "static",
           }}
@@ -174,11 +171,10 @@ const SubscriberConfig = () => {
           classNames={{
             label: "static",
           }}
-          required
-          onKeyDown={handleKeyPress}
+          // onKeyDown={handleKey}
           className="w-[300px] mr-6"
-          value={formData.usimType}
-          onChange={handleChange}
+          // value={formData.usimType}
+          // onChange={handleForm}
         />
         <TextInput
           label="Operator Key (OPc/OP)"
@@ -186,10 +182,9 @@ const SubscriberConfig = () => {
           classNames={{
             label: "static",
           }}
-          value={formData.opKey}
-          required
-          onChange={handleChange}
-          onKeyDown={handleKeyPress}
+          value={opKey}
+          onChange={handleOpKey}
+          // onKeyDown={handleKey}
           className="w-[500px]"
         />
       </div>
@@ -201,10 +196,9 @@ const SubscriberConfig = () => {
             label: "static",
           }}
           placeholder="1"
-          required
-          value={formData.ueDownlink}
-          onChange={handleChange}
-          onKeyDown={handleKeyPress}
+          value={downValue}
+          onChange={handleDownValue}
+          // onKeyDown={handleKey}
           className="w-[250px]"
         />
         <Select
@@ -223,30 +217,29 @@ const SubscriberConfig = () => {
           ]}
           defaultValue={"Gbps"}
           className="ml-3 w-[100px]"
-          value={selectDL}
-          onChange={setSelectDL}
-          onKeyDown={handleKeyPress}
+          value={downUnit}
+          onChange={handleDownUnit}
+          // onKeyDown={handleKey}
         />
         <TextInput
           label="UE-AMBR Uplink"
-          value={formData.ueUplink}
-          onChange={handleChange}
+          value={upValue}
+          onChange={handleUpValue}
           name="ueUplink"
           classNames={{
             label: "static",
           }}
           placeholder="1"
-          required
           className="w-[250px] ml-2"
-          onKeyDown={handleKeyPress}
+          // onKeyDown={handleKey}
         />
         <Select
           label="Unit"
           classNames={{
             label: "static",
           }}
-          value={selectUL}
-          onChange={setSelectUL}
+          value={upUnit}
+          onChange={handleUpUnit}
           data={[
             { value: "bps", label: "bps" },
             { value: "kbps", label: "Kbps" },

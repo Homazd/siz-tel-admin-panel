@@ -247,7 +247,9 @@ function IMSIInput(props: TextInputProps) {
                   },
                 })}
               >
-                <div>IMSI: {Subscriber.imsi} </div>
+                <div>IMSI: {Subscriber.imsi}
+                
+                </div>
               </Box>
             </Group>
           </>

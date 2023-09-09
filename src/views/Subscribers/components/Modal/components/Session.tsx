@@ -1,4 +1,3 @@
-import { useState } from "react";
 // Mantine Components
 import { Divider, Select, Button, List, TextInput } from "@mantine/core";
 // Static data
@@ -30,14 +29,14 @@ const Session: React.FC<SessionProps> = ({
                     label: "static",
                   }}
                   label="DNN/APN"
-                  required
+                  
                   placeholder="Internet"
                   className="w-[300px]"
                 />
                 <Select
                   label="Type"
                   placeholder="IPv4v6"
-                  required
+                  
                   classNames={{
                     label: "static",
                   }}
@@ -63,7 +62,7 @@ const Session: React.FC<SessionProps> = ({
                 classNames={{
                   label: "static",
                 }}
-                required
+                
                 clearable
                 data={qciItems.map((option) => ({
                   value: option.title,
@@ -76,7 +75,7 @@ const Session: React.FC<SessionProps> = ({
                 classNames={{
                   label: "static",
                 }}
-                required
+                
                 clearable
                 data={apr.map((num) => ({
                   value: num.toString(),
@@ -90,7 +89,7 @@ const Session: React.FC<SessionProps> = ({
                   classNames={{
                     label: "static",
                   }}
-                  required
+                  
                   clearable
                   data={[
                     { value: "Disabled", label: "Disabled" },
@@ -103,7 +102,7 @@ const Session: React.FC<SessionProps> = ({
                     label: "static",
                   }}
                   className="mt-3 w-[200px] ml-6"
-                  required
+                  
                   clearable
                   data={[
                     { value: "Disabled", label: "Disabled" },
@@ -117,7 +116,7 @@ const Session: React.FC<SessionProps> = ({
                     label: "static",
                   }}
                   label="Session-AMBR Downlink"
-                  required
+                  
                   placeholder="1"
                   className="w-[250px]"
                 />
@@ -144,7 +143,7 @@ const Session: React.FC<SessionProps> = ({
                     label: "static",
                   }}
                   label="Session-AMBR Uplink"
-                  required
+                  
                   placeholder="1"
                   className="w-[250px]"
                 />
