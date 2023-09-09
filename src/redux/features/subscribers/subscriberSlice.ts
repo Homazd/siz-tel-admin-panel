@@ -10,7 +10,7 @@ export interface DataType {
   ueDownlink: string;
   ueDownUnit: string | null;
   ueUplink: string;
-  ueUplinkUnit: string;
+  ueUplinkUnit: string | undefined | null;
 
 }
 export interface FormState {
@@ -21,7 +21,7 @@ export interface FormState {
 
 export const initialState: FormState = {
   data: {
-    imsi: "321",
+    imsi: "",
     msisdn: "",
     subK: "",
     amf: "",
