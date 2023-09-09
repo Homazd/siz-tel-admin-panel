@@ -3,14 +3,30 @@ import { createSlice } from "@reduxjs/toolkit";
 export interface DataType {
   imsi: string;
   msisdn: string;
-  subK: string;
-  amf: string;
-  usimType: string;
-  opKey: string;
-  ueDownlink: string;
-  ueDownUnit: string | null;
-  ueUplink: string;
-  ueUplinkUnit: string | undefined | null;
+  imeisv: string;
+  // mme_host: [string];
+  // mme_realm: [string];
+  // purge_flag: [boolean];
+  
+  security: {
+    opc: string;
+    amf: string;
+    k: string;
+  }
+ ambr: {
+  downlink: {value: number, unit: number}
+  uplink: {value: number, unit: number}
+ }
+//  slice: [{
+//   sst: number,
+//   sd: string,
+
+//  }]
+  // usimType: string;
+  // ueDownlink: string;
+  // ueDownUnit: string | null;
+  // ueUplink: string;
+  // ueUplinkUnit: string | undefined | null;
 
 }
 export interface FormState {
@@ -23,14 +39,22 @@ export const initialState: FormState = {
   data: {
     imsi: "",
     msisdn: "",
-    subK: "",
-    amf: "",
-    usimType: "",
-    opKey: "",
-    ueDownlink:"1",
-    ueDownUnit:"Gbps",
-    ueUplink:"1",
-    ueUplinkUnit:"Gbps"
+    imeisv: "",
+    security: {
+      opc: "",
+      amf: "string",
+      k: "string",
+    },
+    ambr: {
+      downlink: {value: 1, unit: 1},
+      uplink: {value: 1, unit: 1}
+     }
+ 
+    // usimType: "",
+    // ueDownlink:"1",
+    // ueDownUnit:"Gbps",
+    // ueUplink:"1",
+    // ueUplinkUnit:"Gbps"
   },
   isLoading: false,
   isError: false,

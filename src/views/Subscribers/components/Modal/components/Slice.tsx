@@ -28,12 +28,42 @@ interface SlicePropsTypes {
   onClickDelete: () => void;
   onClickAdd: () => void;
 }
+interface SliceType {
+  sst: string;
+  sd: string;
+  nssai: boolean;
+}
+
+const SliceInitialState: SliceType = {
+  sst: "1",
+  sd: "",
+  nssai: true,
+};
+
 const Slice: React.FC<SlicePropsTypes> = ({
   hiddenSlice,
   onClickDelete,
   onClickAdd,
 }) => {
   const [checked, setChecked] = useState(true);
+  const [SSTValue, setSSTValue] = useState("1");
+  const [sliceForm, setSliceForm] = useState<SliceType>(SliceInitialState);
+
+  const handleChange = (event: any) => {
+    event.preventDefault();
+    const { name, value } = event.target;
+    setSliceForm((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      console.log("form is:", sliceForm);
+      sliceForm.sst = SSTValue;
+      sliceForm.nssai = checked;
+    }
+  };
 
   return (
     <div className="mt-10">
@@ -41,7 +71,13 @@ const Slice: React.FC<SlicePropsTypes> = ({
       <Divider />
       {!hiddenSlice ? (
         <div className="flex">
-          <Radio.Group name="SST" label="SST" withAsterisk>
+          <Radio.Group
+            name="SST"
+            label="SST"
+            withAsterisk
+            value={SSTValue}
+            onChange={setSSTValue}
+          >
             <Group mt="xs">
               <Radio
                 value="1"
@@ -78,7 +114,11 @@ const Slice: React.FC<SlicePropsTypes> = ({
               label: "static",
             }}
             label="SD"
+            name="sd"
             className="ml-6 w-[300px]"
+            value={sliceForm.sd}
+            onChange={handleChange}
+            onKeyDown={handleKeyPress}
           />
           {checked ? (
             <Checkbox

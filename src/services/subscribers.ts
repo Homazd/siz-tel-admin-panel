@@ -1,6 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
-  FormState,
   DataType,
 } from "@/redux/features/subscribers/subscriberSlice";
 
@@ -42,7 +41,7 @@ export const subscriberApi = createApi({
     updateSubscriber: builder.mutation<
       DataType, Partial<DataType>>({
       query: (data) => ({
-        url: `/mon/${data.imsi}`,
+        url: `/mon/`,
         method: "PATCH",
         headers: {
           'Content-Type': 'application/json',
@@ -53,10 +52,9 @@ export const subscriberApi = createApi({
       invalidatesTags: ["Subscribers"],
     }),
     deleteSubscriber: builder.mutation({
-      query: ({ id }) => ({
-        url: `/mon/${id}`,
+      query: (imsi) => ({
+        url: `/mon/${imsi}`,
         method: "DELETE",
-        body: id,
       }),
       invalidatesTags: ["Subscribers"],
     }),

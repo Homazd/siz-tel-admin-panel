@@ -41,7 +41,7 @@ function IMSIInput(props: TextInputProps) {
   });
 
   const sessionType = () => {
-    const sessionItem = Subscriber.slice[0].session[0].type;
+    const sessionItem = Subscriber.ambr.downlink.unit;
     switch (sessionItem) {
       case 1:
         return "IPv4";
