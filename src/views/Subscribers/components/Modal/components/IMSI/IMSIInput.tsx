@@ -9,7 +9,11 @@ import {
   Modal,
   Group,
   Button,
+  ModalProps,
 } from "@mantine/core";
+// Mantine Form
+import { useForm } from "@mantine/form";
+
 import { IconSearch, IconArrowRight, IconArrowLeft } from "@tabler/icons-react";
 import { useGetSubscribersQuery } from "../../../../../../services/subscribers";
 import { ModalsProvider } from "@mantine/modals";
@@ -17,6 +21,12 @@ import { ModalsProvider } from "@mantine/modals";
 import StyledInput from "./style";
 import { FaPencilAlt } from "react-icons/fa";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { useDisclosure } from "@mantine/hooks";
+// Components
+import SubscriberConfig from "../../components/SubscriberConfig";
+import Slice from "../../components/Slice";
+import Session from "../../components/Session";
+import PccRules from "../../components/PccRules";
 
 export interface SubscriberType {
   imsi: string;
@@ -26,9 +36,94 @@ export interface SubscriberType {
 function IMSIInput(props: TextInputProps) {
   const [value, setValue] = useState<string>("");
   const [isTyping, setIsTyping] = useState(false);
-  const [opened, setOpened] = useState(false);
+  const [hiddenSession, setHiddenSession] = useState(true);
+  const [hiddenSlice, setHiddenSlice] = useState(false);
+  const [opened, { open, close }] = useDisclosure();
   const [editOpened, setEditOpened] = useState(false);
   const theme = useMantineTheme();
+  const [imsi, setImsi] = useState("");
+  const [subK, setSubk] = useState("");
+  // const [op, setOp] = useState('');
+  const [opKey, setOpKey] = useState("");
+  const [amf, setAmf] = useState("");
+  const [downValue, setDownValue] = useState("1");
+  const [downUnit, setDownUnit] = useState<string | null>("Gbps");
+  const [upValue, setUpValue] = useState("1");
+  const [upUnit, setUpUnit] = useState<string | null>("Gbps");
+  // Slice States
+  const [sst, setSst] = useState("1");
+  const [sd, setSd] = useState("");
+  // Session States
+
+  const form = useForm({
+    initialValues: {
+      imsi: "55",
+      msisdn: "",
+      subK: "",
+    },
+  });
+
+  useEffect(() => {
+console.log(Subscriber);
+
+  }, []);
+  const handleImsi = (e: any) => {
+    e.preventDefault();
+    setImsi(e.currentTarget.value);
+  };
+
+  const handleSubk = (e: any) => {
+    e.preventDefault();
+    setSubk(e.currentTarget.value);
+    console.log("subK", subK);
+  };
+  const handleOpKey = (e: any) => {
+    e.preventDefault();
+    setOpKey(e.currentTarget.value);
+    console.log("Op key", opKey);
+  };
+  const handleAmf = (e: any) => {
+    e.preventDefault();
+    setAmf(e.currentTarget.value);
+    console.log("amf", amf);
+  };
+
+  const handleDownValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    setDownValue(e.currentTarget.value);
+  };
+
+  const handleUpValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    setUpValue(e.currentTarget.value);
+  };
+
+  const handleSD = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    setSd(e.currentTarget.value);
+  };
+
+  const handleOnDelete = () => {
+    setHiddenSlice(true);
+  };
+
+  const handleOnAdd = () => {
+    setHiddenSlice(false);
+  };
+  const onClickDeleteSession = () => {
+    setHiddenSession(false);
+  };
+
+  const onClickAddSession = () => {
+    setHiddenSession(true);
+  };
+
+  const contentStyles: Partial<ModalProps["styles"]> = {
+    content: {
+      minWidth: "900px",
+      margin: "auto",
+    },
+  };
 
   const {
     data: Subscriber,
@@ -41,7 +136,7 @@ function IMSIInput(props: TextInputProps) {
   });
 
   useEffect(() => {
-    console.log(value);
+    console.log("Subscriber is:", Subscriber);
   });
 
   const sessionType = () => {
@@ -103,8 +198,8 @@ function IMSIInput(props: TextInputProps) {
     // handle form submit
   }
   const handleOnEditModal = () => {
-    setOpened(false);
-    setEditOpened(true)
+    close();
+    setEditOpened(true);
   };
   return (
     <>
@@ -143,7 +238,7 @@ function IMSIInput(props: TextInputProps) {
           <>
             <Modal
               opened={opened}
-              onClose={() => setOpened(false)}
+              onClose={close}
               className="w-[600px]"
               withCloseButton={false}
               classNames={{ body: "pt-0 pl-0" }}
@@ -230,7 +325,7 @@ function IMSIInput(props: TextInputProps) {
                 </div>
               </div>
             </Modal>
-            <Group position="center" onClick={() => setOpened(true)}>
+            <Group position="center">
               <Box
                 component="a"
                 target="_blank"
@@ -257,21 +352,75 @@ function IMSIInput(props: TextInputProps) {
                   },
                 })}
               >
-                <div>IMSI: {Subscriber.imsi}</div>
+                <div className="" onClick={open}>
+                  IMSI: {Subscriber.imsi}
+                </div>
                 <div className="right-0 justify-center absolute grid grid-cols-2 w-16">
                   <div className="col-span-1">
-                    <Modal opened={editOpened} onClose={() => setEditOpened(false)}>
-                      Hi
+                    <Modal
+                      opened={editOpened}
+                      onClose={() => setEditOpened(false)}
+                      styles={contentStyles}
+                      className="bg-gray-300 rounded-lg shadow-lg w-[1200px]"
+                    >
+                      <Box mx="auto" className="w-[800px]">
+                        <form
+                          onSubmit={form.onSubmit(handleSubmit)}
+                          className="block relative"
+                        >
+                          <SubscriberConfig
+                            imsi={Subscriber.imsi}
+                            handleImsi={handleImsi}
+                            subK={Subscriber.security.k}
+                            handleSubk={handleSubk}
+                            // op={op}
+                            opKey={Subscriber.security.opc}
+                            handleOpKey={handleOpKey}
+                            amf={Subscriber.security.amf}
+                            handleAmf={handleAmf}
+                            downValue={Subscriber.ambr.downlink.value}
+                            handleDownValue={handleDownValue}
+                            downUnit={Subscriber.ambr.downlink.unit}
+                            handleDownUnit={setDownUnit}
+                            upValue={Subscriber.ambr.uplink.value}
+                            handleUpValue={handleUpValue}
+                            upUnit={upUnit}
+                            handleUpUnit={setUpUnit}
+                          />
+                          <Slice
+                            hiddenSlice={hiddenSlice}
+                            onClickDelete={handleOnDelete}
+                            onClickAdd={handleOnAdd}
+                            sst={Subscriber.slice[0].sst}
+                            handleSST={setSst}
+                            sd={Subscriber.slice[0].sd}
+                            handleSD={handleSD}
+                          />
+                          <Session
+                            hiddenSession={hiddenSession}
+                            onClickDeleteSession={onClickDeleteSession}
+                            onClickAddSession={onClickAddSession}
+                          />
+                          <PccRules />
+
+                          <Button
+                            className="font-bold bg-blue-500 absolute w-36 right-0 mt-6"
+                            type="submit"
+                          >
+                            Save
+                          </Button>
+                        </form>
+                      </Box>
                     </Modal>
                     <Button
-                      className="text-sky-500 p-0 m-0 min-w-0"
+                      className="text-sky-500 p-0 m-0 min-w-0 hover:bg-inherit"
                       onClick={handleOnEditModal}
                     >
                       <FaPencilAlt />
                     </Button>
                   </div>
                   <div className="col-span-1">
-                    <Button className="text-sky-500 p-0 m-0 min-w-0">
+                    <Button className="text-sky-500 p-0 m-0 min-w-0 hover:bg-inherit">
                       <RiDeleteBinLine />
                     </Button>
                   </div>

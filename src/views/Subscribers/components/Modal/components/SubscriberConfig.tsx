@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 // Mantine Components
 import { Button, Divider, Select, TextInput } from "@mantine/core";
+import { useGetSubscribersQuery } from "@/services/subscribers";
 
 interface InputChildProps {
   imsi: string;
@@ -51,6 +52,10 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
 }) => {
   const [isMSIVisible, setIsMSIVisible] = useState(true);
   const [msisdnClicked, setMsisdnClicked] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+  const [value, setValue] = useState<string>("");
+
+
 
   const formData = {
     imsi: "",
@@ -76,6 +81,17 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
     setMsisdnClicked(false);
   };
 
+  const {
+    data: Subscriber,
+    isLoading,
+    isSuccess,
+    isError,
+    error,
+  } = useGetSubscribersQuery(value, {
+    skip: isTyping,
+  });
+
+  
   return (
     <>
       <div className="relative">
