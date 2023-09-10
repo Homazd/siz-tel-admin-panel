@@ -8,12 +8,15 @@ import {
   Box,
   Modal,
   Group,
+  Button,
 } from "@mantine/core";
 import { IconSearch, IconArrowRight, IconArrowLeft } from "@tabler/icons-react";
 import { useGetSubscribersQuery } from "../../../../../../services/subscribers";
 import { ModalsProvider } from "@mantine/modals";
 // Styles
 import StyledInput from "./style";
+import { FaPencilAlt } from "react-icons/fa";
+import { RiDeleteBinLine } from "react-icons/ri";
 
 export interface SubscriberType {
   imsi: string;
@@ -24,6 +27,7 @@ function IMSIInput(props: TextInputProps) {
   const [value, setValue] = useState<string>("");
   const [isTyping, setIsTyping] = useState(false);
   const [opened, setOpened] = useState(false);
+  const [editOpened, setEditOpened] = useState(false);
   const theme = useMantineTheme();
 
   const {
@@ -98,6 +102,10 @@ function IMSIInput(props: TextInputProps) {
     event.preventDefault();
     // handle form submit
   }
+  const handleOnEditModal = () => {
+    setOpened(false);
+    setEditOpened(true)
+  };
   return (
     <>
       <ModalsProvider>
@@ -214,7 +222,9 @@ function IMSIInput(props: TextInputProps) {
                       {Subscriber.slice[0].session[0].qos.arp.priority_level}
                     </div>
                     <div className="col-span-1 text-sm">{capabilityApr()}</div>
-                    <div className="col-span-1 text-sm">{vulnerabilitySST()}</div>
+                    <div className="col-span-1 text-sm">
+                      {vulnerabilitySST()}
+                    </div>
                     <div className="col-span-1 text-sm">{}</div>
                   </div>
                 </div>
@@ -224,7 +234,7 @@ function IMSIInput(props: TextInputProps) {
               <Box
                 component="a"
                 target="_blank"
-                className="w-[300px] h-6 grid content-center"
+                className="w-[400px] h-6 grid content-center relative mt-6"
                 sx={(theme) => ({
                   // display: 'block',
                   backgroundColor:
@@ -247,8 +257,24 @@ function IMSIInput(props: TextInputProps) {
                   },
                 })}
               >
-                <div>IMSI: {Subscriber.imsi}
-                
+                <div>IMSI: {Subscriber.imsi}</div>
+                <div className="right-0 justify-center absolute grid grid-cols-2 w-16">
+                  <div className="col-span-1">
+                    <Modal opened={editOpened} onClose={() => setEditOpened(false)}>
+                      Hi
+                    </Modal>
+                    <Button
+                      className="text-sky-500 p-0 m-0 min-w-0"
+                      onClick={handleOnEditModal}
+                    >
+                      <FaPencilAlt />
+                    </Button>
+                  </div>
+                  <div className="col-span-1">
+                    <Button className="text-sky-500 p-0 m-0 min-w-0">
+                      <RiDeleteBinLine />
+                    </Button>
+                  </div>
                 </div>
               </Box>
             </Group>

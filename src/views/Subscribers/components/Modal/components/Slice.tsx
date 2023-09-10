@@ -21,17 +21,7 @@ interface SlicePropsTypes {
   handleSST: (data: string) => void;
   handleSD: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
-interface SliceType {
-  sst: string;
-  sd: string;
-  nssai: boolean;
-}
 
-const SliceInitialState: SliceType = {
-  sst: "1",
-  sd: "",
-  nssai: true,
-};
 
 const Slice: React.FC<SlicePropsTypes> = ({
   hiddenSlice,
