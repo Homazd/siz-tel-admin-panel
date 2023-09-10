@@ -7,27 +7,43 @@ export interface DataType {
   // mme_host: [string];
   // mme_realm: [string];
   // purge_flag: [boolean];
-  
+
   security: {
     opc: string;
     amf: string;
     k: string;
-  }
- ambr: {
-  downlink: {value: number, unit: number}
-  uplink: {value: number, unit: number}
- }
-//  slice: [{
-//   sst: number,
-//   sd: string,
-
-//  }]
-  // usimType: string;
-  // ueDownlink: string;
-  // ueDownUnit: string | null;
-  // ueUplink: string;
-  // ueUplinkUnit: string | undefined | null;
-
+  };
+  ambr: {
+    downlink: { value: string; unit: string };
+    uplink: { value: string; unit: string };
+  };
+  mme_host: [];
+  mme_realm: [];
+  purge_flag: [];
+  slice: [
+    {
+      sst: string;
+      sd: string;
+      session: [
+        {
+          name: string;
+          type: number;
+          ambr: {
+            downlink: { value: string; unit: string };
+            uplink: { value: string; unit: string };
+          };
+          qos: {
+            index: number;
+            arp: {
+              priority_level: number;
+              pre_emption_capability: number;
+              pre_emption_vulnerability: number;
+            };
+          };
+        }
+      ];
+    }
+  ];
 }
 export interface FormState {
   data: DataType;
@@ -46,15 +62,43 @@ export const initialState: FormState = {
       k: "string",
     },
     ambr: {
-      downlink: {value: 1, unit: 1},
-      uplink: {value: 1, unit: 1}
-     }
- 
-    // usimType: "",
-    // ueDownlink:"1",
-    // ueDownUnit:"Gbps",
-    // ueUplink:"1",
-    // ueUplinkUnit:"Gbps"
+      downlink: { value: "1", unit: "1" },
+      uplink: { value: "1", unit: "1" },
+    },
+    mme_host: [],
+    mme_realm: [],
+    purge_flag: [],
+    slice: [
+      {
+        sst: "1",
+        sd: "",
+        session: [
+          {
+            name: "internet",
+            type: 3,
+            ambr: {
+              downlink: {
+                value: "1",
+                unit: "3",
+              },
+              uplink: {
+                value: "1",
+                unit: "3",
+              },
+            },
+            qos: {
+              index: 9,
+              arp: {
+                priority_level: 8,
+                pre_emption_capability: 1,
+                pre_emption_vulnerability: 1,
+              },
+            },
+          },
+        ],
+      },
+    ],
+
   },
   isLoading: false,
   isError: false,

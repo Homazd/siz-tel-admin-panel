@@ -16,7 +16,11 @@ import {
 import { useForm } from "@mantine/form";
 
 import { IconSearch, IconArrowRight, IconArrowLeft } from "@tabler/icons-react";
-import { useGetSubscribersQuery, useDeleteSubscriberMutation } from "../../../../../../services/subscribers";
+import {
+  useGetSubscribersQuery,
+  useDeleteSubscriberMutation,
+  useUpdateSubscriberMutation,
+} from "../../../../../../services/subscribers";
 import { ModalsProvider } from "@mantine/modals";
 // Styles
 import StyledInput from "./style";
@@ -50,13 +54,15 @@ function IMSIInput(props: TextInputProps) {
   const [opKey, setOpKey] = useState("");
   const [amf, setAmf] = useState("");
   const [downValue, setDownValue] = useState("1");
-  const [downUnit, setDownUnit] = useState<string | null>("3");
+  const [downUnit, setDownUnit] = useState<string>("3");
   const [upValue, setUpValue] = useState("1");
-  const [upUnit, setUpUnit] = useState<string | null>("3");
+  const [upUnit, setUpUnit] = useState<string>("3");
   // Slice States
   const [sst, setSst] = useState("1");
   const [sd, setSd] = useState("");
-  const [deleteSubscriber, {isLoadingDelete} ] = useDeleteSubscriberMutation()
+  const [deleteSubscriber] = useDeleteSubscriberMutation();
+  const [updateSubscriber] =
+    useUpdateSubscriberMutation();
   // Session States
 
   const form = useForm({
@@ -67,9 +73,6 @@ function IMSIInput(props: TextInputProps) {
     },
   });
 
-  useEffect(() => {
-    console.log(Subscriber);
-  }, []);
   const handleImsi = (e: any) => {
     e.preventDefault();
     setImsi(e.currentTarget.value);
@@ -209,8 +212,55 @@ function IMSIInput(props: TextInputProps) {
     setEditOpened(true);
   };
   const handleDelete = () => {
-   deleteSubscriber(Subscriber.imsi);
-  }
+    deleteSubscriber(Subscriber.imsi);
+  };
+  const handleSubmitUpdate = () => {
+    updateSubscriber({
+      imsi: imsi,
+      security: {
+        k: subK,
+        opc: opKey,
+        amf: amf,
+      },
+      mme_host: [],
+      mme_realm: [],
+      purge_flag: [],
+      ambr: {
+        downlink: { value: downValue, unit: downUnit },
+        uplink: { value: upValue, unit: upUnit },
+      },
+      slice: [
+        {
+          sst: sst,
+          sd: sd,
+          session: [
+            {
+              name: "internet",
+              type: 3,
+              ambr: {
+                downlink: {
+                  value: "1",
+                  unit: "3",
+                },
+                uplink: {
+                  value: "1",
+                  unit: "3",
+                },
+              },
+              qos: {
+                index: 9,
+                arp: {
+                  priority_level: 8,
+                  pre_emption_capability: 1,
+                  pre_emption_vulnerability: 1,
+                },
+              },
+            },
+          ],
+        },
+      ],
+    });
+  };
   return (
     <>
       <ModalsProvider>
@@ -375,11 +425,11 @@ function IMSIInput(props: TextInputProps) {
                     >
                       <Box mx="auto" className="w-[800px]">
                         <form
-                          onSubmit={form.onSubmit(handleSubmit)}
+                          onSubmit={form.onSubmit(handleSubmitUpdate)}
                           className="block relative"
                         >
                           <SubscriberConfig
-                            imsi={Subscriber.imsi}
+                            imsi={imsi}
                             handleImsi={handleImsi}
                             subK={Subscriber.security.k}
                             handleSubk={handleSubk}
@@ -437,10 +487,19 @@ function IMSIInput(props: TextInputProps) {
                       // styles={contentStyles}
                       className="bg-gray-300 rounded-lg shadow-lg w-[200px]"
                     >
-                      <Text className="text-center">Are you sure to delete this subscriber?</Text>
+                      <Text className="text-center">
+                        Are you sure to delete this subscriber?
+                      </Text>
                       <div className="flex mt-5 justify-center">
-                        <Button className="text-black hover:bg-slate-300">Cancel</Button>
-                        <Button className="text-red-400 ml-5" onClick={handleDelete}>Delete</Button>
+                        <Button className="text-black hover:bg-slate-300">
+                          Cancel
+                        </Button>
+                        <Button
+                          className="text-red-400 ml-5"
+                          onClick={handleDelete}
+                        >
+                          Delete
+                        </Button>
                       </div>
                     </Modal>
                     <Button
