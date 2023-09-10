@@ -68,7 +68,6 @@ function SubscriberModal() {
   const handleImsi = (e: any) => {
     e.preventDefault();
     setImsi(e.currentTarget.value);
-    console.log(imsi);
   };
 
   const handleSubk = (e: any) => {
@@ -118,10 +117,34 @@ function SubscriberModal() {
       margin: "auto",
     },
   };
+  let downType: string;
+
+  function assignUnitType(downUnit: string | null) {
+    switch (downUnit) {
+      case "bps":
+        downType = "0";
+
+        break;
+      case "Kbps":
+        downType = "1";
+        break;
+      case "Mbps":
+        downType = "2";
+        break;
+      case "Gbps":
+        downType = "3";
+        break;
+
+      default:
+        break;
+    }
+
+    return downType;
+  }
 
   const handleSubmit = () => {
     // const { imsi } = form.values;
-    console.log("data is:", imsi);
+    console.log("imsi is:", imsi);
     addSubscriber({
       imsi: imsi,
       security: {
@@ -133,9 +156,39 @@ function SubscriberModal() {
       mme_realm: [],
       purge_flag: [],
       ambr: {
-        downlink: { value: downValue, unit: downType },
+        downlink: { value: downValue, unit: downUnit },
         uplink: { value: upValue, unit: upUnit },
       },
+      slice: [
+        {
+          sst: 1,
+          sd: 1,
+          session: [
+            {
+              name: "internet",
+              type: 3,
+              ambr: {
+                downlink: {
+                  value: 1,
+                  unit: 3,
+                },
+                uplink: {
+                  value: 1,
+                  unit: 3,
+                },
+              },
+              qos: {
+                index: 9,
+                arp: {
+                  priority_level: 8,
+                  pre_emption_capability: 1,
+                  pre_emption_vulnerability: 1,
+                },
+              },
+            },
+          ],
+        },
+      ],
     });
   };
   const form = useForm({

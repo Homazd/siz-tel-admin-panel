@@ -203,17 +203,16 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
         />
         <Select
           label="Unit"
-          name="ueDownUnit"
           classNames={{
             label: "static",
           }}
           placeholder="Gbps"
           data={[
-            { value: "bps", label: "bps" },
-            { value: "kbps", label: "Kbps" },
-            { value: "mbps", label: "Mbps" },
-            { value: "gbps", label: "Gbps" },
-            { value: "tbps", label: "Tbps" },
+            { value: "0", label: "bps" },
+            { value: "1", label: "Kbps" },
+            { value: "2", label: "Mbps" },
+            { value: "3", label: "Gbps" },
+            { value: "4", label: "Tbps" },
           ]}
           defaultValue={"Gbps"}
           className="ml-3 w-[100px]"
@@ -241,11 +240,11 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
           value={upUnit}
           onChange={handleUpUnit}
           data={[
-            { value: "bps", label: "bps" },
-            { value: "kbps", label: "Kbps" },
-            { value: "mbps", label: "Mbps" },
-            { value: "gbps", label: "Gbps" },
-            { value: "tbps", label: "Tbps" },
+            { value: "0", label: "bps" },
+            { value: "1", label: "Kbps" },
+            { value: "2", label: "Mbps" },
+            { value: "3", label: "Gbps" },
+            { value: "4", label: "Tbps" },
           ]}
           defaultValue={"Gbps"}
           className="ml-3 w-[100px]"
