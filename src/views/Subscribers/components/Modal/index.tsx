@@ -58,9 +58,9 @@ function SubscriberModal() {
   const [opKey, setOpKey] = useState("");
   const [amf, setAmf] = useState("");
   const [downValue, setDownValue] = useState("1");
-  const [downUnit, setDownUnit] = useState<string | null>("Gbps");
+  const [downUnit, setDownUnit] = useState<string | null>("3");
   const [upValue, setUpValue] = useState("1");
-  const [upUnit, setUpUnit] = useState<string | null>("Gbps");
+  const [upUnit, setUpUnit] = useState<string | null>("3");
   // Slice States
   const [sst, setSst] = useState("1");
   const [sd, setSd] = useState("");
