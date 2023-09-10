@@ -70,25 +70,22 @@ function SubscriberModal() {
   const [addSubscriber, { isLoading, isError, isSuccess }] =
     useAddSubscriberMutation();
 
-  const handleImsi = (e: any) => {
+  const handleImsi = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setImsi(e.currentTarget.value);
   };
 
-  const handleSubk = (e: any) => {
+  const handleSubk = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setSubk(e.currentTarget.value);
-    console.log("subK", subK);
   };
-  const handleOpKey = (e: any) => {
+  const handleOpKey = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setOpKey(e.currentTarget.value);
-    console.log("Op key", opKey);
   };
-  const handleAmf = (e: any) => {
+  const handleAmf = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setAmf(e.currentTarget.value);
-    console.log("amf", amf);
   };
 
   const handleDownValue = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -10,12 +10,13 @@ import {
   Group,
   Button,
   ModalProps,
+  Text,
 } from "@mantine/core";
 // Mantine Form
 import { useForm } from "@mantine/form";
 
 import { IconSearch, IconArrowRight, IconArrowLeft } from "@tabler/icons-react";
-import { useGetSubscribersQuery } from "../../../../../../services/subscribers";
+import { useGetSubscribersQuery, useDeleteSubscriberMutation } from "../../../../../../services/subscribers";
 import { ModalsProvider } from "@mantine/modals";
 // Styles
 import StyledInput from "./style";
@@ -40,6 +41,8 @@ function IMSIInput(props: TextInputProps) {
   const [hiddenSlice, setHiddenSlice] = useState(false);
   const [opened, { open, close }] = useDisclosure();
   const [editOpened, setEditOpened] = useState(false);
+  const [deleteOpened, setDeleteOpened] = useState(false);
+
   const theme = useMantineTheme();
   const [imsi, setImsi] = useState("");
   const [subK, setSubk] = useState("");
@@ -53,6 +56,7 @@ function IMSIInput(props: TextInputProps) {
   // Slice States
   const [sst, setSst] = useState("1");
   const [sd, setSd] = useState("");
+  const [deleteSubscriber, {isLoadingDelete} ] = useDeleteSubscriberMutation()
   // Session States
 
   const form = useForm({
@@ -64,8 +68,7 @@ function IMSIInput(props: TextInputProps) {
   });
 
   useEffect(() => {
-console.log(Subscriber);
-
+    console.log(Subscriber);
   }, []);
   const handleImsi = (e: any) => {
     e.preventDefault();
@@ -197,10 +200,17 @@ console.log(Subscriber);
     event.preventDefault();
     // handle form submit
   }
+  const handleOnDeleteModal = () => {
+    close();
+    setDeleteOpened(true);
+  };
   const handleOnEditModal = () => {
     close();
     setEditOpened(true);
   };
+  const handleDelete = () => {
+   deleteSubscriber(Subscriber.imsi);
+  }
   return (
     <>
       <ModalsProvider>
@@ -420,7 +430,23 @@ console.log(Subscriber);
                     </Button>
                   </div>
                   <div className="col-span-1">
-                    <Button className="text-sky-500 p-0 m-0 min-w-0 hover:bg-inherit">
+                    <Modal
+                      opened={deleteOpened}
+                      onClose={() => setDeleteOpened(false)}
+                      centered
+                      // styles={contentStyles}
+                      className="bg-gray-300 rounded-lg shadow-lg w-[200px]"
+                    >
+                      <Text className="text-center">Are you sure to delete this subscriber?</Text>
+                      <div className="flex mt-5 justify-center">
+                        <Button className="text-black hover:bg-slate-300">Cancel</Button>
+                        <Button className="text-red-400 ml-5" onClick={handleDelete}>Delete</Button>
+                      </div>
+                    </Modal>
+                    <Button
+                      className="text-sky-500 p-0 m-0 min-w-0 hover:bg-inherit"
+                      onClick={handleOnDeleteModal}
+                    >
                       <RiDeleteBinLine />
                     </Button>
                   </div>
