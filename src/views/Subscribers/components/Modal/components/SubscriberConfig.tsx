@@ -19,8 +19,8 @@ interface InputChildProps {
   upUnit: string | null;
   handleDownValue: (data: React.ChangeEvent<HTMLInputElement>) => void;
   handleUpValue: (data: React.ChangeEvent<HTMLInputElement>) => void;
-  handleDownUnit: (data: any) => void;
-  handleUpUnit: (data: any) => void;
+  handleDownUnit: (data: string) => void;
+  handleUpUnit: (data: string) => void;
 }
 
 // interface ConfigProps {

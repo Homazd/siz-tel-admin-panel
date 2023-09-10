@@ -10,23 +10,16 @@ import {
   List,
   TextInput,
 } from "@mantine/core";
-import styled from "@emotion/styled";
-
-const StyledCheckbox = styled(Checkbox)`
-  & .mantine-Checkbox-label {
-    color: red;
-    width: 120px;
-    margin-left: 10px;
-  }
-  &. mantine-checkbox-body {
-    place-content: center start;
-  }
-`;
+import { StyledCheckbox } from "./style/style.module";
 
 interface SlicePropsTypes {
   hiddenSlice: boolean;
   onClickDelete: () => void;
   onClickAdd: () => void;
+  sst: string;
+  sd: string | undefined;
+  handleSST: (data: string) => void;
+  handleSD: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 interface SliceType {
   sst: string;
@@ -44,26 +37,30 @@ const Slice: React.FC<SlicePropsTypes> = ({
   hiddenSlice,
   onClickDelete,
   onClickAdd,
+  sst,
+  sd,
+  handleSD,
+  handleSST,
 }) => {
   const [checked, setChecked] = useState(true);
-  const [SSTValue, setSSTValue] = useState("1");
-  const [sliceForm, setSliceForm] = useState<SliceType>(SliceInitialState);
+  // const [SSTValue, setSSTValue] = useState("1");
+  // const [sliceForm, setSliceForm] = useState<SliceType>(SliceInitialState);
 
-  const handleChange = (event: any) => {
-    event.preventDefault();
-    const { name, value } = event.target;
-    setSliceForm((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
-  };
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      console.log("form is:", sliceForm);
-      sliceForm.sst = SSTValue;
-      sliceForm.nssai = checked;
-    }
-  };
+  // const handleChange = (event: any) => {
+  //   event.preventDefault();
+  //   const { name, value } = event.target;
+  //   setSliceForm((prevFormData) => ({
+  //     ...prevFormData,
+  //     [name]: value,
+  //   }));
+  // };
+  // const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  //   if (event.key === "Enter") {
+  //     console.log("form is:", sliceForm);
+  //     sliceForm.sst = SSTValue;
+  //     sliceForm.nssai = checked;
+  //   }
+  // };
 
   return (
     <div className="mt-10">
@@ -75,8 +72,8 @@ const Slice: React.FC<SlicePropsTypes> = ({
             name="SST"
             label="SST"
             withAsterisk
-            value={SSTValue}
-            onChange={setSSTValue}
+            value={sst}
+            onChange={handleSST}
           >
             <Group mt="xs">
               <Radio
@@ -114,11 +111,10 @@ const Slice: React.FC<SlicePropsTypes> = ({
               label: "static",
             }}
             label="SD"
-            name="sd"
             className="ml-6 w-[300px]"
-            value={sliceForm.sd}
-            onChange={handleChange}
-            onKeyDown={handleKeyPress}
+            value={sd}
+            onChange={handleSD}
+            // onKeyDown={handleKeyPress}
           />
           {checked ? (
             <Checkbox

@@ -1,5 +1,5 @@
 // Hooks
-import { useEffect, useState } from "react";
+import { useState } from "react";
 // Mantine Hooks
 import { useDisclosure } from "@mantine/hooks";
 // Mantine Form
@@ -61,6 +61,9 @@ function SubscriberModal() {
   const [downUnit, setDownUnit] = useState<string | null>("Gbps");
   const [upValue, setUpValue] = useState("1");
   const [upUnit, setUpUnit] = useState<string | null>("Gbps");
+  // Slice States
+  const [sst, setSst] = useState("1");
+  const [sd, setSd] = useState("");
 
   const [addSubscriber, { isLoading, isError, isSuccess }] =
     useAddSubscriberMutation();
@@ -96,6 +99,11 @@ function SubscriberModal() {
     setUpValue(e.currentTarget.value);
   };
 
+  const handleSD = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    setSd(e.currentTarget.value);
+  };
+
   const handleOnDelete = () => {
     setHiddenSlice(true);
   };
@@ -117,30 +125,6 @@ function SubscriberModal() {
       margin: "auto",
     },
   };
-  let downType: string;
-
-  function assignUnitType(downUnit: string | null) {
-    switch (downUnit) {
-      case "bps":
-        downType = "0";
-
-        break;
-      case "Kbps":
-        downType = "1";
-        break;
-      case "Mbps":
-        downType = "2";
-        break;
-      case "Gbps":
-        downType = "3";
-        break;
-
-      default:
-        break;
-    }
-
-    return downType;
-  }
 
   const handleSubmit = () => {
     // const { imsi } = form.values;
@@ -161,8 +145,8 @@ function SubscriberModal() {
       },
       slice: [
         {
-          sst: 1,
-          sd: 1,
+          sst: sst,
+          sd: sd,
           session: [
             {
               name: "internet",
@@ -259,19 +243,15 @@ function SubscriberModal() {
               handleUpValue={handleUpValue}
               upUnit={upUnit}
               handleUpUnit={setUpUnit}
-
-              // handleForm={handleChange}
-              // handleKey={handleKeyPress}
-              // selectDL={selectDL}
-              // selectUL={selectUL}
-              // setSelectDL={setSelectDL}
-              // setSelectUL={setSelectUL}
             />
-            {/* <p>IMSI: {form.imsi}</p> */}
             <Slice
               hiddenSlice={hiddenSlice}
               onClickDelete={handleOnDelete}
               onClickAdd={handleOnAdd}
+              sst={sst}
+              handleSST={setSst}
+              sd={sd}
+              handleSD={handleSD}
             />
             <Session
               hiddenSession={hiddenSession}
