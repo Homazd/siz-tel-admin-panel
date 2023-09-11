@@ -52,61 +52,7 @@ const EditConfig: React.FC<InputChildProps> = ({
     console.log("subscriber is:", Subscriber.imsi);
     
   })
-  // const [isTyping, setIsTyping] = useState(false);
-  // const [value, setValue] = useState<string>("");
-
-  //   const [imsi, setImsi] = useState("");
-  //   const [subK, setSubK] = useState("");
-  //   const [opKey, setOpKey] = useState("");
-  //   const [amf, setAmf] = useState("");
-  //   const [downValue, setDownValue] = useState("1");
-  //   const [downUnit, setDownUnit] = useState<string | null>("3");
-  //   const [upValue, setUpValue] = useState("1");
-  //   const [upUnit, setUpUnit] = useState<string | null>("3");
-
-
-  //   const handleImsi = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //     e.preventDefault();
-  //     setImsi(e.currentTarget.value);
-  //   };
-
-  //   const handleSubk = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //     e.preventDefault();
-  //     setSubK(e.currentTarget.value);
-  //     console.log("subK", subK);
-  //   };
-  //   const handleOpKey = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //     e.preventDefault();
-  //     setOpKey(e.currentTarget.value);
-  //   };
-  //   const handleAmf = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //     e.preventDefault();
-  //     setAmf(e.currentTarget.value);
-  //   };
-
-  //   const handleDownValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //     e.preventDefault();
-  //     setDownValue(e.currentTarget.value);
-  //   };
-
-  //   const handleUpValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //     e.preventDefault();
-  //     setUpValue(e.currentTarget.value);
-  //   };
-
-  const formData = {
-    imsi: "",
-    msisdn: "",
-    security: {
-      opc: "",
-      amf: "",
-      k: "",
-    },
-    ambr: {
-      downlink: { value: 1, unit: 1 },
-      uplink: { value: 1, unit: 1 },
-    },
-  };
+ 
 
   const handleOnAdd = () => {
     setMsisdnClicked(true);
@@ -118,15 +64,6 @@ const EditConfig: React.FC<InputChildProps> = ({
     setMsisdnClicked(false);
   };
 
-  // const {
-  //   data: Subscriber,
-  //   isLoading,
-  //   isSuccess,
-  //   isError,
-  //   error,
-  // } = useGetSubscribersQuery(value, {
-  //   skip: isTyping,
-  // });
 
   return (
     <>

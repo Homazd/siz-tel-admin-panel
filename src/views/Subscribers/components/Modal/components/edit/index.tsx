@@ -67,10 +67,6 @@ function IMSIInput(props: TextInputProps) {
     },
   });
 
-  // const handleImsi = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   e.preventDefault();
-  //   setImsi(e.currentTarget.value);
-  // };
   const {
     data: Subscriber,
     isLoading,
@@ -92,23 +88,9 @@ function IMSIInput(props: TextInputProps) {
       setUpValue(Subscriber.ambr.uplink.value);
       setUpUnit(Subscriber.ambr.uplink.unit);
     }
-  }, []);
+  }, [Subscriber]);
 
-  useEffect(() => {
-    if (Subscriber) {
-      setImsi(Subscriber.imsi);
-    }
-    console.log("Subscriber", Subscriber);
-
-    // setSubK(Subscriber.security.k);
-    // setOpKey(Subscriber.security.opc);
-    // setAmf(Subscriber.security.amf);
-    // setDownValue(Subscriber.ambr.downlink.value);
-    // setDownUnit(Subscriber.ambr.downlink.unit);
-    // setUpValue(Subscriber.ambr.uplink.value);
-    // setUpUnit(Subscriber.ambr.uplink.unit);
-  }, []);
-
+  
   const handleImsi = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setImsi(e.currentTarget.value);
@@ -164,11 +146,6 @@ function IMSIInput(props: TextInputProps) {
       margin: "auto",
     },
   };
-
-  useEffect(() => {
-    console.log("Subscriber is:", Subscriber);
-    console.log("Imsi", imsi);
-  });
 
   const sessionType = () => {
     const sessionItem = Subscriber.ambr.downlink.unit;
@@ -244,8 +221,8 @@ function IMSIInput(props: TextInputProps) {
       imsi: imsi,
       security: {
         k: Subscriber.security.subK,
-        opc: opKey,
-        amf: amf,
+        opc: Subscriber.security.opc,
+        amf: Subscriber.security.amf,
       },
       mme_host: [],
       mme_realm: [],
