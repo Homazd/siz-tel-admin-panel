@@ -84,7 +84,22 @@ function IMSIInput(props: TextInputProps) {
   useEffect(() => {
     if (Subscriber) {
       setImsi(Subscriber.imsi);
+      setSubK(Subscriber.security.k);
+      setOpKey(Subscriber.security.opc);
+      setAmf(Subscriber.security.amf);
+      setDownValue(Subscriber.ambr.downlink.value);
+      setDownUnit(Subscriber.ambr.downlink.unit);
+      setUpValue(Subscriber.ambr.uplink.value);
+      setUpUnit(Subscriber.ambr.uplink.unit);
     }
+  }, []);
+
+  useEffect(() => {
+    if (Subscriber) {
+      setImsi(Subscriber.imsi);
+    }
+    console.log("Subscriber", Subscriber);
+
     // setSubK(Subscriber.security.k);
     // setOpKey(Subscriber.security.opc);
     // setAmf(Subscriber.security.amf);
@@ -102,7 +117,7 @@ function IMSIInput(props: TextInputProps) {
   const handleSubk = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setSubK(e.currentTarget.value);
-    console.log("subK", SubK);
+    console.log("subK", subK);
   };
   const handleOpKey = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -152,7 +167,7 @@ function IMSIInput(props: TextInputProps) {
 
   useEffect(() => {
     console.log("Subscriber is:", Subscriber);
-    console.log(Imsi);
+    console.log("Imsi", imsi);
   });
 
   const sessionType = () => {
@@ -226,18 +241,18 @@ function IMSIInput(props: TextInputProps) {
   };
   const handleSubmitUpdate = () => {
     updateSubscriber({
-      imsi: Imsi,
+      imsi: imsi,
       security: {
-        k: SubK,
-        opc: OpKey,
-        amf: Amf,
+        k: Subscriber.security.subK,
+        opc: opKey,
+        amf: amf,
       },
       mme_host: [],
       mme_realm: [],
       purge_flag: [],
       ambr: {
-        downlink: { value: DownValue, unit: DownUnit },
-        uplink: { value: UpValue, unit: UpUnit },
+        downlink: { value: downValue, unit: downUnit },
+        uplink: { value: upValue, unit: upUnit },
       },
       slice: [
         {
@@ -440,22 +455,22 @@ function IMSIInput(props: TextInputProps) {
                         >
                           <EditConfig
                             Subscriber={Subscriber}
-                            Imsi={Imsi}
+                            imsi={imsi}
                             handleImsi={handleImsi}
-                            SubK={SubK}
+                            subK={subK}
                             handleSubK={handleSubk}
                             // op={op}
-                            OpKey={OpKey}
+                            opKey={opKey}
                             handleOpKey={handleOpKey}
-                            Amf={Amf}
+                            amf={amf}
                             handleAmf={handleAmf}
-                            DownValue={DownValue}
+                            downValue={downValue}
                             handleDownValue={handleDownValue}
-                            handleDownUnit={DownUnit}
+                            downUnit={downUnit}
                             handleDownUnit={setDownUnit}
                             upValue={upValue}
                             handleUpValue={handleUpValue}
-                            UpUnit={UpUnit}
+                            upUnit={upUnit}
                             handleUpUnit={setUpUnit}
                           />
                           <Slice

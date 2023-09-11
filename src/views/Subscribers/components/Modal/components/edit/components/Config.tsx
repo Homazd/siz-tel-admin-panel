@@ -5,20 +5,20 @@ import { DataType } from "@/redux/features/subscribers/subscriberSlice";
 
 interface InputChildProps {
   Subscriber: DataType;
-  modifiedImsi: string;
-  handleModifiedImsi: (data: React.ChangeEvent<HTMLInputElement>) => void;
-  modifiedSubK: string;
-  handleModifiedSubK: (data: React.ChangeEvent<HTMLInputElement>) => void;
+  imsi: string;
+  handleImsi: (data: React.ChangeEvent<HTMLInputElement>) => void;
+  subK: string;
+  handleSubK: (data: React.ChangeEvent<HTMLInputElement>) => void;
   // op: string | null;
   // handleOp: (data: React.ChangeEvent<HTMLInputElement>) => void;
-  modifiedOpKey: string;
-  handleModifiedOpKey: (data: React.ChangeEvent<HTMLInputElement>) => void;
-  modifiedAmf: string;
-  handleModifiedAmf: (data: React.ChangeEvent<HTMLInputElement>) => void;
-  modifiedDownValue: string;
+  opKey: string;
+  handleOpKey: (data: React.ChangeEvent<HTMLInputElement>) => void;
+  amf: string;
+  handleAmf: (data: React.ChangeEvent<HTMLInputElement>) => void;
+  downValue: string;
   upValue: string;
-  DownUnit: string | null;
-  modifiedUpUnit: string | null;
+  downUnit: string | null;
+  upUnit: string | null;
   handleDownValue: (data: React.ChangeEvent<HTMLInputElement>) => void;
   handleUpValue: (data: React.ChangeEvent<HTMLInputElement>) => void;
   handleDownUnit: (data: string) => void;
@@ -27,23 +27,31 @@ interface InputChildProps {
 
 const EditConfig: React.FC<InputChildProps> = ({
   Subscriber,
-  modifiedImsi,
-  modifiedSubK,
-  modifiedAmf,
-  DownUnit,
-  modifiedDownValue,
-  modifiedOpKey,
-  modifiedUpUnit,
+  imsi,
+  subK,
+  amf,
+  downUnit,
+  downValue,
+  opKey,
+  upUnit,
   upValue,
-  handleModifiedImsi,
-  handleModifiedSubK,
-  handleModifiedOpKey,
-  handleModifiedAmf,
+  handleImsi,
+  handleSubK,
+  handleOpKey,
+  handleAmf,
   handleDownUnit,
-  handleDownValue
+  handleDownValue,
+  handleUpUnit,
+  handleUpValue
 }) => {
   const [isMSIVisible, setIsMSIVisible] = useState(true);
   const [msisdnClicked, setMsisdnClicked] = useState(false);
+
+  useEffect(()=>{
+    console.log("imsi", imsi);
+    console.log("subscriber is:", Subscriber.imsi);
+    
+  })
   // const [isTyping, setIsTyping] = useState(false);
   // const [value, setValue] = useState<string>("");
 
@@ -56,17 +64,6 @@ const EditConfig: React.FC<InputChildProps> = ({
   //   const [upValue, setUpValue] = useState("1");
   //   const [upUnit, setUpUnit] = useState<string | null>("3");
 
-  //   useEffect(() => {
-  //     setImsi(Subscriber.imsi);
-  //     setSubK(Subscriber.security.k);
-  //     setOpKey(Subscriber.security.opc);
-  //     setAmf(Subscriber.security.amf);
-  //     setDownValue(Subscriber.ambr.downlink.value);
-  //     setDownUnit(Subscriber.ambr.downlink.unit);
-  //     setUpValue(Subscriber.ambr.uplink.value);
-  //     setUpUnit(Subscriber.ambr.uplink.unit);
-
-  //   }, []);
 
   //   const handleImsi = (e: React.ChangeEvent<HTMLInputElement>) => {
   //     e.preventDefault();
@@ -144,8 +141,8 @@ const EditConfig: React.FC<InputChildProps> = ({
             label: "static",
           }}
           className="mt-3"
-          value={modifiedImsi}
-          onChange={handleModifiedImsi}
+          value={imsi}
+          onChange={handleImsi}
           // onKeyDown={handleKey}
         />
         <div className="grid place-content-center">
@@ -205,15 +202,14 @@ const EditConfig: React.FC<InputChildProps> = ({
           className="w-[400px] mr-6"
           name="subK"
           //   placeholder={Subscriber.security.k}
-          value={modifiedSubK}
-          onChange={handleModifiedSubK}
+          value={subK}
+          onChange={handleSubK}
         />
         <TextInput
           label="Authentication Management Field (AMF)"
           name="amf"
-          placeholder={Subscriber.security.amf}
-          value={modifiedAmf}
-          onChange={handleModifiedAmf}
+          value={amf}
+          onChange={handleAmf}
           classNames={{
             label: "static",
           }}
@@ -238,9 +234,9 @@ const EditConfig: React.FC<InputChildProps> = ({
           classNames={{
             label: "static",
           }}
-          value={modifiedOpKey}
+          value={opKey}
           placeholder={Subscriber.security.opc}
-          onChange={handleModifiedOpKey}
+          onChange={handleOpKey}
           // onKeyDown={handleKey}
           className="w-[500px]"
         />
@@ -253,7 +249,7 @@ const EditConfig: React.FC<InputChildProps> = ({
             label: "static",
           }}
           placeholder="1"
-          value={modifiedDownValue}
+          value={downValue}
           onChange={handleDownValue}
           // onKeyDown={handleKey}
           className="w-[250px]"
@@ -273,7 +269,7 @@ const EditConfig: React.FC<InputChildProps> = ({
           ]}
           defaultValue={"Gbps"}
           className="ml-3 w-[100px]"
-          value={DownUnit}
+          value={downUnit}
           onChange={handleDownUnit}
           // onKeyDown={handleKey}
         />
@@ -295,7 +291,7 @@ const EditConfig: React.FC<InputChildProps> = ({
             label: "static",
           }}
           value={upUnit}
-          onChange={setUpUnit}
+          onChange={handleUpUnit}
           data={[
             { value: "0", label: "bps" },
             { value: "1", label: "Kbps" },
