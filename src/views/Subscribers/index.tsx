@@ -1,5 +1,5 @@
 import { ModalsProvider } from "@mantine/modals";
-import IMSIInput from "./components/Modal/components/IMSI/IMSIInput";
+import IMSIInput from "./components/Modal/components/edit";
 import SubscriberModal from "./components/Modal/index";
 
 function Subscribers() {

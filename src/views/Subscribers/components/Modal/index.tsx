@@ -14,39 +14,25 @@ import Slice from "./components/Slice";
 import Session from "./components/Session";
 import PccRules from "./components/PccRules";
 
-interface ConfigType {
-  imsi: string;
-  msisdn: string;
-  imeisv: string;
-  mme_host: [string];
-  mme_realm: [string];
-  purge_flag: [boolean];
+// interface ConfigType {
+//   imsi: string;
+//   msisdn: string;
+//   imeisv: string;
+//   mme_host: [string];
+//   mme_realm: [string];
+//   purge_flag: [boolean];
 
-  security: {
-    opc: string;
-    amf: string;
-    k: string;
-  };
-  ambr: {
-    downlink: { value: string | null; unit: number };
-    uplink: { value: string | null; unit: number };
-  };
-}
+//   security: {
+//     opc: string;
+//     amf: string;
+//     k: string;
+//   };
+//   ambr: {
+//     downlink: { value: string | null; unit: number };
+//     uplink: { value: string | null; unit: number };
+//   };
+// }
 
-const ConfigInitialState: ConfigType = {
-  imsi: "",
-  imeisv: "",
-  msisdn: "",
-  security: {
-    opc: "",
-    amf: "",
-    k: "",
-  },
-  ambr: {
-    downlink: { value: "1", unit: 1 },
-    uplink: { value: "1", unit: 1 },
-  },
-};
 
 function SubscriberModal() {
   const [opened, { open, close }] = useDisclosure(false);
@@ -58,16 +44,16 @@ function SubscriberModal() {
   const [opKey, setOpKey] = useState("");
   const [amf, setAmf] = useState("");
   const [downValue, setDownValue] = useState("1");
-  const [downUnit, setDownUnit] = useState<string | null>("3");
+  const [downUnit, setDownUnit] = useState<string | null>("Gbps");
   const [upValue, setUpValue] = useState("1");
-  const [upUnit, setUpUnit] = useState<string | null>("3");
+  const [upUnit, setUpUnit] = useState<string | null>("Gbps");
   // Slice States
   const [sst, setSst] = useState("1");
   const [sd, setSd] = useState("");
   // Session States
   
 
-  const [addSubscriber, { isLoading, isError, isSuccess }] =
+  const [addSubscriber] =
     useAddSubscriberMutation();
 
   const handleImsi = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -42,7 +42,7 @@ export const subscriberApi = createApi({
       DataType, Partial<DataType>>({
       query: (data) => ({
         url: `/mon/`,
-        method: "PATCH",
+        method: "PUT",
         headers: {
           'Content-Type': 'application/json',
           imsi: data.imsi,

@@ -16,7 +16,11 @@ import {
 import { useForm } from "@mantine/form";
 
 import { IconSearch, IconArrowRight, IconArrowLeft } from "@tabler/icons-react";
-import { useGetSubscribersQuery, useDeleteSubscriberMutation } from "../../../../../../services/subscribers";
+import {
+  useGetSubscribersQuery,
+  useDeleteSubscriberMutation,
+  useUpdateSubscriberMutation,
+} from "../../../../../../services/subscribers";
 import { ModalsProvider } from "@mantine/modals";
 // Styles
 import StyledInput from "./style";
@@ -24,15 +28,10 @@ import { FaPencilAlt } from "react-icons/fa";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { useDisclosure } from "@mantine/hooks";
 // Components
-import SubscriberConfig from "../../components/SubscriberConfig";
-import Slice from "../../components/Slice";
-import Session from "../../components/Session";
-import PccRules from "../../components/PccRules";
-
-export interface SubscriberType {
-  imsi: string;
-  security: object;
-}
+import Slice from "../Slice";
+import Session from "../Session";
+import PccRules from "../PccRules";
+import EditConfig from "./components/Config";
 
 function IMSIInput(props: TextInputProps) {
   const [value, setValue] = useState<string>("");
@@ -42,21 +41,22 @@ function IMSIInput(props: TextInputProps) {
   const [opened, { open, close }] = useDisclosure();
   const [editOpened, setEditOpened] = useState(false);
   const [deleteOpened, setDeleteOpened] = useState(false);
-
   const theme = useMantineTheme();
+  // Config States
   const [imsi, setImsi] = useState("");
-  const [subK, setSubk] = useState("");
+  const [subK, setSubK] = useState("");
   // const [op, setOp] = useState('');
   const [opKey, setOpKey] = useState("");
   const [amf, setAmf] = useState("");
   const [downValue, setDownValue] = useState("1");
-  const [downUnit, setDownUnit] = useState<string | null>("3");
+  const [downUnit, setDownUnit] = useState<string>("3");
   const [upValue, setUpValue] = useState("1");
-  const [upUnit, setUpUnit] = useState<string | null>("3");
+  const [upUnit, setUpUnit] = useState<string>("3");
   // Slice States
   const [sst, setSst] = useState("1");
   const [sd, setSd] = useState("");
-  const [deleteSubscriber, {isLoadingDelete} ] = useDeleteSubscriberMutation()
+  const [deleteSubscriber] = useDeleteSubscriberMutation();
+  const [updateSubscriber] = useUpdateSubscriberMutation();
   // Session States
 
   const form = useForm({
@@ -67,28 +67,50 @@ function IMSIInput(props: TextInputProps) {
     },
   });
 
+  // const handleImsi = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   e.preventDefault();
+  //   setImsi(e.currentTarget.value);
+  // };
+  const {
+    data: Subscriber,
+    isLoading,
+    isSuccess,
+    isError,
+    error,
+  } = useGetSubscribersQuery(value, {
+    skip: isTyping,
+  });
+
   useEffect(() => {
-    console.log(Subscriber);
+    if (Subscriber) {
+      setImsi(Subscriber.imsi);
+    }
+    // setSubK(Subscriber.security.k);
+    // setOpKey(Subscriber.security.opc);
+    // setAmf(Subscriber.security.amf);
+    // setDownValue(Subscriber.ambr.downlink.value);
+    // setDownUnit(Subscriber.ambr.downlink.unit);
+    // setUpValue(Subscriber.ambr.uplink.value);
+    // setUpUnit(Subscriber.ambr.uplink.unit);
   }, []);
-  const handleImsi = (e: any) => {
+
+  const handleImsi = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setImsi(e.currentTarget.value);
   };
 
-  const handleSubk = (e: any) => {
+  const handleSubk = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    setSubk(e.currentTarget.value);
-    console.log("subK", subK);
+    setSubK(e.currentTarget.value);
+    console.log("subK", SubK);
   };
-  const handleOpKey = (e: any) => {
+  const handleOpKey = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setOpKey(e.currentTarget.value);
-    console.log("Op key", opKey);
   };
-  const handleAmf = (e: any) => {
+  const handleAmf = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setAmf(e.currentTarget.value);
-    console.log("amf", amf);
   };
 
   const handleDownValue = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -128,18 +150,9 @@ function IMSIInput(props: TextInputProps) {
     },
   };
 
-  const {
-    data: Subscriber,
-    isLoading,
-    isSuccess,
-    isError,
-    error,
-  } = useGetSubscribersQuery(value, {
-    skip: isTyping,
-  });
-
   useEffect(() => {
     console.log("Subscriber is:", Subscriber);
+    console.log(Imsi);
   });
 
   const sessionType = () => {
@@ -209,8 +222,55 @@ function IMSIInput(props: TextInputProps) {
     setEditOpened(true);
   };
   const handleDelete = () => {
-   deleteSubscriber(Subscriber.imsi);
-  }
+    deleteSubscriber(Subscriber.imsi);
+  };
+  const handleSubmitUpdate = () => {
+    updateSubscriber({
+      imsi: Imsi,
+      security: {
+        k: SubK,
+        opc: OpKey,
+        amf: Amf,
+      },
+      mme_host: [],
+      mme_realm: [],
+      purge_flag: [],
+      ambr: {
+        downlink: { value: DownValue, unit: DownUnit },
+        uplink: { value: UpValue, unit: UpUnit },
+      },
+      slice: [
+        {
+          sst: sst,
+          sd: sd,
+          session: [
+            {
+              name: "internet",
+              type: 3,
+              ambr: {
+                downlink: {
+                  value: "1",
+                  unit: "3",
+                },
+                uplink: {
+                  value: "1",
+                  unit: "3",
+                },
+              },
+              qos: {
+                index: 9,
+                arp: {
+                  priority_level: 8,
+                  pre_emption_capability: 1,
+                  pre_emption_vulnerability: 1,
+                },
+              },
+            },
+          ],
+        },
+      ],
+    });
+  };
   return (
     <>
       <ModalsProvider>
@@ -375,26 +435,27 @@ function IMSIInput(props: TextInputProps) {
                     >
                       <Box mx="auto" className="w-[800px]">
                         <form
-                          onSubmit={form.onSubmit(handleSubmit)}
+                          onSubmit={form.onSubmit(handleSubmitUpdate)}
                           className="block relative"
                         >
-                          <SubscriberConfig
-                            imsi={Subscriber.imsi}
+                          <EditConfig
+                            Subscriber={Subscriber}
+                            Imsi={Imsi}
                             handleImsi={handleImsi}
-                            subK={Subscriber.security.k}
-                            handleSubk={handleSubk}
+                            SubK={SubK}
+                            handleSubK={handleSubk}
                             // op={op}
-                            opKey={Subscriber.security.opc}
+                            OpKey={OpKey}
                             handleOpKey={handleOpKey}
-                            amf={Subscriber.security.amf}
+                            Amf={Amf}
                             handleAmf={handleAmf}
-                            downValue={Subscriber.ambr.downlink.value}
+                            DownValue={DownValue}
                             handleDownValue={handleDownValue}
-                            downUnit={Subscriber.ambr.downlink.unit}
+                            handleDownUnit={DownUnit}
                             handleDownUnit={setDownUnit}
-                            upValue={Subscriber.ambr.uplink.value}
+                            upValue={upValue}
                             handleUpValue={handleUpValue}
-                            upUnit={upUnit}
+                            UpUnit={UpUnit}
                             handleUpUnit={setUpUnit}
                           />
                           <Slice
@@ -437,10 +498,19 @@ function IMSIInput(props: TextInputProps) {
                       // styles={contentStyles}
                       className="bg-gray-300 rounded-lg shadow-lg w-[200px]"
                     >
-                      <Text className="text-center">Are you sure to delete this subscriber?</Text>
+                      <Text className="text-center">
+                        Are you sure to delete this subscriber?
+                      </Text>
                       <div className="flex mt-5 justify-center">
-                        <Button className="text-black hover:bg-slate-300">Cancel</Button>
-                        <Button className="text-red-400 ml-5" onClick={handleDelete}>Delete</Button>
+                        <Button className="text-black hover:bg-slate-300">
+                          Cancel
+                        </Button>
+                        <Button
+                          className="text-red-400 ml-5"
+                          onClick={handleDelete}
+                        >
+                          Delete
+                        </Button>
                       </div>
                     </Modal>
                     <Button

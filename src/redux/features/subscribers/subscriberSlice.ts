@@ -14,9 +14,33 @@ export interface DataType {
     k: string;
   }
  ambr: {
-  downlink: {value: number, unit: number}
-  uplink: {value: number, unit: number}
+  downlink: {value: string, unit: string}
+  uplink: {value: string, unit: string}
  }
+ mme_host: [];
+ mme_realm: [];
+ purge_flag: [];
+slice:[{
+  sst: string;
+  sd: string;
+  session: [{
+    name: string;
+    type: number;
+    ambr: {
+      downlink: {value: string, unit: string},
+      uplink: {value: string, unit: string}
+    },
+    qos: {
+index: number;
+arp: {
+  priority_level: number,
+  pre_emption_capability: number,
+  pre_emption_vulnerability: number,
+}
+    }
+  }]
+}]
+
 //  slice: [{
 //   sst: number,
 //   sd: string,
@@ -46,15 +70,10 @@ export const initialState: FormState = {
       k: "string",
     },
     ambr: {
-      downlink: {value: 1, unit: 1},
-      uplink: {value: 1, unit: 1}
+      downlink: {value: "1", unit: "3"},
+      uplink: {value: "1", unit: "1"}
      }
- 
-    // usimType: "",
-    // ueDownlink:"1",
-    // ueDownUnit:"Gbps",
-    // ueUplink:"1",
-    // ueUplinkUnit:"Gbps"
+
   },
   isLoading: false,
   isError: false,
