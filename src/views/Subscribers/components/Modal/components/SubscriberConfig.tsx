@@ -23,13 +23,6 @@ interface InputChildProps {
   handleUpUnit: (data: string) => void;
 }
 
-// interface ConfigProps {
-
-//   selectDL: string | null;
-//   selectUL: string | null;
-//   setSelectDL: (data: string) => void;
-//   setSelectUL: (data: string) => void;
-// }
 
 const SubscriberConfig: React.FC<InputChildProps> = ({
   imsi,
@@ -79,16 +72,6 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
     setIsMSIVisible(true);
     setMsisdnClicked(false);
   };
-
-  // const {
-  //   data: Subscriber,
-  //   isLoading,
-  //   isSuccess,
-  //   isError,
-  //   error,
-  // } = useGetSubscribersQuery(value, {
-  //   skip: isTyping,
-  // });
 
 
   return (
