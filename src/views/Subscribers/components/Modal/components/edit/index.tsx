@@ -13,7 +13,6 @@ import {
   Text,
 } from "@mantine/core";
 // Mantine Form
-import { useForm } from "@mantine/form";
 
 import { IconSearch, IconArrowRight, IconArrowLeft } from "@tabler/icons-react";
 import {
@@ -44,10 +43,12 @@ function IMSIInput(props: TextInputProps) {
   const theme = useMantineTheme();
   // Config States
   const [imsi, setImsi] = useState("");
+  const [msisdn, setMsisdn] = useState("");
   const [subK, setSubK] = useState("");
+  const [usimType, setUsimType] = useState("OP");
   // const [op, setOp] = useState('');
   const [opKey, setOpKey] = useState("");
-  const [amf, setAmf] = useState("");
+  const [amf, setAmf] = useState("8000");
   const [downValue, setDownValue] = useState("1");
   const [downUnit, setDownUnit] = useState<string>("3");
   const [upValue, setUpValue] = useState("1");
@@ -58,14 +59,6 @@ function IMSIInput(props: TextInputProps) {
   const [deleteSubscriber] = useDeleteSubscriberMutation();
   const [updateSubscriber] = useUpdateSubscriberMutation();
   // Session States
-
-  const form = useForm({
-    initialValues: {
-      imsi: "55",
-      msisdn: "",
-      subK: "",
-    },
-  });
 
   const {
     data: Subscriber,
@@ -78,8 +71,9 @@ function IMSIInput(props: TextInputProps) {
   });
 
   useEffect(() => {
-    if (Subscriber) {
+    if (Subscriber !== undefined) {
       setImsi(Subscriber.imsi);
+      setMsisdn(Subscriber.msisdn[0]);
       setSubK(Subscriber.security.k);
       setOpKey(Subscriber.security.opc);
       setAmf(Subscriber.security.amf);
@@ -90,10 +84,14 @@ function IMSIInput(props: TextInputProps) {
     }
   }, [Subscriber]);
 
-  
   const handleImsi = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setImsi(e.currentTarget.value);
+  };
+
+  const handleMsisdn = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    setMsisdn(e.currentTarget.value);
   };
 
   const handleSubk = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -224,6 +222,7 @@ function IMSIInput(props: TextInputProps) {
         opc: Subscriber.security.opc,
         amf: Subscriber.security.amf,
       },
+      msisdn: Subscriber.msisdn[0],
       mme_host: [],
       mme_realm: [],
       purge_flag: [],
@@ -427,12 +426,17 @@ function IMSIInput(props: TextInputProps) {
                     >
                       <Box mx="auto" className="w-[800px]">
                         <form
-                          onSubmit={form.onSubmit(handleSubmitUpdate)}
+                          onSubmit={handleSubmitUpdate}
                           className="block relative"
                         >
                           <EditConfig
                             Subscriber={Subscriber}
                             imsi={imsi}
+                            msisdn={msisdn}
+                            handleMsisdn={handleMsisdn}
+                            // imeisv={imeisv}
+                            usimType={usimType}
+                            handleUsimType={setUsimType}
                             handleImsi={handleImsi}
                             subK={subK}
                             handleSubK={handleSubk}
@@ -469,6 +473,7 @@ function IMSIInput(props: TextInputProps) {
                           <Button
                             className="font-bold bg-blue-500 absolute w-36 right-0 mt-6"
                             type="submit"
+                            onClick={() => setEditOpened(false)}
                           >
                             Save
                           </Button>

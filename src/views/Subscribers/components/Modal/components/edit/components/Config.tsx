@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 // Mantine Components
-import { Button, Divider, Select, TextInput } from "@mantine/core";
 import { DataType } from "@/redux/features/subscribers/subscriberSlice";
+import { Button, Divider, Select, TextInput } from "@mantine/core";
 
 interface InputChildProps {
   Subscriber: DataType;
   imsi: string;
   handleImsi: (data: React.ChangeEvent<HTMLInputElement>) => void;
+  usimType: string;
+  handleUsimType: (data: string) => void;
+  msisdn: string;
+  handleMsisdn: (data: React.ChangeEvent<HTMLInputElement>) => void;
+  // imeisv: [string];
   subK: string;
   handleSubK: (data: React.ChangeEvent<HTMLInputElement>) => void;
   // op: string | null;
@@ -28,6 +33,8 @@ interface InputChildProps {
 const EditConfig: React.FC<InputChildProps> = ({
   Subscriber,
   imsi,
+  msisdn,
+  handleMsisdn,
   subK,
   amf,
   downUnit,
@@ -35,6 +42,8 @@ const EditConfig: React.FC<InputChildProps> = ({
   opKey,
   upUnit,
   upValue,
+  usimType,
+  handleUsimType,
   handleImsi,
   handleSubK,
   handleOpKey,
@@ -42,17 +51,10 @@ const EditConfig: React.FC<InputChildProps> = ({
   handleDownUnit,
   handleDownValue,
   handleUpUnit,
-  handleUpValue
+  handleUpValue,
 }) => {
   const [isMSIVisible, setIsMSIVisible] = useState(true);
   const [msisdnClicked, setMsisdnClicked] = useState(false);
-
-  useEffect(()=>{
-    console.log("imsi", imsi);
-    console.log("subscriber is:", Subscriber.imsi);
-    
-  })
- 
 
   const handleOnAdd = () => {
     setMsisdnClicked(true);
@@ -63,7 +65,6 @@ const EditConfig: React.FC<InputChildProps> = ({
     setIsMSIVisible(true);
     setMsisdnClicked(false);
   };
-
 
   return (
     <>
@@ -105,8 +106,8 @@ const EditConfig: React.FC<InputChildProps> = ({
                         label: "static",
                       }}
                       className="w-[300px]"
-                      value={formData.msisdn}
-                      // onChange={handleForm}
+                      value={msisdn}
+                      onChange={handleMsisdn}
                     />
                   </>
                 ) : null}
@@ -154,17 +155,22 @@ const EditConfig: React.FC<InputChildProps> = ({
         />
       </div>
       <div className="flex  mt-3">
-        <TextInput
+        <Select
           label="USIM Type"
-          name="usimType"
           classNames={{
             label: "static",
           }}
-          // onKeyDown={handleKey}
-          className="w-[300px] mr-6"
-          // value={formData.usimType}
-          // onChange={handleForm}
+          placeholder="OP"
+          data={[
+            { value: "OP", unit: "OP" },
+            { value: "OPC", unit: "OPC" },
+          ]}
+          defaultValue={"Gbps"}
+          className="mr-6 w-[300px]"
+          value={usimType}
+          onChange={handleUsimType}
         />
+
         <TextInput
           label="Operator Key (OPc/OP)"
           name="opKey"
