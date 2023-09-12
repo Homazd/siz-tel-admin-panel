@@ -7,58 +7,58 @@ export interface DataType {
 
   security: {
     opc: string;
+    // op: string;
     amf: string;
     k: string;
-  }
- ambr: {
-  downlink: {value: string, unit: string}
-  uplink: {value: string, unit: string}
- },
- mme_host: [],
- mme_realm: [],
- purge_flag: [],
- slice: [
-   {
-     sst: string,
-     sd: string,
-     session: [
-       {
-         name: string,
-         type: number,
-         ambr: {
-           downlink: {
-             value: string,
-             unit: string,
-           },
-           uplink: {
-             value: string,
-             unit: string,
-           },
-         },
-         qos: {
-           index: number,
-           arp: {
-             priority_level: number,
-             pre_emption_capability: number,
-             pre_emption_vulnerability: number,
-           },
-         },
-       },
-     ],
-   },
- ],
+  };
+  ambr: {
+    downlink: { value: string; unit: string };
+    uplink: { value: string; unit: string };
+  };
+  mme_host: [];
+  mme_realm: [];
+  purge_flag: [];
+  slice: [
+    {
+      sst: string;
+      sd: string;
+      session: [
+        {
+          name: string;
+          type: number;
+          ambr: {
+            downlink: {
+              value: string;
+              unit: string;
+            };
+            uplink: {
+              value: string;
+              unit: string;
+            };
+          };
+          qos: {
+            index: number;
+            arp: {
+              priority_level: number;
+              pre_emption_capability: number;
+              pre_emption_vulnerability: number;
+            };
+          };
+        }
+      ];
+    }
+  ];
 
-//  slice: [{
-//   sst: number,
-//   sd: string,
+  //  slice: [{
+  //   sst: number,
+  //   sd: string,
 
-//  }]
+  //  }]
   // usimType: string;
   // ueDownlink: string;
   // ueDownUnit: string | null;
   // ueUplink: string;
   // ueUplinkUnit: string | undefined | null;
-
 }
 export interface FormState {
   data: DataType;
@@ -73,8 +73,9 @@ export const initialState: FormState = {
     imeisv: "",
     security: {
       opc: "",
-      amf: "string",
-      k: "string",
+      op: "",
+      amf: "",
+      k: "",
     },
     ambr: {
       downlink: { value: "1", unit: "1" },
@@ -113,7 +114,6 @@ export const initialState: FormState = {
         ],
       },
     ],
-
   },
   isLoading: false,
   isError: false,

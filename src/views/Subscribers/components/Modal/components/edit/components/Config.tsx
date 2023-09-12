@@ -74,12 +74,12 @@ const EditConfig: React.FC<InputChildProps> = ({
         <TextInput
           label="IMSI"
           name="imsi"
-          //   placeholder={Subscriber.imsi}
           classNames={{
             label: "static",
           }}
           className="mt-3"
           value={imsi}
+          pattern="^\\d+$"
           onChange={handleImsi}
           // onKeyDown={handleKey}
         />
@@ -133,13 +133,14 @@ const EditConfig: React.FC<InputChildProps> = ({
       <div className="flex mt-6">
         <TextInput
           label="Subscriber Key (K)"
+          name="subK"
           classNames={{
             label: "static",
           }}
           // onKeyDown={handleKey}
           className="w-[400px] mr-6"
-          name="subK"
-          //   placeholder={Subscriber.security.k}
+          required
+          pattern="^[0-9a-fA-F\\s]+$"
           value={subK}
           onChange={handleSubK}
         />
@@ -148,6 +149,7 @@ const EditConfig: React.FC<InputChildProps> = ({
           name="amf"
           value={amf}
           onChange={handleAmf}
+          pattern="^[0-9a-fA-F\\s]+$"
           classNames={{
             label: "static",
           }}

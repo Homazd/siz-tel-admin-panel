@@ -48,7 +48,7 @@ function IMSIInput(props: TextInputProps) {
   const [usimType, setUsimType] = useState("OP");
   // const [op, setOp] = useState('');
   const [opKey, setOpKey] = useState("");
-  const [amf, setAmf] = useState("8000");
+  const [amf, setAmf] = useState("");
   const [downValue, setDownValue] = useState("1");
   const [downUnit, setDownUnit] = useState<string>("3");
   const [upValue, setUpValue] = useState("1");
@@ -60,12 +60,13 @@ function IMSIInput(props: TextInputProps) {
   const [updateSubscriber] = useUpdateSubscriberMutation();
   // Session States
 
+  // Validation
+
   const {
     data: Subscriber,
     isLoading,
     isSuccess,
     isError,
-    error,
   } = useGetSubscribersQuery(value, {
     skip: isTyping,
   });
@@ -73,7 +74,9 @@ function IMSIInput(props: TextInputProps) {
   useEffect(() => {
     if (Subscriber !== undefined) {
       setImsi(Subscriber.imsi);
-      setMsisdn(Subscriber.msisdn[0]);
+      if (Subscriber.msisdn) {
+        setMsisdn(Subscriber.msisdn[0]);
+      }
       setSubK(Subscriber.security.k);
       setOpKey(Subscriber.security.opc);
       setAmf(Subscriber.security.amf);
@@ -81,8 +84,16 @@ function IMSIInput(props: TextInputProps) {
       setDownUnit(Subscriber.ambr.downlink.unit);
       setUpValue(Subscriber.ambr.uplink.value);
       setUpUnit(Subscriber.ambr.uplink.unit);
+      console.log(Subscriber);
+      if (Subscriber.security.opc && Subscriber.security.opc.length > 0) {
+        setUsimType("OPC");
+      } else {
+        setUsimType("OP");
+      }
+      console.log(usimType);
+      console.log(Subscriber.security);
     }
-  }, [Subscriber]);
+  }, [Subscriber, usimType]);
 
   const handleImsi = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -97,7 +108,8 @@ function IMSIInput(props: TextInputProps) {
   const handleSubk = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setSubK(e.currentTarget.value);
-    console.log("subK", subK);
+
+    // console.log("subK", subK);
   };
   const handleOpKey = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -189,7 +201,7 @@ function IMSIInput(props: TextInputProps) {
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
-      console.log(Subscriber, isLoading, isSuccess, isError, error);
+      console.log("Subscriber is:", Subscriber);
     }
   };
 
@@ -215,14 +227,17 @@ function IMSIInput(props: TextInputProps) {
     deleteSubscriber(Subscriber.imsi);
   };
   const handleSubmitUpdate = () => {
+    console.log("usim type:", usimType);
+
     updateSubscriber({
       imsi: imsi,
       security: {
-        k: Subscriber.security.subK,
+        k: Subscriber.security.k,
         opc: Subscriber.security.opc,
         amf: Subscriber.security.amf,
       },
       msisdn: Subscriber.msisdn[0],
+
       mme_host: [],
       mme_realm: [],
       purge_flag: [],

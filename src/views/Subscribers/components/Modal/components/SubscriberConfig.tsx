@@ -82,6 +82,7 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
         <TextInput
           label="IMSI"
           name="imsi"
+          pattern="^\d+$"
           placeholder="Enter IMSI"
           classNames={{
             label: "static",

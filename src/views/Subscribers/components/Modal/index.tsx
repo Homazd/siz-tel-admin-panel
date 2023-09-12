@@ -33,7 +33,6 @@ import PccRules from "./components/PccRules";
 //   };
 // }
 
-
 function SubscriberModal() {
   const [opened, { open, close }] = useDisclosure(false);
   const [hiddenSession, setHiddenSession] = useState(true);
@@ -51,19 +50,37 @@ function SubscriberModal() {
   const [sst, setSst] = useState("1");
   const [sd, setSd] = useState("");
   // Session States
-  
 
-  const [addSubscriber] =
-    useAddSubscriberMutation();
+  // Validation
+  const [error, setError] = useState("");
+
+  const [addSubscriber] = useAddSubscriberMutation();
 
   const handleImsi = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setImsi(e.currentTarget.value);
+
+    if (imsi.length > 15 || !/^\d+$/.test(imsi)) {
+      setError(
+        "Only digits are allowed and lenght must be less than 15 numbers."
+      );
+      console.log(error);
+      error;
+    } else {
+      setError("");
+    }
   };
 
   const handleSubk = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setSubk(e.currentTarget.value);
+    if (!/^\[0-9a-fA-F\\s]+$/.test(subK)) {
+      setError("Only hexadecimal digits are allowed");
+      console.log(error);
+      error;
+    } else {
+      setError("");
+    }
   };
   const handleOpKey = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -111,54 +128,59 @@ function SubscriberModal() {
     },
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (event: any) => {
     // const { imsi } = form.values;
     console.log("imsi is:", imsi);
-    addSubscriber({
-      imsi: imsi,
-      security: {
-        k: subK,
-        opc: opKey,
-        amf: amf,
-      },
-      mme_host: [],
-      mme_realm: [],
-      purge_flag: [],
-      ambr: {
-        downlink: { value: downValue, unit: downUnit },
-        uplink: { value: upValue, unit: upUnit },
-      },
-      slice: [
-        {
-          sst: sst,
-          sd: sd,
-          session: [
-            {
-              name: "internet",
-              type: 3,
-              ambr: {
-                downlink: {
-                  value: 1,
-                  unit: 3,
-                },
-                uplink: {
-                  value: 1,
-                  unit: 3,
-                },
-              },
-              qos: {
-                index: 9,
-                arp: {
-                  priority_level: 8,
-                  pre_emption_capability: 1,
-                  pre_emption_vulnerability: 1,
-                },
-              },
-            },
-          ],
+    if (error) {
+      alert("Please Correct the errors!");
+    } else {
+      addSubscriber({
+        imsi: imsi,
+        security: {
+          k: subK,
+          op_type: usimType,
+          op_value: opKey,
+          amf: amf,
         },
-      ],
-    });
+        mme_host: [],
+        mme_realm: [],
+        purge_flag: [],
+        ambr: {
+          downlink: { value: downValue, unit: downUnit },
+          uplink: { value: upValue, unit: upUnit },
+        },
+        slice: [
+          {
+            sst: sst,
+            sd: sd,
+            session: [
+              {
+                name: "internet",
+                type: 3,
+                ambr: {
+                  downlink: {
+                    value: 1,
+                    unit: 3,
+                  },
+                  uplink: {
+                    value: 1,
+                    unit: 3,
+                  },
+                },
+                qos: {
+                  index: 9,
+                  arp: {
+                    priority_level: 8,
+                    pre_emption_capability: 1,
+                    pre_emption_vulnerability: 1,
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      });
+    }
   };
   const form = useForm({
     initialValues: {
