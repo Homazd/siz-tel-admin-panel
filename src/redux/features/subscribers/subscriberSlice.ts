@@ -1,3 +1,4 @@
+import { op_value } from "@/views/Subscribers/Types/subscriberTypes";
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface DataType {
@@ -7,7 +8,7 @@ export interface DataType {
 
   security: {
     opc: string;
-    // op: string;
+    op: op_value;
     amf: string;
     k: string;
   };
@@ -62,7 +63,7 @@ export const initialState: FormState = {
     imeisv: "",
     security: {
       opc: "",
-      op: "",
+      op: 0 ,
       amf: "",
       k: "",
     },

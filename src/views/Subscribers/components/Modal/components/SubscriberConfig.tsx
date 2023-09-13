@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 // Mantine Components
 import { Button, Divider, Select, TextInput } from "@mantine/core";
+import { op_value } from "@/views/Subscribers/Types/subscriberTypes";
 
 interface InputChildProps {
   imsi: string;
@@ -9,6 +10,8 @@ interface InputChildProps {
   handleSubk: (data: React.ChangeEvent<HTMLInputElement>) => void;
   // op: string | null;
   // handleOp: (data: React.ChangeEvent<HTMLInputElement>) => void;
+  opType: op_value;
+  handleOpType: (data: string) => void;
   opKey: string;
   handleOpKey: (data: React.ChangeEvent<HTMLInputElement>) => void;
   amf: string;
@@ -16,13 +19,12 @@ interface InputChildProps {
   downValue: string;
   upValue: string;
   downUnit: number;
-  upUnit: number ;
+  upUnit: number;
   handleDownValue: (data: React.ChangeEvent<HTMLInputElement>) => void;
   handleUpValue: (data: React.ChangeEvent<HTMLInputElement>) => void;
   handleDownUnit: (data: number) => void;
   handleUpUnit: (data: number) => void;
 }
-
 
 const SubscriberConfig: React.FC<InputChildProps> = ({
   imsi,
@@ -35,6 +37,8 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
   handleAmf,
   downValue,
   handleDownValue,
+  opType,
+  handleOpType,
   downUnit,
   handleDownUnit,
   upValue,
@@ -46,8 +50,6 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
   const [msisdnClicked, setMsisdnClicked] = useState(false);
   // const [isTyping, setIsTyping] = useState(false);
   // const [value, setValue] = useState<string>("");
-
-
 
   const formData = {
     imsi: "",
@@ -72,7 +74,6 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
     setIsMSIVisible(true);
     setMsisdnClicked(false);
   };
-
 
   return (
     <>
@@ -164,16 +165,19 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
         />
       </div>
       <div className="flex  mt-3">
-        <TextInput
+        <Select
           label="USIM Type"
-          name="usimType"
           classNames={{
             label: "static",
           }}
-          // onKeyDown={handleKey}
-          className="w-[300px] mr-6"
-          // value={formData.usimType}
-          // onChange={handleForm}
+          placeholder="OP"
+          data={[
+            { value: "0", unit: "OP" },
+            { value: "1", unit: "OPc" },
+          ]}
+          className="mr-6 w-[300px]"
+          value={(opType)}
+          onChange={handleOpKey}
         />
         <TextInput
           label="Operator Key (OPc/OP)"

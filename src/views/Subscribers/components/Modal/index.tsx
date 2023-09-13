@@ -13,6 +13,7 @@ import SubscriberConfig from "./components/SubscriberConfig";
 import Slice from "./components/Slice";
 import Session from "./components/Session";
 import PccRules from "./components/PccRules";
+import { op_value } from "../../Types/subscriberTypes";
 
 function SubscriberModal() {
   const [opened, { open, close }] = useDisclosure(false);
@@ -20,14 +21,14 @@ function SubscriberModal() {
   const [hiddenSlice, setHiddenSlice] = useState(false);
   const [imsi, setImsi] = useState("");
   const [subK, setSubk] = useState("");
-  // const [op, setOp] = useState('');
+  const [opType, setOpType] = useState<op_value | null>(0);
   const [opKey, setOpKey] = useState("");
   const [amf, setAmf] = useState("");
   const [downValue, setDownValue] = useState(1);
   const [downUnit, setDownUnit] = useState<number>(3);
   const [upValue, setUpValue] = useState(1);
   const [upUnit, setUpUnit] = useState<number>(3);
-  const [usimType, setUsimType] = useState("OP");
+  const [usimType, setUsimType] = useState(0);
 
   // Slice States
   const [sst, setSst] = useState("1");
@@ -65,6 +66,11 @@ function SubscriberModal() {
     //   setError("");
     // }
   };
+  const handleOpType = (e: op_value) => {
+    console.log("opKey is:", e);
+
+    (e: op_value) => setOpType(e);
+  };
   const handleOpKey = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setOpKey(e.currentTarget.value);
@@ -77,7 +83,7 @@ function SubscriberModal() {
   const handleDownValue = (e: any) => {
     e.preventDefault();
     console.log("DownValue", e.currentTarget.value);
-    
+
     setDownValue(Number(e.currentTarget.value));
   };
 
@@ -194,7 +200,8 @@ function SubscriberModal() {
               handleImsi={handleImsi}
               subK={subK}
               handleSubk={handleSubk}
-              // op={op}
+              opType={opType}
+              handleOpType={handleOpType}
               opKey={opKey}
               handleOpKey={handleOpKey}
               amf={amf}
