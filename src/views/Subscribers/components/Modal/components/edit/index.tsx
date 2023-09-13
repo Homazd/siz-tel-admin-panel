@@ -49,10 +49,10 @@ function IMSIInput(props: TextInputProps) {
   // const [op, setOp] = useState('');
   const [opKey, setOpKey] = useState("");
   const [amf, setAmf] = useState("");
-  const [downValue, setDownValue] = useState("1");
-  const [downUnit, setDownUnit] = useState<string>("3");
-  const [upValue, setUpValue] = useState("1");
-  const [upUnit, setUpUnit] = useState<string>("3");
+  const [downValue, setDownValue] = useState(1);
+  const [downUnit, setDownUnit] = useState<number>(3);
+  const [upValue, setUpValue] = useState(1);
+  const [upUnit, setUpUnit] = useState<number>(3);
   // Slice States
   const [sst, setSst] = useState("1");
   const [sd, setSd] = useState("");
@@ -92,6 +92,8 @@ function IMSIInput(props: TextInputProps) {
       }
       console.log(usimType);
       console.log(Subscriber.security);
+      console.log(Subscriber.ambr.downlink);
+      
     }
   }, [Subscriber, usimType]);
 
@@ -120,12 +122,12 @@ function IMSIInput(props: TextInputProps) {
     setAmf(e.currentTarget.value);
   };
 
-  const handleDownValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleDownValue = (e: any) => {
     e.preventDefault();
     setDownValue(e.currentTarget.value);
   };
 
-  const handleUpValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUpValue = (e: any) => {
     e.preventDefault();
     setUpValue(e.currentTarget.value);
   };
@@ -213,7 +215,6 @@ function IMSIInput(props: TextInputProps) {
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     setIsTyping(false);
     event.preventDefault();
-    // handle form submit
   }
   const handleOnDeleteModal = () => {
     close();
@@ -228,6 +229,8 @@ function IMSIInput(props: TextInputProps) {
   };
   const handleSubmitUpdate = () => {
     console.log("usim type:", usimType);
+    console.log("submit edit");
+    
 
     updateSubscriber({
       imsi: imsi,
@@ -255,12 +258,12 @@ function IMSIInput(props: TextInputProps) {
               type: 3,
               ambr: {
                 downlink: {
-                  value: "1",
-                  unit: "3",
+                  value: 1,
+                  unit: 3,
                 },
                 uplink: {
-                  value: "1",
-                  unit: "3",
+                  value: 1,
+                  unit: 3,
                 },
               },
               qos: {

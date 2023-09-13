@@ -12,8 +12,8 @@ export interface DataType {
     k: string;
   };
   ambr: {
-    downlink: { value: string; unit: string };
-    uplink: { value: string; unit: string };
+    downlink: { value: number; unit: number };
+    uplink: { value: number; unit: number };
   };
   mme_host: [];
   mme_realm: [];
@@ -28,12 +28,12 @@ export interface DataType {
           type: number;
           ambr: {
             downlink: {
-              value: string;
-              unit: string;
+              value: number;
+              unit: number;
             };
             uplink: {
-              value: string;
-              unit: string;
+              value: number;
+              unit: number;
             };
           };
           qos: {
@@ -48,17 +48,6 @@ export interface DataType {
       ];
     }
   ];
-
-  //  slice: [{
-  //   sst: number,
-  //   sd: string,
-
-  //  }]
-  // usimType: string;
-  // ueDownlink: string;
-  // ueDownUnit: string | null;
-  // ueUplink: string;
-  // ueUplinkUnit: string | undefined | null;
 }
 export interface FormState {
   data: DataType;
@@ -78,8 +67,8 @@ export const initialState: FormState = {
       k: "",
     },
     ambr: {
-      downlink: { value: "1", unit: "1" },
-      uplink: { value: "1", unit: "1" },
+      downlink: { value: 1, unit: 1 },
+      uplink: { value: 1, unit: 1 },
     },
     mme_host: [],
     mme_realm: [],
@@ -94,12 +83,12 @@ export const initialState: FormState = {
             type: 3,
             ambr: {
               downlink: {
-                value: "1",
-                unit: "3",
+                value: 1,
+                unit: 3,
               },
               uplink: {
-                value: "1",
-                unit: "3",
+                value: 1,
+                unit: 3,
               },
             },
             qos: {

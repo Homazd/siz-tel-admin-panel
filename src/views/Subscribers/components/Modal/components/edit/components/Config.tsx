@@ -20,14 +20,14 @@ interface InputChildProps {
   handleOpKey: (data: React.ChangeEvent<HTMLInputElement>) => void;
   amf: string;
   handleAmf: (data: React.ChangeEvent<HTMLInputElement>) => void;
-  downValue: string;
-  upValue: string;
-  downUnit: string | null;
-  upUnit: string | null;
+  downValue: number;
+  upValue: number;
+  downUnit: number;
+  upUnit: number;
   handleDownValue: (data: React.ChangeEvent<HTMLInputElement>) => void;
   handleUpValue: (data: React.ChangeEvent<HTMLInputElement>) => void;
-  handleDownUnit: (data: string) => void;
-  handleUpUnit: (data: string) => void;
+  handleDownUnit: (data: number) => void;
+  handleUpUnit: (data: number) => void;
 }
 
 const EditConfig: React.FC<InputChildProps> = ({

@@ -14,25 +14,6 @@ import Slice from "./components/Slice";
 import Session from "./components/Session";
 import PccRules from "./components/PccRules";
 
-// interface ConfigType {
-//   imsi: string;
-//   msisdn: string;
-//   imeisv: string;
-//   mme_host: [string];
-//   mme_realm: [string];
-//   purge_flag: [boolean];
-
-//   security: {
-//     opc: string;
-//     amf: string;
-//     k: string;
-//   };
-//   ambr: {
-//     downlink: { value: string | null; unit: number };
-//     uplink: { value: string | null; unit: number };
-//   };
-// }
-
 function SubscriberModal() {
   const [opened, { open, close }] = useDisclosure(false);
   const [hiddenSession, setHiddenSession] = useState(true);
@@ -42,10 +23,12 @@ function SubscriberModal() {
   // const [op, setOp] = useState('');
   const [opKey, setOpKey] = useState("");
   const [amf, setAmf] = useState("");
-  const [downValue, setDownValue] = useState("1");
-  const [downUnit, setDownUnit] = useState<string | null>("Gbps");
-  const [upValue, setUpValue] = useState("1");
-  const [upUnit, setUpUnit] = useState<string | null>("Gbps");
+  const [downValue, setDownValue] = useState(1);
+  const [downUnit, setDownUnit] = useState<number>(3);
+  const [upValue, setUpValue] = useState(1);
+  const [upUnit, setUpUnit] = useState<number>(3);
+  const [usimType, setUsimType] = useState("OP");
+
   // Slice States
   const [sst, setSst] = useState("1");
   const [sd, setSd] = useState("");
@@ -74,13 +57,13 @@ function SubscriberModal() {
   const handleSubk = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setSubk(e.currentTarget.value);
-    if (!/^\[0-9a-fA-F\\s]+$/.test(subK)) {
-      setError("Only hexadecimal digits are allowed");
-      console.log(error);
-      error;
-    } else {
-      setError("");
-    }
+    // if (!/^\[0-9a-fA-F\\s]+$/.test(subK)) {
+    //   setError("Only hexadecimal digits are allowed");
+    //   console.log(error);
+    //   error;
+    // } else {
+    //   setError("");
+    // }
   };
   const handleOpKey = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -91,12 +74,14 @@ function SubscriberModal() {
     setAmf(e.currentTarget.value);
   };
 
-  const handleDownValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleDownValue = (e: any) => {
     e.preventDefault();
-    setDownValue(e.currentTarget.value);
+    console.log("DownValue", e.currentTarget.value);
+    
+    setDownValue(Number(e.currentTarget.value));
   };
 
-  const handleUpValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUpValue = (e: any) => {
     e.preventDefault();
     setUpValue(e.currentTarget.value);
   };
@@ -128,11 +113,11 @@ function SubscriberModal() {
     },
   };
 
-  const handleSubmit = (event: any) => {
+  const handleSubmit = () => {
     // const { imsi } = form.values;
     console.log("imsi is:", imsi);
     if (error) {
-      alert("Please Correct the errors!");
+      console.log(error);
     } else {
       addSubscriber({
         imsi: imsi,
@@ -146,8 +131,8 @@ function SubscriberModal() {
         mme_realm: [],
         purge_flag: [],
         ambr: {
-          downlink: { value: downValue, unit: downUnit },
-          uplink: { value: upValue, unit: upUnit },
+          downlink: { value: downValue, unit: 3 },
+          uplink: { value: upValue, unit: 3 },
         },
         slice: [
           {
@@ -190,34 +175,6 @@ function SubscriberModal() {
     },
   });
 
-  // const handleChangeForm = (event: React.FormEvent) =>
-  //   form.setFieldValue("imsi", event.target.value);
-
-  // const handleChange = (event: any) => {
-  //   if (typeof event === "string") {
-  //     const name = "Unit";
-  //     const value = event;
-  //     setFormData((prevFormData) => ({
-  //       ...prevFormData,
-  //       [name]: value,
-  //     }));
-  //   } else {
-  //     event.preventDefault();
-
-  //     const { name, value } = event.target;
-  //     setFormData((prevFormData) => ({
-  //       ...prevFormData,
-  //       [name]: value,
-  //     }));
-  //   }
-  // };
-  // const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-  //   if (event.key === "Enter") {
-  //     console.log("form is:", formData);
-  //     formData.ambr.downlink.value = selectDL;
-  //     formData.ambr.uplink.value = selectUL;
-  //   }
-  // };
   return (
     <>
       <Modal
