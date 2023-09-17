@@ -4,7 +4,7 @@ import { DataType } from "@/redux/features/subscribers/subscriberSlice";
 import { Button, Divider, Select, TextInput } from "@mantine/core";
 
 interface InputChildProps {
-  Subscriber: DataType;
+  searchedSubscriber: DataType;
   imsi: string;
   handleImsi: (data: React.ChangeEvent<HTMLInputElement>) => void;
   usimType: string;
@@ -13,9 +13,10 @@ interface InputChildProps {
   handleMsisdn: (data: React.ChangeEvent<HTMLInputElement>) => void;
   // imeisv: [string];
   subK: string;
-  handleSubK: (data: React.ChangeEvent<HTMLInputElement>) => void;
-  // op: string | null;
-  // handleOp: (data: React.ChangeEvent<HTMLInputElement>) => void;
+  setSubK: (data: string) => void;
+  // handleSubK: (data: React.ChangeEvent<HTMLInputElement>) => void;
+  opType: string;
+  handleOpType: (data: string) => void;
   opKey: string;
   handleOpKey: (data: React.ChangeEvent<HTMLInputElement>) => void;
   amf: string;
@@ -31,21 +32,24 @@ interface InputChildProps {
 }
 
 const EditConfig: React.FC<InputChildProps> = ({
-  Subscriber,
+  searchedSubscriber,
   imsi,
   msisdn,
   handleMsisdn,
   subK,
   amf,
+  opType,
+  handleOpType,
   downUnit,
   downValue,
   opKey,
+  setSubK,
   upUnit,
   upValue,
   usimType,
   handleUsimType,
   handleImsi,
-  handleSubK,
+  // handleSubK,
   handleOpKey,
   handleAmf,
   handleDownUnit,
@@ -78,7 +82,7 @@ const EditConfig: React.FC<InputChildProps> = ({
             label: "static",
           }}
           className="mt-3"
-          value={imsi}
+          value={searchedSubscriber.imsi}
           pattern="^\\d+$"
           onChange={handleImsi}
           // onKeyDown={handleKey}
@@ -106,7 +110,7 @@ const EditConfig: React.FC<InputChildProps> = ({
                         label: "static",
                       }}
                       className="w-[300px]"
-                      value={msisdn}
+                      value={searchedSubscriber.msisdn[0]}
                       onChange={handleMsisdn}
                     />
                   </>
@@ -142,7 +146,7 @@ const EditConfig: React.FC<InputChildProps> = ({
           required
           pattern="^[0-9a-fA-F\\s]+$"
           value={subK}
-          onChange={handleSubK}
+          onChange={(e) => setSubK(e.target.value)}
         />
         <TextInput
           label="Authentication Management Field (AMF)"
@@ -152,7 +156,7 @@ const EditConfig: React.FC<InputChildProps> = ({
             label: "static",
           }}
           className="w-[300px]"
-          value={amf}
+          value={searchedSubscriber.security.amf}
           onChange={handleAmf}
         />
       </div>
@@ -164,13 +168,13 @@ const EditConfig: React.FC<InputChildProps> = ({
           }}
           placeholder="OP"
           data={[
-            { value: "OP", unit: "OP" },
-            { value: "OPC", unit: "OPC" },
+            { value: "0", label: "OPc" },
+            { value: "1", label: "OP" },
           ]}
           defaultValue={"Gbps"}
           className="mr-6 w-[300px]"
-          value={usimType}
-          onChange={handleUsimType}
+          value={searchedSubscriber.security.op_type}
+          onChange={handleOpType}
         />
 
         <TextInput
@@ -179,10 +183,8 @@ const EditConfig: React.FC<InputChildProps> = ({
           classNames={{
             label: "static",
           }}
-          value={opKey}
-          placeholder={Subscriber.security.opc}
+          value={searchedSubscriber.security.op_value}
           onChange={handleOpKey}
-          // onKeyDown={handleKey}
           className="w-[500px]"
         />
       </div>

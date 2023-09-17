@@ -20,6 +20,7 @@ function SubscriberModal() {
   const [hiddenSession, setHiddenSession] = useState(true);
   const [hiddenSlice, setHiddenSlice] = useState(false);
   const [imsi, setImsi] = useState("");
+  const [msisdn, setMsisdn] = useState("")
   const [subK, setSubk] = useState("");
   const [opType, setOpType] = useState<opType | null>(0);
   const [opKey, setOpKey] = useState("");
@@ -66,6 +67,10 @@ function SubscriberModal() {
     //   setError("");
     // }
   };
+  const handleMsisdn = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    setMsisdn(e.currentTarget.value)
+  }
   const handleOpType = (e: opType) => {
     console.log("opKey is:", e);
 
@@ -126,7 +131,7 @@ function SubscriberModal() {
     } else {
       addSubscriber({
         imsi: imsi,
-        msisdn: [""],
+        msisdn: [msisdn],
         imeisv: "",
         security: {
           k: subK,
@@ -199,6 +204,8 @@ function SubscriberModal() {
             <SubscriberConfig
               imsi={imsi}
               handleImsi={handleImsi}
+              msisdn={msisdn}
+              handleMsisdn={handleMsisdn}
               subK={subK}
               handleSubk={handleSubk}
               opType={opType}

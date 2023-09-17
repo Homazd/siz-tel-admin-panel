@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 // Mantine Components
 import { Button, Divider, Select, TextInput } from "@mantine/core";
-import { op_value } from "@/views/Subscribers/Types/subscriberTypes";
+import { opType } from "@/views/Subscribers/Types/subscriberTypes";
 
 interface InputChildProps {
   imsi: string;
   handleImsi: (data: React.ChangeEvent<HTMLInputElement>) => void;
+  msisdn: string;
+  handleMsisdn: (data: React.ChangeEvent<HTMLInputElement>) => void;
   subK: string;
   handleSubk: (data: React.ChangeEvent<HTMLInputElement>) => void;
   // op: string | null;
   // handleOp: (data: React.ChangeEvent<HTMLInputElement>) => void;
-  opType: op_value;
+  opType: opType;
   handleOpType: (data: string) => void;
   opKey: string;
   handleOpKey: (data: React.ChangeEvent<HTMLInputElement>) => void;
@@ -29,6 +31,8 @@ interface InputChildProps {
 const SubscriberConfig: React.FC<InputChildProps> = ({
   imsi,
   handleImsi,
+  msisdn,
+  handleMsisdn,
   subK,
   handleSubk,
   opKey,
@@ -116,8 +120,8 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
                         label: "static",
                       }}
                       className="w-[300px]"
-                      value={formData.msisdn}
-                      // onChange={handleForm}
+                      value={msisdn}
+                      onChange={handleMsisdn}
                     />
                   </>
                 ) : null}
@@ -176,7 +180,7 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
             { value: "1", unit: "OPc" },
           ]}
           className="mr-6 w-[300px]"
-          value={(opType)}
+          value={opType}
           onChange={handleOpKey}
         />
         <TextInput
