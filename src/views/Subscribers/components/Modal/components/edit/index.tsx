@@ -31,19 +31,17 @@ function IMSIInput() {
   const [editOpened, setEditOpened] = useState(false);
   const [deleteOpened, setDeleteOpened] = useState(false);
   // Config States
-  const [imsi, setImsi] = useState("");
   const [imeisv, setImeisv] = useState("");
   const [msisdn, setMsisdn] = useState("");
   const [subK, setSubK] = useState("");
-  const [usimType, setUsimType] = useState("OP");
   // const [op, setOp] = useState('');
   const [opKey, setOpKey] = useState("");
   const [opType, setOpType] = useState("");
   const [amf, setAmf] = useState("");
-  const [downValue, setDownValue] = useState(1);
-  const [downUnit, setDownUnit] = useState<number>(3);
-  const [upValue, setUpValue] = useState(1);
-  const [upUnit, setUpUnit] = useState<number>(3);
+  const [downValue, setDownValue] = useState("1");
+  const [downUnit, setDownUnit] = useState("3");
+  const [upValue, setUpValue] = useState("1");
+  const [upUnit, setUpUnit] = useState("3");
   // Slice States
   const [sst, setSst] = useState("1");
   const [sd, setSd] = useState("");
@@ -87,19 +85,27 @@ function IMSIInput() {
     // }
     if (searchedSubscriber) {
       setSubK(searchedSubscriber.security.k);
+      setAmf(searchedSubscriber.security.amf);
+      setMsisdn(searchedSubscriber.msisdn[0]);
+      setOpKey(searchedSubscriber.security.op_value);
+      setOpType(searchedSubscriber.security.op_Type);
+      setDownUnit(searchedSubscriber.ambr.downlink.unit);
+      setDownValue(searchedSubscriber.ambr.downlink.value);
+      setUpValue(searchedSubscriber.ambr.uplink.value);
+      setUpUnit(searchedSubscriber.ambr.uplink.unit);
     }
     console.log("searchedSubscriber is:", searchedSubscriber);
   }, [searchedSubscriber]);
 
-  const handleImsi = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setImsi(e.currentTarget.value);
-  };
+  // const handleImsi = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   e.preventDefault();
+  //   setImsi(e.currentTarget.value);
+  // };
 
-  const handleMsisdn = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setMsisdn(e.currentTarget.value);
-  };
+  // const handleMsisdn = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   e.preventDefault();
+  //   setMsisdn(e.currentTarget.value);
+  // };
 
   // const handleSubk = (e: React.ChangeEvent<HTMLInputElement>) => {
   //   e.preventDefault();
@@ -107,24 +113,24 @@ function IMSIInput() {
 
   //   // console.log("subK", subK);
   // };
-  const handleOpKey = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setOpKey(e.currentTarget.value);
-  };
-  const handleAmf = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setAmf(e.currentTarget.value);
-  };
+  // const handleOpKey = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   e.preventDefault();
+  //   setOpKey(e.currentTarget.value);
+  // };
+  // const handleAmf = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   e.preventDefault();
+  //   setAmf(e.currentTarget.value);
+  // };
 
-  const handleDownValue = (e: any) => {
-    e.preventDefault();
-    setDownValue(e.currentTarget.value);
-  };
+  // const handleDownValue = (e: any) => {
+  //   e.preventDefault();
+  //   setDownValue(e.currentTarget.value);
+  // };
 
-  const handleUpValue = (e: any) => {
-    e.preventDefault();
-    setUpValue(e.currentTarget.value);
-  };
+  // const handleUpValue = (e: any) => {
+  //   e.preventDefault();
+  //   setUpValue(e.currentTarget.value);
+  // };
 
   const handleSD = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -191,7 +197,7 @@ function IMSIInput() {
     setEditOpened(true);
   };
   const handleDelete = () => {
-    deleteSubscriber(imsi);
+    deleteSubscriber(searchedSubscriber.imsi);
   };
   const handleSubmitUpdate = async () => {
     try {
@@ -210,8 +216,8 @@ function IMSIInput() {
         mme_realm: [],
         purge_flag: [],
         ambr: {
-          downlink: { value: downValue, unit: downUnit },
-          uplink: { value: upValue, unit: upUnit },
+          downlink: { value: Number(downValue), unit: Number(downUnit) },
+          uplink: { value: Number(upValue), unit: Number(upUnit) },
         },
         slice: [
           {
@@ -326,29 +332,32 @@ function IMSIInput() {
                         >
                           <EditConfig
                             searchedSubscriber={searchedSubscriber}
-                            imsi={imsi}
-                            handleImsi={handleImsi}
-                            msisdn={msisdn}
-                            handleMsisdn={handleMsisdn}
-                            // imeisv={imeisv}
-                            usimType={usimType}
-                            handleUsimType={setUsimType}
+                            // imsi={imsi}
+                            // handleImsi={handleImsi}
                             subK={subK}
                             setSubK={setSubK}
+                            msisdn={msisdn}
+                            setMsisdn={setMsisdn}
+                            // handleMsisdn={handleMsisdn}
+                            // imeisv={imeisv}
+                            // usimType={usimType}
+                            // handleUsimType={setUsimType}
                             opType={opType}
-                            handleOpType={setOpType}
+                            setOpType={setOpType}
                             opKey={opKey}
-                            handleOpKey={handleOpKey}
+                            setOpKey={setOpKey}
+                            // handleOpKey={handleOpKey}
                             amf={amf}
-                            handleAmf={handleAmf}
+                            setAmf={setAmf}
                             downValue={downValue}
-                            handleDownValue={handleDownValue}
+                            setDownValue={setDownValue}
+                            // handleDownValue={handleDownValue}
                             downUnit={downUnit}
-                            handleDownUnit={setDownUnit}
+                            setDownUnit={setDownUnit}
                             upValue={upValue}
-                            handleUpValue={handleUpValue}
+                            setUpValue={setUpValue}
                             upUnit={upUnit}
-                            handleUpUnit={setUpUnit}
+                            setUpUnit={setUpUnit}
                           />
                           <Slice
                             hiddenSlice={hiddenSlice}

@@ -1,7 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import {
-  DataType,
-} from "@/redux/features/subscribers/subscriberSlice";
+import { DataType } from "@/redux/Types/subscriberTypes";
 
 export const subscriberApi = createApi({
   reducerPath: "subscriberApi",
@@ -20,7 +18,7 @@ export const subscriberApi = createApi({
   }),
   endpoints: (builder) => ({
     getSubscribers: builder.query({
-      query: (imsi : string) => ({
+      query: (imsi: string) => ({
         url: `/mon/${imsi}`,
         method: "GET",
       }),
@@ -28,7 +26,7 @@ export const subscriberApi = createApi({
       providesTags: ["Subscribers"],
     }),
     addSubscriber: builder.mutation({
-      query: (data : DataType) => ({
+      query: (data: DataType) => ({
         url: "/mon/",
         method: "POST",
         body: data,
@@ -39,11 +37,11 @@ export const subscriberApi = createApi({
     //
 
     updateSubscriber: builder.mutation({
-      query: (data : DataType) => ({
+      query: (data: DataType) => ({
         url: `/mon/`,
         method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           imsi: data.imsi,
         },
         body: data,
@@ -51,7 +49,7 @@ export const subscriberApi = createApi({
       invalidatesTags: ["Subscribers"],
     }),
     deleteSubscriber: builder.mutation({
-      query: (imsi : string) => ({
+      query: (imsi: string) => ({
         url: `/mon/${imsi}`,
         method: "DELETE",
       }),

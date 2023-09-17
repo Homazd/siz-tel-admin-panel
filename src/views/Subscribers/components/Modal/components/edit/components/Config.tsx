@@ -1,59 +1,70 @@
+// Hooks
 import React, { useState } from "react";
 // Mantine Components
-import { DataType } from "@/redux/features/subscribers/subscriberSlice";
 import { Button, Divider, Select, TextInput } from "@mantine/core";
+// Types
+import { DataType } from "@/redux/Types/subscriberTypes";
 
 interface InputChildProps {
   searchedSubscriber: DataType;
-  imsi: string;
+  // imsi: string;
   // handleImsi: (data: React.ChangeEvent<HTMLInputElement>) => void;
-  usimType: string;
-  handleUsimType: (data: string) => void;
+  opKey: string;
+  setOpKey: (data: string) => void;
   msisdn: string;
-  handleMsisdn: (data: React.ChangeEvent<HTMLInputElement>) => void;
+  setMsisdn: (data: string) => void;
+  amf: string;
+  setAmf: (data: string) => void;
+  opType: string;
+  setOpType: (data: string) => void;
+  // handleMsisdn: (data: React.ChangeEvent<HTMLInputElement>) => void;
   // imeisv: [string];
   subK: string;
   setSubK: (data: string) => void;
   // handleSubK: (data: React.ChangeEvent<HTMLInputElement>) => void;
-  opType: string;
-  handleOpType: (data: string) => void;
-  opKey: string;
-  handleOpKey: (data: React.ChangeEvent<HTMLInputElement>) => void;
-  amf: string;
-  handleAmf: (data: React.ChangeEvent<HTMLInputElement>) => void;
-  downValue: number;
-  upValue: number;
-  downUnit: number;
-  upUnit: number;
-  handleDownValue: (data: React.ChangeEvent<HTMLInputElement>) => void;
-  handleUpValue: (data: React.ChangeEvent<HTMLInputElement>) => void;
-  handleDownUnit: (data: number) => void;
-  handleUpUnit: (data: number) => void;
+  // handleOpType: (data: string) => void;
+  // handleOpKey: (data: React.ChangeEvent<HTMLInputElement>) => void;
+  // handleAmf: (data: React.ChangeEvent<HTMLInputElement>) => void;
+  downValue: string;
+  setDownValue: (data: string) => void;
+  upValue: string;
+  setUpValue: (data: string) => void;
+  downUnit: string;
+  setDownUnit: (data: string) => void;
+  upUnit: string;
+  setUpUnit: (data: string) => void;
+  // handleDownValue: (data: React.ChangeEvent<HTMLInputElement>) => void;
+  // handleUpValue: (data: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const EditConfig: React.FC<InputChildProps> = ({
   searchedSubscriber,
-  imsi,
   msisdn,
-  handleMsisdn,
+  setMsisdn,
   subK,
   amf,
+  setAmf,
   opType,
-  handleOpType,
+  setOpType,
   downUnit,
+  setDownUnit,
   downValue,
+  setDownValue,
   opKey,
+  setOpKey,
   setSubK,
   upUnit,
+  setUpUnit,
   upValue,
+  setUpValue,
   // handleImsi,
   // handleSubK,
-  handleOpKey,
-  handleAmf,
-  handleDownUnit,
-  handleDownValue,
-  handleUpUnit,
-  handleUpValue,
+  // handleOpKey,
+  // handleAmf,
+  // handleDownUnit,
+  // handleDownValue,
+  // handleUpUnit,
+  // handleUpValue,
 }) => {
   const [isMSIVisible, setIsMSIVisible] = useState(true);
   const [msisdnClicked, setMsisdnClicked] = useState(false);
@@ -109,7 +120,7 @@ const EditConfig: React.FC<InputChildProps> = ({
                       }}
                       className="w-[300px]"
                       value={searchedSubscriber.msisdn[0]}
-                      onChange={handleMsisdn}
+                      onChange={(e) => setMsisdn(e.target.value)}
                     />
                   </>
                 ) : null}
@@ -154,8 +165,8 @@ const EditConfig: React.FC<InputChildProps> = ({
             label: "static",
           }}
           className="w-[300px]"
-          value={searchedSubscriber.security.amf}
-          onChange={handleAmf}
+          value={amf}
+          onChange={(e) => setAmf(e.target.value)}
         />
       </div>
       <div className="flex  mt-3">
@@ -171,8 +182,8 @@ const EditConfig: React.FC<InputChildProps> = ({
           ]}
           defaultValue={"Gbps"}
           className="mr-6 w-[300px]"
-          value={searchedSubscriber.security.op_type}
-          onChange={handleOpType}
+          value={opType}
+          onChange={setOpType}
         />
 
         <TextInput
@@ -181,8 +192,8 @@ const EditConfig: React.FC<InputChildProps> = ({
           classNames={{
             label: "static",
           }}
-          value={searchedSubscriber.security.op_value}
-          onChange={handleOpKey}
+          value={opKey}
+          onChange={(e) => setOpKey(e.target.value)}
           className="w-[500px]"
         />
       </div>
@@ -195,7 +206,7 @@ const EditConfig: React.FC<InputChildProps> = ({
           }}
           placeholder="1"
           value={downValue}
-          onChange={handleDownValue}
+          onChange={(e) => setDownValue(e.target.value)}
           // onKeyDown={handleKey}
           className="w-[250px]"
         />
@@ -215,13 +226,13 @@ const EditConfig: React.FC<InputChildProps> = ({
           defaultValue={"Gbps"}
           className="ml-3 w-[100px]"
           value={downUnit}
-          onChange={handleDownUnit}
+          onChange={setDownUnit}
           // onKeyDown={handleKey}
         />
         <TextInput
           label="UE-AMBR Uplink"
           value={upValue}
-          onChange={handleUpValue}
+          onChange={(e) => setUpValue(e.target.value)}
           name="ueUplink"
           classNames={{
             label: "static",
@@ -236,7 +247,7 @@ const EditConfig: React.FC<InputChildProps> = ({
             label: "static",
           }}
           value={upUnit}
-          onChange={handleUpUnit}
+          onChange={setUpUnit}
           data={[
             { value: "0", label: "bps" },
             { value: "1", label: "Kbps" },

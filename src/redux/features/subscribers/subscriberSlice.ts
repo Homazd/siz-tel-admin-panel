@@ -1,54 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { DataType } from "@/redux/Types/subscriberTypes";
 
-export interface DataType {
-  imsi: string;
-  msisdn: string[];
-  imeisv: string;
-
-  security: {
-    op_value: string;
-    op_type: string;
-    amf: string;
-    k: string;
-  };
-  ambr: {
-    downlink: { value: number; unit: number };
-    uplink: { value: number; unit: number };
-  };
-  mme_host: [];
-  mme_realm: [];
-  purge_flag: [];
-  slice: [
-    {
-      sst: string;
-      sd: string;
-      session: [
-        {
-          name: string;
-          type: number;
-          ambr: {
-            downlink: {
-              value: number;
-              unit: number;
-            };
-            uplink: {
-              value: number;
-              unit: number;
-            };
-          };
-          qos: {
-            index: number;
-            arp: {
-              priority_level: number;
-              pre_emption_capability: number;
-              pre_emption_vulnerability: number;
-            };
-          };
-        }
-      ];
-    }
-  ];
-}
 export interface FormState {
   data: DataType;
   isLoading: boolean;
@@ -59,16 +11,16 @@ export const initialState: FormState = {
   data: {
     imsi: "",
     msisdn: [],
-    imeisv: "",
+    imeisv: [],
     security: {
-      op_value: "",
-      op_type: "",
+      op: null,
+      opc: null,
       amf: "",
       k: "",
     },
     ambr: {
-      downlink: { value: 1, unit: 1 },
-      uplink: { value: 1, unit: 1 },
+      downlink: { value: 1, unit: 3 },
+      uplink: { value: 1, unit: 3 },
     },
     mme_host: [],
     mme_realm: [],
