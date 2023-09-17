@@ -147,13 +147,13 @@ const EditConfig: React.FC<InputChildProps> = ({
         <TextInput
           label="Authentication Management Field (AMF)"
           name="amf"
-          value={amf}
-          onChange={handleAmf}
           pattern="^[0-9a-fA-F\\s]+$"
           classNames={{
             label: "static",
           }}
           className="w-[300px]"
+          value={amf}
+          onChange={handleAmf}
         />
       </div>
       <div className="flex  mt-3">

@@ -1,4 +1,4 @@
-export enum op_value {
+export enum opType {
    OPc = 0,
    OP = 1, 
 }

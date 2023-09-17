@@ -13,6 +13,7 @@ import {
   Text,
 } from "@mantine/core";
 // Mantine Form
+import { useForm } from "@mantine/form";
 
 import { IconSearch, IconArrowRight, IconArrowLeft } from "@tabler/icons-react";
 import {
@@ -33,7 +34,7 @@ import PccRules from "../PccRules";
 import EditConfig from "./components/Config";
 
 function IMSIInput(props: TextInputProps) {
-  const [value, setValue] = useState<string>("");
+  const [value, setValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [hiddenSession, setHiddenSession] = useState(true);
   const [hiddenSlice, setHiddenSlice] = useState(false);
@@ -93,7 +94,6 @@ function IMSIInput(props: TextInputProps) {
       console.log(usimType);
       console.log(Subscriber.security);
       console.log(Subscriber.ambr.downlink);
-      
     }
   }, [Subscriber, usimType]);
 
@@ -229,16 +229,19 @@ function IMSIInput(props: TextInputProps) {
   };
   const handleSubmitUpdate = () => {
     console.log("usim type:", usimType);
+    console.log(Subscriber);
+
     console.log("submit edit");
-    
 
     updateSubscriber({
-      imsi: imsi,
+      imsi: Subscriber.imsi,
       security: {
         k: Subscriber.security.k,
-        opc: Subscriber.security.opc,
+        op_value: Subscriber.security.op_value,
         amf: Subscriber.security.amf,
+        op_type: Subscriber.security.op_type,
       },
+      imeisv: Subscriber.imeisv,
       msisdn: Subscriber.msisdn[0],
 
       mme_host: [],
@@ -280,6 +283,14 @@ function IMSIInput(props: TextInputProps) {
       ],
     });
   };
+
+  const form = useForm({
+    initialValues: {
+      imsi: "55",
+      msisdn: "",
+      subK: "",
+    },
+  });
   return (
     <>
       <ModalsProvider>
@@ -444,7 +455,7 @@ function IMSIInput(props: TextInputProps) {
                     >
                       <Box mx="auto" className="w-[800px]">
                         <form
-                          onSubmit={handleSubmitUpdate}
+                          onSubmit={form.onSubmit(handleSubmitUpdate)}
                           className="block relative"
                         >
                           <EditConfig
@@ -491,7 +502,11 @@ function IMSIInput(props: TextInputProps) {
                           <Button
                             className="font-bold bg-blue-500 absolute w-36 right-0 mt-6"
                             type="submit"
-                            onClick={() => setEditOpened(false)}
+                            onClick={() => {
+                              setEditOpened(false);
+                              console.log(Subscriber);
+                              handleSubmitUpdate();
+                            }}
                           >
                             Save
                           </Button>

@@ -13,7 +13,7 @@ import SubscriberConfig from "./components/SubscriberConfig";
 import Slice from "./components/Slice";
 import Session from "./components/Session";
 import PccRules from "./components/PccRules";
-import { op_value } from "../../Types/subscriberTypes";
+import { opType } from "../../Types/subscriberTypes";
 
 function SubscriberModal() {
   const [opened, { open, close }] = useDisclosure(false);
@@ -21,7 +21,7 @@ function SubscriberModal() {
   const [hiddenSlice, setHiddenSlice] = useState(false);
   const [imsi, setImsi] = useState("");
   const [subK, setSubk] = useState("");
-  const [opType, setOpType] = useState<op_value | null>(0);
+  const [opType, setOpType] = useState<opType | null>(0);
   const [opKey, setOpKey] = useState("");
   const [amf, setAmf] = useState("");
   const [downValue, setDownValue] = useState(1);
@@ -66,10 +66,10 @@ function SubscriberModal() {
     //   setError("");
     // }
   };
-  const handleOpType = (e: op_value) => {
+  const handleOpType = (e: opType) => {
     console.log("opKey is:", e);
 
-    (e: op_value) => setOpType(e);
+    (e: opType) => setOpType(e);
   };
   const handleOpKey = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -120,13 +120,14 @@ function SubscriberModal() {
   };
 
   const handleSubmit = () => {
-    // const { imsi } = form.values;
     console.log("imsi is:", imsi);
     if (error) {
       console.log(error);
     } else {
       addSubscriber({
         imsi: imsi,
+        msisdn: [""],
+        imeisv: "",
         security: {
           k: subK,
           op_type: usimType,

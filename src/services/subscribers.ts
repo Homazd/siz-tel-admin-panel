@@ -20,7 +20,7 @@ export const subscriberApi = createApi({
   }),
   endpoints: (builder) => ({
     getSubscribers: builder.query({
-      query: (imsi) => ({
+      query: (imsi : string) => ({
         url: `/mon/${imsi}`,
         method: "GET",
       }),
@@ -28,7 +28,7 @@ export const subscriberApi = createApi({
       providesTags: ["Subscribers"],
     }),
     addSubscriber: builder.mutation({
-      query: (data) => ({
+      query: (data : DataType) => ({
         url: "/mon/",
         method: "POST",
         body: data,
@@ -38,9 +38,8 @@ export const subscriberApi = createApi({
     }),
     //
 
-    updateSubscriber: builder.mutation<
-      DataType, Partial<DataType>>({
-      query: (data) => ({
+    updateSubscriber: builder.mutation({
+      query: (data : DataType) => ({
         url: `/mon/`,
         method: "PUT",
         headers: {
@@ -52,7 +51,7 @@ export const subscriberApi = createApi({
       invalidatesTags: ["Subscribers"],
     }),
     deleteSubscriber: builder.mutation({
-      query: (imsi) => ({
+      query: (imsi : string) => ({
         url: `/mon/${imsi}`,
         method: "DELETE",
       }),
