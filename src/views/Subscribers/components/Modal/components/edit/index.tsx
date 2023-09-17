@@ -34,7 +34,6 @@ function IMSIInput() {
   const [imeisv, setImeisv] = useState("");
   const [msisdn, setMsisdn] = useState("");
   const [subK, setSubK] = useState("");
-  // const [op, setOp] = useState('');
   const [opKey, setOpKey] = useState("");
   const [opType, setOpType] = useState("");
   const [amf, setAmf] = useState("");
@@ -61,38 +60,21 @@ function IMSIInput() {
   });
 
   useEffect(() => {
-    // if (searchedSubscriber !== undefined) {
-    //   setImsi(searchedSubscriber.imsi);
-    //   if (searchedSubscriber.msisdn) {
-    //     setMsisdn(searchedSubscriber.msisdn[0]);
-    //   }
-    //   setSubK(searchedSubscriber.security.k);
-    //   setOpKey(searchedSubscriber.security.opc);
-    //   setAmf(searchedSubscriber.security.amf);
-    //   setDownValue(searchedSubscriber.ambr.downlink.value);
-    //   setDownUnit(searchedSubscriber.ambr.downlink.unit);
-    //   setUpValue(searchedSubscriber.ambr.uplink.value);
-    //   setUpUnit(searchedSubscriber.ambr.uplink.unit);
-    //   console.log(searchedSubscriber);
-    //   if (searchedSubscriber.security.opc && searchedSubscriber.security.opc.length > 0) {
-    //     setUsimType("OPC");
-    //   } else {
-    //     setUsimType("OP");
-    //   }
-    //   console.log(usimType);
-    //   console.log(searchedSubscriber.security);
-    //   console.log(searchedSubscriber.ambr.downlink);
-    // }
+    
     if (searchedSubscriber) {
       setSubK(searchedSubscriber.security.k);
       setAmf(searchedSubscriber.security.amf);
       setMsisdn(searchedSubscriber.msisdn[0]);
-      setOpKey(searchedSubscriber.security.op_value);
-      setOpType(searchedSubscriber.security.op_Type);
+      setOpKey(searchedSubscriber.security.opc);
       setDownUnit(searchedSubscriber.ambr.downlink.unit);
       setDownValue(searchedSubscriber.ambr.downlink.value);
       setUpValue(searchedSubscriber.ambr.uplink.value);
       setUpUnit(searchedSubscriber.ambr.uplink.unit);
+    }
+    if(searchedSubscriber.security.op !== null){
+      setOpType('OP')
+    } else {
+      setOpType('OPc')
     }
     console.log("searchedSubscriber is:", searchedSubscriber);
   }, [searchedSubscriber]);
@@ -205,11 +187,11 @@ function IMSIInput() {
         imsi: searchedSubscriber.imsi,
         security: {
           k: subK,
-          op_value: opKey,
+          op: opKey,
+          opc: opKey,
           amf: amf,
-          op_type: opType,
         },
-        imeisv: imeisv,
+        imeisv: [imeisv],
         msisdn: [msisdn],
 
         mme_host: [],

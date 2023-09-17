@@ -1,5 +1,5 @@
 // Hooks
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // Mantine Components
 import { Button, Divider, Select, TextInput } from "@mantine/core";
 // Types
@@ -78,6 +78,9 @@ const EditConfig: React.FC<InputChildProps> = ({
     setIsMSIVisible(true);
     setMsisdnClicked(false);
   };
+  useEffect(() => {
+    console.log("opType:", opType);
+  }, [opType]);
 
   return (
     <>
@@ -177,8 +180,8 @@ const EditConfig: React.FC<InputChildProps> = ({
           }}
           placeholder="OP"
           data={[
-            { value: "0", label: "OPc" },
-            { value: "1", label: "OP" },
+            { value: "OPc", label: "OPc" },
+            { value: "OP", label: "OP" },
           ]}
           defaultValue={"Gbps"}
           className="mr-6 w-[300px]"
