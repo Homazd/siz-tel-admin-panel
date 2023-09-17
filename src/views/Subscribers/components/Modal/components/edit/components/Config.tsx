@@ -6,7 +6,7 @@ import { Button, Divider, Select, TextInput } from "@mantine/core";
 interface InputChildProps {
   searchedSubscriber: DataType;
   imsi: string;
-  handleImsi: (data: React.ChangeEvent<HTMLInputElement>) => void;
+  // handleImsi: (data: React.ChangeEvent<HTMLInputElement>) => void;
   usimType: string;
   handleUsimType: (data: string) => void;
   msisdn: string;
@@ -46,9 +46,7 @@ const EditConfig: React.FC<InputChildProps> = ({
   setSubK,
   upUnit,
   upValue,
-  usimType,
-  handleUsimType,
-  handleImsi,
+  // handleImsi,
   // handleSubK,
   handleOpKey,
   handleAmf,
@@ -78,13 +76,14 @@ const EditConfig: React.FC<InputChildProps> = ({
         <TextInput
           label="IMSI"
           name="imsi"
+          disabled
           classNames={{
             label: "static",
           }}
           className="mt-3"
           value={searchedSubscriber.imsi}
           pattern="^\\d+$"
-          onChange={handleImsi}
+          // onChange={handleImsi}
         />
         <div className="grid place-content-center">
           {isMSIVisible && (
