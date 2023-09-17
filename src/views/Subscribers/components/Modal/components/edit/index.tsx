@@ -2,9 +2,6 @@ import { useEffect, useState } from "react";
 import { ChangeEvent, FormEvent } from "react";
 // Mantine
 import {
-  TextInputProps,
-  ActionIcon,
-  useMantineTheme,
   Box,
   Modal,
   Group,
@@ -14,8 +11,6 @@ import {
 } from "@mantine/core";
 // Mantine Form
 import { useForm } from "@mantine/form";
-
-import { IconSearch, IconArrowRight, IconArrowLeft } from "@tabler/icons-react";
 import {
   useGetSubscribersQuery,
   useDeleteSubscriberMutation,
@@ -23,7 +18,6 @@ import {
 } from "../../../../../../services/subscribers";
 import { ModalsProvider } from "@mantine/modals";
 // Styles
-import StyledInput from "./style";
 import { FaPencilAlt } from "react-icons/fa";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { useDisclosure } from "@mantine/hooks";
@@ -32,8 +26,9 @@ import Slice from "../Slice";
 import Session from "../Session";
 import PccRules from "../PccRules";
 import EditConfig from "./components/Config";
+import Search from "../../Search/Search";
 
-function IMSIInput(props: TextInputProps) {
+function IMSIInput() {
   const [value, setValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [hiddenSession, setHiddenSession] = useState(true);
@@ -41,7 +36,6 @@ function IMSIInput(props: TextInputProps) {
   const [opened, { open, close }] = useDisclosure();
   const [editOpened, setEditOpened] = useState(false);
   const [deleteOpened, setDeleteOpened] = useState(false);
-  const theme = useMantineTheme();
   // Config States
   const [imsi, setImsi] = useState("");
   const [msisdn, setMsisdn] = useState("");
@@ -201,6 +195,10 @@ function IMSIInput(props: TextInputProps) {
     }
   };
 
+  // const { data: Subscriber, isLoading, isError, isSuccess, error } = useGetSubscribersQuery(value, {
+  //   skip: isTyping,
+  // });
+
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       console.log("Subscriber is:", Subscriber);
@@ -208,9 +206,13 @@ function IMSIInput(props: TextInputProps) {
   };
 
   const handleOnInput = (event: ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
     setIsTyping(true);
     setValue(event.target.value);
+    console.log("value is", value);
+    console.log("Subscriber is:", Subscriber, isLoading, isSuccess, isError);
   };
+
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     setIsTyping(false);
@@ -295,32 +297,7 @@ function IMSIInput(props: TextInputProps) {
     <>
       <ModalsProvider>
         <form onSubmit={handleSubmit}>
-          <StyledInput
-            icon={<IconSearch size="1.1rem" stroke={1.5} />}
-            radius="xl"
-            size="lg"
-            rightSection={
-              <ActionIcon
-                size={22}
-                radius="xl"
-                color={theme.primaryColor}
-                variant="filled"
-                maw={320}
-              >
-                {theme.dir === "ltr" ? (
-                  <IconArrowRight size="1.1rem" stroke={1.5} />
-                ) : (
-                  <IconArrowLeft size="1.1rem" stroke={1.5} />
-                )}
-              </ActionIcon>
-            }
-            placeholder="IMSI"
-            rightSectionWidth={22}
-            value={value}
-            onChange={handleOnInput}
-            onKeyDown={handleKeyPress}
-            {...props}
-          />
+         <Search value={value} handleOnInput={handleOnInput} handleKeyPress={handleKeyPress} />
         </form>
         {isLoading && <div>Loading...</div>}
         {isError && <div>Error Fetching Subscriber data</div>}
