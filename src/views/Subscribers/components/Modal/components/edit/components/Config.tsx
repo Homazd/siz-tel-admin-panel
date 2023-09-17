@@ -85,7 +85,6 @@ const EditConfig: React.FC<InputChildProps> = ({
           value={searchedSubscriber.imsi}
           pattern="^\\d+$"
           onChange={handleImsi}
-          // onKeyDown={handleKey}
         />
         <div className="grid place-content-center">
           {isMSIVisible && (

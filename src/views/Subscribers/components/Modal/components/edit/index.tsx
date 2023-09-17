@@ -86,6 +86,8 @@ function IMSIInput() {
     // }
     if (searchedSubscriber) {
       setSubK(searchedSubscriber.security.k);
+      console.log("subk", subK);
+      
     }
     console.log("searchedSubscriber is:", searchedSubscriber);
   }, [searchedSubscriber]);
@@ -220,6 +222,7 @@ function IMSIInput() {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     setIsTyping(false);
+
     event.preventDefault();
   }
   const handleOnDeleteModal = () => {
@@ -233,8 +236,7 @@ function IMSIInput() {
   const handleDelete = () => {
     deleteSubscriber(imsi);
   };
-  const handleSubmitUpdate = async(e) => {
-    e.preventDefault();
+  const handleSubmitUpdate = async () => {
     try {
       await updateSubscriber({
         imsi: imsi,
@@ -329,7 +331,7 @@ function IMSIInput() {
                 </h3>
                 <div className="grid grid-cols-2 gap-[200px]">
                   <div className="col-span-1 text-[16px]">
-                    {/* <p>{Subscriber.imeisv}...</p> */}
+                    <p>{searchedSubscriber.imeisv} <span className="text-gray-400 text-[14px]">...IMEISV</span></p>
                     <p>
                       {searchedSubscriber.security.k}
                       <span className="text-gray-400 text-[14px]">...K</span>
@@ -492,11 +494,6 @@ function IMSIInput() {
                           <Button
                             className="font-bold bg-blue-500 absolute w-36 right-0 mt-6"
                             type="submit"
-                            onClick={() => {
-                              setEditOpened(false);
-                              console.log(updatedSubscriber);
-                              handleSubmitUpdate();
-                            }}
                           >
                             Save
                           </Button>

@@ -44,16 +44,6 @@ function SubscriberModal() {
   const handleImsi = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setImsi(e.currentTarget.value);
-
-    if (imsi.length > 15 || !/^\d+$/.test(imsi)) {
-      setError(
-        "Only digits are allowed and lenght must be less than 15 numbers."
-      );
-      console.log(error);
-      error;
-    } else {
-      setError("");
-    }
   };
 
   const handleSubk = (e: React.ChangeEvent<HTMLInputElement>) => {
