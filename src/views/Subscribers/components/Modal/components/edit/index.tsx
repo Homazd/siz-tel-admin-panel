@@ -60,59 +60,67 @@ function IMSIInput() {
   });
 
   useEffect(() => {
-    
     if (searchedSubscriber) {
+      let downLinkUnit : string;
+      let upLinkUnit: string;
+      
+      switch (searchedSubscriber.ambr.downlink.unit) {
+        case 0:
+          downLinkUnit = "0";
+          break;
+        case 1:
+          downLinkUnit = "1";
+          break;
+        case 2:
+          downLinkUnit = "2";
+          break;
+        case 3:
+          downLinkUnit = "3";
+          break;
+        case 4:
+          downLinkUnit = "4";
+          break;
+
+        default:
+          downLinkUnit = "3"
+          break;
+      }
+      switch (searchedSubscriber.ambr.uplink.unit) {
+        case 0:
+          upLinkUnit = "0";
+          break;
+        case 1:
+          upLinkUnit = "1";
+          break;
+        case 2:
+          upLinkUnit = "2";
+          break;
+        case 3:
+          upLinkUnit = "3";
+          break;
+        case 4:
+          upLinkUnit = "4";
+          break;
+
+        default:
+          upLinkUnit = "3"
+          break;
+      }
       setSubK(searchedSubscriber.security.k);
       setAmf(searchedSubscriber.security.amf);
       setMsisdn(searchedSubscriber.msisdn[0]);
-      setOpKey(searchedSubscriber.security.opc);
-      setDownUnit(searchedSubscriber.ambr.downlink.unit);
+      setOpKey(
+        searchedSubscriber.security.opc !== null
+          ? searchedSubscriber.security.opc
+          : searchedSubscriber.security.op
+      );
+      setDownUnit(downLinkUnit);
       setDownValue(searchedSubscriber.ambr.downlink.value);
       setUpValue(searchedSubscriber.ambr.uplink.value);
-      setUpUnit(searchedSubscriber.ambr.uplink.unit);
-    }
-    if(searchedSubscriber.security.op !== null){
-      setOpType('OP')
-    } else {
-      setOpType('OPc')
+      setUpUnit(upLinkUnit);
     }
     console.log("searchedSubscriber is:", searchedSubscriber);
   }, [searchedSubscriber]);
-
-  // const handleImsi = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   e.preventDefault();
-  //   setImsi(e.currentTarget.value);
-  // };
-
-  // const handleMsisdn = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   e.preventDefault();
-  //   setMsisdn(e.currentTarget.value);
-  // };
-
-  // const handleSubk = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   e.preventDefault();
-  //   setSubK(e.currentTarget.value);
-
-  //   // console.log("subK", subK);
-  // };
-  // const handleOpKey = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   e.preventDefault();
-  //   setOpKey(e.currentTarget.value);
-  // };
-  // const handleAmf = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   e.preventDefault();
-  //   setAmf(e.currentTarget.value);
-  // };
-
-  // const handleDownValue = (e: any) => {
-  //   e.preventDefault();
-  //   setDownValue(e.currentTarget.value);
-  // };
-
-  // const handleUpValue = (e: any) => {
-  //   e.preventDefault();
-  //   setUpValue(e.currentTarget.value);
-  // };
 
   const handleSD = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -141,10 +149,6 @@ function IMSIInput() {
     },
   };
 
-  // const { data: Subscriber, isLoading, isError, isSuccess, error } = useGetSubscribersQuery(value, {
-  //   skip: isTyping,
-  // });
-
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       console.log("Subscriber is:", searchedSubscriber);
@@ -155,7 +159,6 @@ function IMSIInput() {
     event.preventDefault();
     setIsTyping(true);
     setValue(event.target.value);
-    console.log("value is", value);
     console.log(
       "Subscriber is:",
       searchedSubscriber,
@@ -320,20 +323,14 @@ function IMSIInput() {
                             setSubK={setSubK}
                             msisdn={msisdn}
                             setMsisdn={setMsisdn}
-                            // handleMsisdn={handleMsisdn}
-                            // imeisv={imeisv}
-                            // usimType={usimType}
-                            // handleUsimType={setUsimType}
                             opType={opType}
                             setOpType={setOpType}
                             opKey={opKey}
                             setOpKey={setOpKey}
-                            // handleOpKey={handleOpKey}
                             amf={amf}
                             setAmf={setAmf}
                             downValue={downValue}
                             setDownValue={setDownValue}
-                            // handleDownValue={handleDownValue}
                             downUnit={downUnit}
                             setDownUnit={setDownUnit}
                             upValue={upValue}

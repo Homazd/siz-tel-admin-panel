@@ -1,5 +1,5 @@
 // Hooks
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 // Mantine Components
 import { Button, Divider, Select, TextInput } from "@mantine/core";
 // Types
@@ -7,8 +7,6 @@ import { DataType } from "@/redux/Types/subscriberTypes";
 
 interface InputChildProps {
   searchedSubscriber: DataType;
-  // imsi: string;
-  // handleImsi: (data: React.ChangeEvent<HTMLInputElement>) => void;
   opKey: string;
   setOpKey: (data: string) => void;
   msisdn: string;
@@ -17,14 +15,8 @@ interface InputChildProps {
   setAmf: (data: string) => void;
   opType: string;
   setOpType: (data: string) => void;
-  // handleMsisdn: (data: React.ChangeEvent<HTMLInputElement>) => void;
-  // imeisv: [string];
   subK: string;
   setSubK: (data: string) => void;
-  // handleSubK: (data: React.ChangeEvent<HTMLInputElement>) => void;
-  // handleOpType: (data: string) => void;
-  // handleOpKey: (data: React.ChangeEvent<HTMLInputElement>) => void;
-  // handleAmf: (data: React.ChangeEvent<HTMLInputElement>) => void;
   downValue: string;
   setDownValue: (data: string) => void;
   upValue: string;
@@ -33,8 +25,6 @@ interface InputChildProps {
   setDownUnit: (data: string) => void;
   upUnit: string;
   setUpUnit: (data: string) => void;
-  // handleDownValue: (data: React.ChangeEvent<HTMLInputElement>) => void;
-  // handleUpValue: (data: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const EditConfig: React.FC<InputChildProps> = ({
@@ -57,14 +47,6 @@ const EditConfig: React.FC<InputChildProps> = ({
   setUpUnit,
   upValue,
   setUpValue,
-  // handleImsi,
-  // handleSubK,
-  // handleOpKey,
-  // handleAmf,
-  // handleDownUnit,
-  // handleDownValue,
-  // handleUpUnit,
-  // handleUpValue,
 }) => {
   const [isMSIVisible, setIsMSIVisible] = useState(true);
   const [msisdnClicked, setMsisdnClicked] = useState(false);
@@ -78,9 +60,6 @@ const EditConfig: React.FC<InputChildProps> = ({
     setIsMSIVisible(true);
     setMsisdnClicked(false);
   };
-  useEffect(() => {
-    console.log("opType:", opType);
-  }, [opType]);
 
   return (
     <>
@@ -96,8 +75,6 @@ const EditConfig: React.FC<InputChildProps> = ({
           }}
           className="mt-3"
           value={searchedSubscriber.imsi}
-          pattern="^\\d+$"
-          // onChange={handleImsi}
         />
         <div className="grid place-content-center">
           {isMSIVisible && (
@@ -156,14 +133,12 @@ const EditConfig: React.FC<InputChildProps> = ({
           // onKeyDown={handleKey}
           className="w-[400px] mr-6"
           required
-          pattern="^[0-9a-fA-F\\s]+$"
           value={subK}
           onChange={(e) => setSubK(e.target.value)}
         />
         <TextInput
           label="Authentication Management Field (AMF)"
           name="amf"
-          pattern="^[0-9a-fA-F\\s]+$"
           classNames={{
             label: "static",
           }}
@@ -183,7 +158,7 @@ const EditConfig: React.FC<InputChildProps> = ({
             { value: "OPc", label: "OPc" },
             { value: "OP", label: "OP" },
           ]}
-          defaultValue={"Gbps"}
+          defaultValue="OP"
           className="mr-6 w-[300px]"
           value={opType}
           onChange={setOpType}

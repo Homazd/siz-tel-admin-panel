@@ -13,79 +13,29 @@ import SubscriberConfig from "./components/SubscriberConfig";
 import Slice from "./components/Slice";
 import Session from "./components/Session";
 import PccRules from "./components/PccRules";
-import { opType } from "../../Types/subscriberTypes";
 
 function SubscriberModal() {
   const [opened, { open, close }] = useDisclosure(false);
   const [hiddenSession, setHiddenSession] = useState(true);
   const [hiddenSlice, setHiddenSlice] = useState(false);
   const [imsi, setImsi] = useState("");
-  const [msisdn, setMsisdn] = useState("")
+  const [msisdn, setMsisdn] = useState("");
+  const [imeisv, setImeisv] = useState("");
   const [subK, setSubk] = useState("");
-  const [opType, setOpType] = useState<opType | null>(0);
+  const [opType, setOpType] = useState("");
   const [opKey, setOpKey] = useState("");
   const [amf, setAmf] = useState("");
-  const [downValue, setDownValue] = useState(1);
-  const [downUnit, setDownUnit] = useState<number>(3);
-  const [upValue, setUpValue] = useState(1);
-  const [upUnit, setUpUnit] = useState<number>(3);
-  const [usimType, setUsimType] = useState(0);
+  const [downValue, setDownValue] = useState("1");
+  const [downUnit, setDownUnit] = useState("3");
+  const [upValue, setUpValue] = useState("1");
+  const [upUnit, setUpUnit] = useState("3");
 
   // Slice States
   const [sst, setSst] = useState("1");
   const [sd, setSd] = useState("");
   // Session States
 
-  // Validation
-  const [error, setError] = useState("");
-
   const [addSubscriber] = useAddSubscriberMutation();
-
-  const handleImsi = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setImsi(e.currentTarget.value);
-  };
-
-  const handleSubk = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setSubk(e.currentTarget.value);
-    // if (!/^\[0-9a-fA-F\\s]+$/.test(subK)) {
-    //   setError("Only hexadecimal digits are allowed");
-    //   console.log(error);
-    //   error;
-    // } else {
-    //   setError("");
-    // }
-  };
-  const handleMsisdn = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setMsisdn(e.currentTarget.value)
-  }
-  const handleOpType = (e: opType) => {
-    console.log("opKey is:", e);
-
-    (e: opType) => setOpType(e);
-  };
-  const handleOpKey = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setOpKey(e.currentTarget.value);
-  };
-  const handleAmf = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setAmf(e.currentTarget.value);
-  };
-
-  const handleDownValue = (e: any) => {
-    e.preventDefault();
-    console.log("DownValue", e.currentTarget.value);
-
-    setDownValue(Number(e.currentTarget.value));
-  };
-
-  const handleUpValue = (e: any) => {
-    e.preventDefault();
-    setUpValue(e.currentTarget.value);
-  };
 
   const handleSD = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -116,58 +66,55 @@ function SubscriberModal() {
 
   const handleSubmit = () => {
     console.log("imsi is:", imsi);
-    if (error) {
-      console.log(error);
-    } else {
-      addSubscriber({
-        imsi: imsi,
-        msisdn: [msisdn],
-        imeisv: "",
-        security: {
-          k: subK,
-          op_type: usimType,
-          op_value: opKey,
-          amf: amf,
-        },
-        mme_host: [],
-        mme_realm: [],
-        purge_flag: [],
-        ambr: {
-          downlink: { value: downValue, unit: 3 },
-          uplink: { value: upValue, unit: 3 },
-        },
-        slice: [
-          {
-            sst: sst,
-            sd: sd,
-            session: [
-              {
-                name: "internet",
-                type: 3,
-                ambr: {
-                  downlink: {
-                    value: 1,
-                    unit: 3,
-                  },
-                  uplink: {
-                    value: 1,
-                    unit: 3,
-                  },
+    console.log("downUnit", downUnit);
+    addSubscriber({
+      imsi: imsi,
+      msisdn: [msisdn],
+      imeisv: [imeisv],
+      security: {
+        k: subK,
+        op: opType === "OP" ? opKey : null,
+        opc:  opType === "OPc" ? opKey : null,
+        amf: amf,
+      },
+      mme_host: [],
+      mme_realm: [],
+      purge_flag: [],
+      ambr: {
+        downlink: { value: Number(downValue), unit: Number(downUnit) },
+        uplink: { value: Number(upValue), unit: Number(upUnit) },
+      },
+      slice: [
+        {
+          sst: sst,
+          sd: sd,
+          session: [
+            {
+              name: "internet",
+              type: 3,
+              ambr: {
+                downlink: {
+                  value: 1,
+                  unit: 3,
                 },
-                qos: {
-                  index: 9,
-                  arp: {
-                    priority_level: 8,
-                    pre_emption_capability: 1,
-                    pre_emption_vulnerability: 1,
-                  },
+                uplink: {
+                  value: 1,
+                  unit: 3,
                 },
               },
-            ],
-          },
-        ],
-      });
-    }
+              qos: {
+                index: 9,
+                arp: {
+                  priority_level: 8,
+                  pre_emption_capability: 1,
+                  pre_emption_vulnerability: 1,
+                },
+              },
+            },
+          ],
+        },
+      ],
+    });
   };
   const form = useForm({
     initialValues: {
@@ -193,25 +140,25 @@ function SubscriberModal() {
           >
             <SubscriberConfig
               imsi={imsi}
-              handleImsi={handleImsi}
+              setImsi={setImsi}
               msisdn={msisdn}
-              handleMsisdn={handleMsisdn}
+              setMsisdn={setMsisdn}
               subK={subK}
-              handleSubk={handleSubk}
+              setSubk={setSubk}
               opType={opType}
-              handleOpType={handleOpType}
+              setOpType={setOpType}
               opKey={opKey}
-              handleOpKey={handleOpKey}
+              setOpKey={setOpKey}
               amf={amf}
-              handleAmf={handleAmf}
+              setAmf={setAmf}
               downValue={downValue}
-              handleDownValue={handleDownValue}
+              setDownValue={setDownValue}
               downUnit={downUnit}
-              handleDownUnit={setDownUnit}
+              setDownUnit={setDownUnit}
               upValue={upValue}
-              handleUpValue={handleUpValue}
+              setUpValue={setUpValue}
               upUnit={upUnit}
-              handleUpUnit={setUpUnit}
+              setUpUnit={setUpUnit}
             />
             <Slice
               hiddenSlice={hiddenSlice}
