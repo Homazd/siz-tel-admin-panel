@@ -1,4 +1,4 @@
-import { DataType } from "@/redux/features/subscribers/subscriberSlice";
+import { DataType } from "@/redux/Types/subscriberTypes";
 interface inputDetail {
   searchedSubscriber: DataType;
 }
@@ -64,7 +64,7 @@ const Detail: React.FC<inputDetail> = ({ searchedSubscriber }) => {
               <span className="text-gray-400 text-[14px]">...K</span>
             </p>
             <p>
-              {searchedSubscriber.security.op_value}
+              {searchedSubscriber.security.op ? searchedSubscriber.security.op : searchedSubscriber.security.opc}
               <span className="text-gray-400 text-[14px]">...OPc</span>
             </p>
             <p>

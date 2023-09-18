@@ -236,6 +236,7 @@ function IMSIInput() {
         ],
       });
       console.log("Data updated");
+      setEditOpened(false)
     } catch (error) {
       console.log("Failed to update the data!");
     }

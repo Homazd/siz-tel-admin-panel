@@ -34,6 +34,16 @@ function SubscriberModal() {
   const [sst, setSst] = useState("1");
   const [sd, setSd] = useState("");
   // Session States
+  const [type, setType] = useState("3");
+  const [qci, setQci] = useState("");
+  const [arp, setArp] = useState("");
+  const [capability, setCapability] = useState("");
+  const [vulnerability, setVulnerability] = useState("");
+  const [ambrDownlink, setAmbrDownlink] = useState("");
+  const [ambrUplink, setAmbrUplink] = useState("");
+  const [ambrDownUnit, setAmbrDownUnit] = useState("");
+  const [ambrUpUnit, setAmbrUpUnit] = useState("");
+  
 
   const [addSubscriber] = useAddSubscriberMutation();
 
@@ -44,6 +54,7 @@ function SubscriberModal() {
 
   const handleOnDelete = () => {
     setHiddenSlice(true);
+    setHiddenSession(false);
   };
 
   const handleOnAdd = () => {
@@ -74,7 +85,7 @@ function SubscriberModal() {
       security: {
         k: subK,
         op: opType === "OP" ? opKey : null,
-        opc:  opType === "OPc" ? opKey : null,
+        opc: opType === "OPc" ? opKey : null,
         amf: amf,
       },
       mme_host: [],
@@ -91,23 +102,23 @@ function SubscriberModal() {
           session: [
             {
               name: "internet",
-              type: 3,
+              type: +type,
               ambr: {
                 downlink: {
-                  value: 1,
-                  unit: 3,
+                  value: +ambrDownlink,
+                  unit: +ambrDownUnit,
                 },
                 uplink: {
-                  value: 1,
-                  unit: 3,
+                  value: +ambrUplink,
+                  unit: +ambrUpUnit,
                 },
               },
               qos: {
-                index: 9,
+                index: +qci,
                 arp: {
-                  priority_level: 8,
-                  pre_emption_capability: 1,
-                  pre_emption_vulnerability: 1,
+                  priority_level: +arp,
+                  pre_emption_capability: +capability,
+                  pre_emption_vulnerability: +vulnerability,
                 },
               },
             },
@@ -115,6 +126,7 @@ function SubscriberModal() {
         },
       ],
     });
+    close();
   };
   const form = useForm({
     initialValues: {
@@ -160,6 +172,7 @@ function SubscriberModal() {
               upUnit={upUnit}
               setUpUnit={setUpUnit}
             />
+            
             <Slice
               hiddenSlice={hiddenSlice}
               onClickDelete={handleOnDelete}
@@ -173,6 +186,24 @@ function SubscriberModal() {
               hiddenSession={hiddenSession}
               onClickDeleteSession={onClickDeleteSession}
               onClickAddSession={onClickAddSession}
+              type={type}
+              setType={setType}
+              qci={qci}
+              setQci={setQci}
+              arp={arp}
+              setArp={setArp}
+              capability={capability}
+              setCapability={setCapability}
+              vulnerability={vulnerability}
+              setVulnerability={setVulnerability}
+              ambrUplink={ambrUplink}
+              setAmbrUplink={setAmbrUplink}
+              ambrDownlink={ambrDownlink}
+              setAmbrDownlink={setAmbrDownlink}
+              ambrDownUnit={ambrDownUnit}
+              setAmbrDownUnit={setAmbrDownUnit}
+              ambrUpUnit={ambrUpUnit}
+              setAmbrUpUnit={setAmbrUpUnit}
             />
             <PccRules />
 

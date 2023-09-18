@@ -158,6 +158,7 @@ const EditConfig: React.FC<InputChildProps> = ({
             { value: "OPc", label: "OPc" },
             { value: "OP", label: "OP" },
           ]}
+          required
           defaultValue="OP"
           className="mr-6 w-[300px]"
           value={opType}
