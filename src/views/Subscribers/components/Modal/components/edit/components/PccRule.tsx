@@ -61,7 +61,7 @@ const PccRules: React.FC<PccProps> = ({ item }) => {
   const [flowVisible, setFlowVisible] = useState(false);
   const [flowComponent, setFlowComponent] = useState([<div>Homa</div>]);
 
-  useEffect(() => console.log("item in pcc rules are:", item), []);
+  useEffect(() => console.log("item in pcc rules are:", item), [item]);
 
   const handleOnAdd = () => {
     setPccVisible(true);

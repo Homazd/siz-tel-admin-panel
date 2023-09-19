@@ -13,6 +13,8 @@ import SubscriberConfig from "./components/SubscriberConfig";
 import Slice from "./components/Slice";
 import Session from "./components/Session";
 import PccRules from "./components/PccRules";
+// Types
+import { pccRules } from "@/redux/Types/subscriberTypes";
 
 function AddSubscriber() {
   const [opened, { open, close }] = useDisclosure(false);
@@ -47,7 +49,68 @@ function AddSubscriber() {
   const [ueIpv6, setUeIpv6] = useState("");
   const [smfIpv4, setSmfIpv4] = useState("");
   const [smfIpv6, setSmfIpv6] = useState("");
+  // PCC Rules
+  const [inputs, setInputs] = useState<pccRules[]>([
+    {
+      flow: [],
+      qos: {
+        index: 1,
+        arp: {
+          priority_level: 0,
+          pre_emption_capability: 1,
+          pre_emption_vulnerability: 1,
+        },
+        gbr: {
+          downlink: { value: 1, unit: 3 },
+          uplink: { value: 1, unit: 3 },
+        },
+        mbr: {
+          downlink: { value: 1, unit: 3 },
+          uplink: { value: 1, unit: 3 },
+        },
+      },
+    },
+  ]);
 
+  const handleInputChange = (index: number, inputData: pccRules) => {
+    setInputs((prevInputs) => {
+      const updatedInputs = [...prevInputs];
+      updatedInputs[index] = inputData;
+      return updatedInputs;
+    });
+  };
+
+  const handleAddInput = () => {
+    setInputs((prevInputs) => [
+      ...prevInputs,
+      {
+        flow: [],
+        qos: {
+          index: 1,
+          arp: {
+            priority_level: 0,
+            pre_emption_capability: 1,
+            pre_emption_vulnerability: 1,
+          },
+          gbr: {
+            downlink: { value: 1, unit: 3 },
+            uplink: { value: 1, unit: 3 },
+          },
+          mbr: {
+            downlink: { value: 1, unit: 3 },
+            uplink: { value: 1, unit: 3 },
+          },
+        },
+      },
+    ]);
+  };
+  const handleRemoveInput = (index: number) => {
+    setInputs((prevInputs) => {
+      const updatedInputs = [...prevInputs];
+      updatedInputs.splice(index, 1);
+      return updatedInputs;
+    });
+  };
   const [addSubscriber] = useAddSubscriberMutation();
 
   const handleSD = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -138,7 +201,6 @@ function AddSubscriber() {
       ],
     });
     close();
-    
   };
   const form = useForm({
     initialValues: {
@@ -225,7 +287,7 @@ function AddSubscriber() {
               smfIpv6={smfIpv6}
               setSmfIpv6={setSmfIpv6}
             />
-            <PccRules />
+            <PccRules inputs={inputs} onInputChange={handleInputChange} />
 
             <Button className="font-bold bg-blue-500 mt-3" type="submit">
               Submit

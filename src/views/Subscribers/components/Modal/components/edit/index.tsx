@@ -362,7 +362,7 @@ function IMSIInput() {
                             onClickDeleteSession={onClickDeleteSession}
                             onClickAddSession={onClickAddSession}
                           />
-                          {searchedSubscriber !== undefined
+                          {searchedSubscriber.slice[0].session[0].pcc_rule !== undefined
                             ? searchedSubscriber.slice[0].session[0].pcc_rule.map(
                                 (item: pccRules) => <PccRules item={item} />
                               )
