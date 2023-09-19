@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // Mantine Components
 import { Button, Divider, Select, TextInput } from "@mantine/core";
 // Static data
@@ -6,6 +6,8 @@ import ReusableInput from "@/components/Input";
 import qciItems from "@/data/qci.json";
 // Components
 import FlowContent from "./Flow";
+// Types
+import { pccRules } from "@/redux/Types/subscriberTypes";
 
 const apr = Array.from({ length: 15 }, (_, index) => index + 1);
 
@@ -51,11 +53,15 @@ const apr = Array.from({ length: 15 }, (_, index) => index + 1);
 //     </div>
 //   );
 // };
-
-const PccRules = () => {
+interface PccProps {
+  item: pccRules;
+}
+const PccRules: React.FC<PccProps> = ({ item }) => {
   const [pccVisible, setPccVisible] = useState(false);
   const [flowVisible, setFlowVisible] = useState(false);
   const [flowComponent, setFlowComponent] = useState([<div>Homa</div>]);
+
+  useEffect(() => console.log("item in pcc rules are:", item), []);
 
   const handleOnAdd = () => {
     setPccVisible(true);
@@ -393,9 +399,13 @@ const PccRules = () => {
                   />
                 </div>
                 <div className="flex mt-6">
-                  <TextInput label="GBR Uplink"  classNames={{
-                    label: "static",
-                  }} className="w-[250px]" />
+                  <TextInput
+                    label="GBR Uplink"
+                    classNames={{
+                      label: "static",
+                    }}
+                    className="w-[250px]"
+                  />
                   <Select
                     label="unit"
                     classNames={{

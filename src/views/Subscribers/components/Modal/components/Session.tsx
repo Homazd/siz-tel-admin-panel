@@ -5,15 +5,6 @@ import qciItems from "@/data/qci.json";
 
 const apr = Array.from({ length: 15 }, (_, index) => index + 1);
 
-// const [qci, setQci] = useState("");
-// const [arp, setArp] = useState("");
-// const [capability, setCapability] = useState("");
-// const [vulnerability, setVulnerability] = useState("");
-// const [ambrDownlink, setAmbrDownlink] = useState("");
-// const [ambrUplink, setAmbrUplink] = useState("");
-// const [ambrDownUnit, setAmbrDownUnit] = useState("");
-// const [ambrUpUnit, setAmbrUpUnit] = useState("");
-
 interface SessionProps {
   hiddenSession: boolean;
   onClickDeleteSession: () => void;
@@ -36,6 +27,14 @@ interface SessionProps {
   setAmbrDownUnit: (data: string) => void;
   ambrUpUnit: string;
   setAmbrUpUnit: (data: string) => void;
+  ueIpv4: string;
+  setUeIpv4: (data: string) => void;
+  ueIpv6: string;
+  setUeIpv6: (data: string) => void;
+  smfIpv4: string;
+  setSmfIpv4: (data: string) => void;
+  smfIpv6: string;
+  setSmfIpv6: (data: string) => void;
 }
 const Session: React.FC<SessionProps> = ({
   hiddenSession,
@@ -59,6 +58,14 @@ const Session: React.FC<SessionProps> = ({
   setAmbrUplink,
   ambrUpUnit,
   setAmbrUpUnit,
+  ueIpv4,
+  ueIpv6,
+  setSmfIpv4,
+  setUeIpv4,
+  setSmfIpv6,
+  setUeIpv6,
+  smfIpv4,
+  smfIpv6,
 }) => {
   return (
     <div>
@@ -115,7 +122,6 @@ const Session: React.FC<SessionProps> = ({
                   value: option.title,
                   label: option.title,
                 }))}
-                defaultValue="5"
                 value={qci}
                 onChange={setQci}
               />
@@ -131,7 +137,6 @@ const Session: React.FC<SessionProps> = ({
                   value: num.toString(),
                   label: num.toString(),
                 }))}
-                defaultValue="1"
                 value={arp}
                 onChange={setArp}
               />
@@ -147,7 +152,6 @@ const Session: React.FC<SessionProps> = ({
                     { value: "1", label: "Disabled" },
                     { value: "2", label: "Enabled" },
                   ]}
-                  defaultValue="1"
                   placeholder="Disabled"
                   value={capability}
                   onChange={setCapability}
@@ -165,7 +169,6 @@ const Session: React.FC<SessionProps> = ({
                     { value: "1", label: "Disabled" },
                     { value: "2", label: "Enabled" },
                   ]}
-                  defaultValue={"1"}
                   value={vulnerability}
                   onChange={setVulnerability}
                 />
@@ -179,7 +182,6 @@ const Session: React.FC<SessionProps> = ({
                   placeholder="1"
                   className="w-[250px]"
                   required
-                  defaultValue="1"
                   value={ambrDownlink}
                   onChange={(e) => setAmbrDownlink(e.target.value)}
 
@@ -200,7 +202,6 @@ const Session: React.FC<SessionProps> = ({
                     { value: "4", label: "Tbps" },
                   ]}
                   required
-                  defaultValue={"3"}
                   value={ambrDownUnit}
                   onChange={setAmbrDownUnit}
                 />
@@ -213,7 +214,6 @@ const Session: React.FC<SessionProps> = ({
                   label="Session-AMBR Uplink"
                   placeholder="1"
                   className="w-[250px]"
-                  defaultValue="1"
                   value={ambrUplink}
                   onChange={(e) => setAmbrUplink(e.target.value)}
                 />
@@ -233,7 +233,6 @@ const Session: React.FC<SessionProps> = ({
                     { value: "4", label: "Tbps" },
                   ]}
                   required
-                  defaultValue="3"
                   value={ambrUpUnit}
                   onChange={setAmbrUpUnit}
                 />
@@ -245,6 +244,8 @@ const Session: React.FC<SessionProps> = ({
                   }}
                   label="UE IPv4 Address"
                   className="w-[200px]"
+                  value={ueIpv4}
+                  onChange={(e) => setUeIpv4(e.target.value)}
                 />
                 <TextInput
                   classNames={{
@@ -252,6 +253,8 @@ const Session: React.FC<SessionProps> = ({
                   }}
                   label="UE IPv6 Address"
                   className="w-[200px] ml-6"
+                  value={ueIpv6}
+                  onChange={(e) => setUeIpv6(e.target.value)}
                 />
               </div>
               <div className="flex mt-3">
@@ -261,6 +264,8 @@ const Session: React.FC<SessionProps> = ({
                   }}
                   label="SMF IPv4 Address"
                   className="w-[200px]"
+                  value={smfIpv4}
+                  onChange={(e) => setSmfIpv4(e.target.value)}
                 />
                 <TextInput
                   classNames={{
@@ -268,6 +273,8 @@ const Session: React.FC<SessionProps> = ({
                   }}
                   label="SMF IPv6 Address"
                   className="w-[200px] ml-6"
+                  value={smfIpv6}
+                  onChange={(e) => setSmfIpv6(e.target.value)}
                 />
               </div>
             </div>

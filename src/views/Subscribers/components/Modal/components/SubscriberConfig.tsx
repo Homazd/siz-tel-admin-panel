@@ -83,7 +83,6 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
         <TextInput
           label="IMSI"
           name="imsi"
-          pattern="^\d+$"
           placeholder="Enter IMSI"
           classNames={{
             label: "static",
@@ -172,7 +171,6 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
             { value: "OP", label: "OP" },
             { value: "OPc", label: "OPc" },
           ]}
-          defaultValue="OP"
           className="mr-6 w-[300px]"
           value={opType}
           onChange={setOpType}
@@ -185,7 +183,6 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
           }}
           value={opKey}
           onChange={(e) => setOpKey(e.target.value)}
-          // onKeyDown={handleKey}
           className="w-[500px]"
         />
       </div>
@@ -199,7 +196,6 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
           placeholder="1"
           value={downValue}
           onChange={(e) => setDownValue(e.target.value)}
-          // onKeyDown={handleKey}
           className="w-[250px]"
         />
         <Select

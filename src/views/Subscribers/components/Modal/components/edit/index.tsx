@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { ChangeEvent, FormEvent } from "react";
+import { pccRules } from "@/redux/Types/subscriberTypes"
 // Mantine
 import { Box, Modal, Group, Button, ModalProps, Text } from "@mantine/core";
 // Mantine Form
@@ -17,7 +18,7 @@ import { useDisclosure } from "@mantine/hooks";
 // Components
 import Slice from "../Slice";
 import Session from "../Session";
-import PccRules from "../PccRules";
+import PccRules from "@/views/Subscribers/components/Modal/components/edit/components/PccRule";
 import EditConfig from "./components/Config";
 import Search from "../../Search/Search";
 import Detail from "./components/Detail";
@@ -61,9 +62,9 @@ function IMSIInput() {
 
   useEffect(() => {
     if (searchedSubscriber) {
-      let downLinkUnit : string;
+      let downLinkUnit: string;
       let upLinkUnit: string;
-      
+
       switch (searchedSubscriber.ambr.downlink.unit) {
         case 0:
           downLinkUnit = "0";
@@ -82,7 +83,7 @@ function IMSIInput() {
           break;
 
         default:
-          downLinkUnit = "3"
+          downLinkUnit = "3";
           break;
       }
       switch (searchedSubscriber.ambr.uplink.unit) {
@@ -103,7 +104,7 @@ function IMSIInput() {
           break;
 
         default:
-          upLinkUnit = "3"
+          upLinkUnit = "3";
           break;
       }
       setSubK(searchedSubscriber.security.k);
@@ -230,13 +231,21 @@ function IMSIInput() {
                     pre_emption_vulnerability: 1,
                   },
                 },
+                ue: {
+                  addr: "",
+                  addr6: "",
+                },
+                smf: {
+                  addr: "",
+                  addr6: "",
+                },
               },
             ],
           },
         ],
       });
       console.log("Data updated");
-      setEditOpened(false)
+      setEditOpened(false);
     } catch (error) {
       console.log("Failed to update the data!");
     }
@@ -353,7 +362,11 @@ function IMSIInput() {
                             onClickDeleteSession={onClickDeleteSession}
                             onClickAddSession={onClickAddSession}
                           />
-                          <PccRules />
+                          {searchedSubscriber !== undefined
+                            ? searchedSubscriber.slice[0].session[0].pcc_rule.map(
+                                (item: pccRules) => <PccRules item={item} />
+                              )
+                            : null}
 
                           <Button
                             className="font-bold bg-blue-500 absolute w-36 right-0 mt-6"

@@ -14,7 +14,7 @@ import Slice from "./components/Slice";
 import Session from "./components/Session";
 import PccRules from "./components/PccRules";
 
-function SubscriberModal() {
+function AddSubscriber() {
   const [opened, { open, close }] = useDisclosure(false);
   const [hiddenSession, setHiddenSession] = useState(true);
   const [hiddenSlice, setHiddenSlice] = useState(false);
@@ -43,7 +43,10 @@ function SubscriberModal() {
   const [ambrUplink, setAmbrUplink] = useState("");
   const [ambrDownUnit, setAmbrDownUnit] = useState("");
   const [ambrUpUnit, setAmbrUpUnit] = useState("");
-  
+  const [ueIpv4, setUeIpv4] = useState("");
+  const [ueIpv6, setUeIpv6] = useState("");
+  const [smfIpv4, setSmfIpv4] = useState("");
+  const [smfIpv6, setSmfIpv6] = useState("");
 
   const [addSubscriber] = useAddSubscriberMutation();
 
@@ -121,12 +124,21 @@ function SubscriberModal() {
                   pre_emption_vulnerability: +vulnerability,
                 },
               },
+              ue: {
+                addr: ueIpv4,
+                addr6: ueIpv6,
+              },
+              smf: {
+                addr: smfIpv4,
+                addr6: smfIpv6,
+              },
             },
           ],
         },
       ],
     });
     close();
+    
   };
   const form = useForm({
     initialValues: {
@@ -172,7 +184,7 @@ function SubscriberModal() {
               upUnit={upUnit}
               setUpUnit={setUpUnit}
             />
-            
+
             <Slice
               hiddenSlice={hiddenSlice}
               onClickDelete={handleOnDelete}
@@ -204,6 +216,14 @@ function SubscriberModal() {
               setAmbrDownUnit={setAmbrDownUnit}
               ambrUpUnit={ambrUpUnit}
               setAmbrUpUnit={setAmbrUpUnit}
+              ueIpv4={ueIpv4}
+              setUeIpv4={setUeIpv4}
+              ueIpv6={ueIpv6}
+              setUeIpv6={setUeIpv6}
+              smfIpv4={smfIpv4}
+              setSmfIpv4={setSmfIpv4}
+              smfIpv6={smfIpv6}
+              setSmfIpv6={setSmfIpv6}
             />
             <PccRules />
 
@@ -223,4 +243,4 @@ function SubscriberModal() {
   );
 }
 
-export default SubscriberModal;
+export default AddSubscriber;
