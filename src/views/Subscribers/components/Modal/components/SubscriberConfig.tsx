@@ -83,6 +83,7 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
         <TextInput
           label="IMSI"
           name="imsi"
+          required
           placeholder="Enter IMSI"
           classNames={{
             label: "static",
@@ -143,7 +144,7 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
           classNames={{
             label: "static",
           }}
-          // onKeyDown={handleKey}
+          required
           className="w-[400px] mr-6"
           name="subK"
           value={subK}
@@ -153,6 +154,7 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
           label="Authentication Management Field (AMF)"
           name="amf"
           value={amf}
+          required
           onChange={(e) => setAmf(e.target.value)}
           classNames={{
             label: "static",
@@ -181,6 +183,7 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
           classNames={{
             label: "static",
           }}
+          required
           value={opKey}
           onChange={(e) => setOpKey(e.target.value)}
           className="w-[500px]"
@@ -194,6 +197,7 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
             label: "static",
           }}
           placeholder="1"
+          required
           value={downValue}
           onChange={(e) => setDownValue(e.target.value)}
           className="w-[250px]"
@@ -211,7 +215,6 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
             { value: "3", label: "Gbps" },
             { value: "4", label: "Tbps" },
           ]}
-          defaultValue={"Gbps"}
           className="ml-3 w-[100px]"
           value={downUnit}
           onChange={setDownUnit}
@@ -225,8 +228,8 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
             label: "static",
           }}
           placeholder="1"
+          required
           className="w-[250px] ml-2"
-          // onKeyDown={handleKey}
         />
         <Select
           label="Unit"

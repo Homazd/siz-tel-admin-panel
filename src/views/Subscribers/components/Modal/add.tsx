@@ -23,10 +23,10 @@ function AddSubscriber() {
   const [imsi, setImsi] = useState("");
   const [msisdn, setMsisdn] = useState("");
   const [imeisv, setImeisv] = useState("");
-  const [subK, setSubk] = useState("");
-  const [opType, setOpType] = useState("");
-  const [opKey, setOpKey] = useState("");
-  const [amf, setAmf] = useState("");
+  const [subK, setSubk] = useState("465B5CE8 B199B49F AA5F0A2E E238A6BC");
+  const [opType, setOpType] = useState("OPc");
+  const [opKey, setOpKey] = useState("E8ED289D EBA952E4 283B54E8 8E6183CA");
+  const [amf, setAmf] = useState("8000");
   const [downValue, setDownValue] = useState("1");
   const [downUnit, setDownUnit] = useState("3");
   const [upValue, setUpValue] = useState("1");
@@ -37,14 +37,14 @@ function AddSubscriber() {
   const [sd, setSd] = useState("");
   // Session States
   const [type, setType] = useState("3");
-  const [qci, setQci] = useState("");
-  const [arp, setArp] = useState("");
-  const [capability, setCapability] = useState("");
-  const [vulnerability, setVulnerability] = useState("");
-  const [ambrDownlink, setAmbrDownlink] = useState("");
-  const [ambrUplink, setAmbrUplink] = useState("");
-  const [ambrDownUnit, setAmbrDownUnit] = useState("");
-  const [ambrUpUnit, setAmbrUpUnit] = useState("");
+  const [qci, setQci] = useState("9");
+  const [arp, setArp] = useState("8");
+  const [capability, setCapability] = useState("1");
+  const [vulnerability, setVulnerability] = useState("1");
+  const [ambrDownlink, setAmbrDownlink] = useState("1");
+  const [ambrUplink, setAmbrUplink] = useState("1");
+  const [ambrDownUnit, setAmbrDownUnit] = useState("3");
+  const [ambrUpUnit, setAmbrUpUnit] = useState("3");
   const [ueIpv4, setUeIpv4] = useState("");
   const [ueIpv6, setUeIpv6] = useState("");
   const [smfIpv4, setSmfIpv4] = useState("");

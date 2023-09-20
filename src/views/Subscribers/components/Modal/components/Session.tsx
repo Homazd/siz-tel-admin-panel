@@ -81,6 +81,8 @@ const Session: React.FC<SessionProps> = ({
                     label: "static",
                   }}
                   label="DNN/APN"
+                  required
+                  defaultValue="Internet"
                   placeholder="Internet"
                   className="w-[300px]"
                 />
@@ -152,6 +154,7 @@ const Session: React.FC<SessionProps> = ({
                     { value: "1", label: "Disabled" },
                     { value: "2", label: "Enabled" },
                   ]}
+                  required
                   placeholder="Disabled"
                   value={capability}
                   onChange={setCapability}
@@ -201,7 +204,6 @@ const Session: React.FC<SessionProps> = ({
                     { value: "3", label: "Gbps" },
                     { value: "4", label: "Tbps" },
                   ]}
-                  required
                   value={ambrDownUnit}
                   onChange={setAmbrDownUnit}
                 />
@@ -212,6 +214,7 @@ const Session: React.FC<SessionProps> = ({
                     label: "static",
                   }}
                   label="Session-AMBR Uplink"
+                  required
                   placeholder="1"
                   className="w-[250px]"
                   value={ambrUplink}
@@ -232,7 +235,6 @@ const Session: React.FC<SessionProps> = ({
                     { value: "3", label: "Gbps" },
                     { value: "4", label: "Tbps" },
                   ]}
-                  required
                   value={ambrUpUnit}
                   onChange={setAmbrUpUnit}
                 />
