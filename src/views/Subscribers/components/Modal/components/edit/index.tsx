@@ -160,13 +160,6 @@ function IMSIInput() {
     event.preventDefault();
     setIsTyping(true);
     setValue(event.target.value);
-    console.log(
-      "Subscriber is:",
-      searchedSubscriber,
-      isLoading,
-      isSuccess,
-      isError
-    );
   };
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {

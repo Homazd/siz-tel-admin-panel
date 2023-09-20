@@ -318,7 +318,6 @@ const PccRules: React.FC<PccProps> = ({ inputs, onInputChange }) => {
                         }}
                         className="mt-3 w-[200px]"
                         required
-                        defaultValue={"Enabeled"}
                         clearable
                         data={[
                           { value: "Disabled", label: "Disabled" },

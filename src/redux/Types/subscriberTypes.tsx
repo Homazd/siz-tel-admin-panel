@@ -26,7 +26,7 @@ export interface DataType {
   imsi: string;
   msisdn: string[];
   imeisv: string[];
-
+schema_version: number;
   security: {
     op: string | null;
     opc: string | null;
@@ -43,7 +43,8 @@ export interface DataType {
   slice: [
     {
       sst: string;
-      sd: string;
+      // sd: string;
+      default_indicator: boolean;
       session: [
         {
           name: string;
@@ -88,4 +89,9 @@ export interface DataType {
       ];
     }
   ];
+  access_restriction_data: number;
+      subscriber_status: number;
+      network_access_mode: number;
+      subscribed_rau_tau_timer: number;
+      __v: number;
 }

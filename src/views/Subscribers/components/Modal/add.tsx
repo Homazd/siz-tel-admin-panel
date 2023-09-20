@@ -21,8 +21,8 @@ function AddSubscriber() {
   const [hiddenSession, setHiddenSession] = useState(true);
   const [hiddenSlice, setHiddenSlice] = useState(false);
   const [imsi, setImsi] = useState("");
-  const [msisdn, setMsisdn] = useState("");
-  const [imeisv, setImeisv] = useState("");
+  const [msisdn, setMsisdn] = useState([]);
+  const [imeisv, setImeisv] = useState([]);
   const [subK, setSubk] = useState("465B5CE8 B199B49F AA5F0A2E E238A6BC");
   const [opType, setOpType] = useState("OPc");
   const [opKey, setOpKey] = useState("E8ED289D EBA952E4 283B54E8 8E6183CA");
@@ -56,17 +56,17 @@ function AddSubscriber() {
       qos: {
         index: 1,
         arp: {
-          priority_level: 0,
-          pre_emption_capability: 1,
-          pre_emption_vulnerability: 1,
+          priority_level: 2,
+          pre_emption_capability: 2,
+          pre_emption_vulnerability: 2,
         },
         gbr: {
-          downlink: { value: 1, unit: 3 },
-          uplink: { value: 1, unit: 3 },
+          downlink: { value: 1, unit: 2 },
+          uplink: { value: 1, unit: 2 },
         },
         mbr: {
-          downlink: { value: 1, unit: 3 },
-          uplink: { value: 1, unit: 3 },
+          downlink: { value: 1, unit: 2 },
+          uplink: { value: 1, unit: 2 },
         },
       },
     },
@@ -146,8 +146,9 @@ function AddSubscriber() {
     console.log("downUnit", downUnit);
     addSubscriber({
       imsi: imsi,
-      msisdn: [msisdn],
-      imeisv: [imeisv],
+      msisdn: msisdn,
+      imeisv: imeisv,
+      schema_version: 1,
       security: {
         k: subK,
         op: opType === "OP" ? opKey : null,
@@ -164,7 +165,8 @@ function AddSubscriber() {
       slice: [
         {
           sst: sst,
-          sd: sd,
+          // sd: sd,
+          default_indicator: true,
           session: [
             {
               name: "internet",
@@ -179,6 +181,10 @@ function AddSubscriber() {
                   unit: +ambrUpUnit,
                 },
               },
+              // _id: {
+              //   $oid: "650a8b2656ab077f1fe6ea71"
+
+              // },
               qos: {
                 index: +qci,
                 arp: {
@@ -195,10 +201,16 @@ function AddSubscriber() {
                 addr: smfIpv4,
                 addr6: smfIpv6,
               },
+              pcc_rule:[],
             },
           ],
         },
       ],
+      access_restriction_data: 32,
+      subscriber_status: 0,
+      network_access_mode: 0,
+      subscribed_rau_tau_timer: 12,
+      __v: 0
     });
     close();
   };
