@@ -5,7 +5,10 @@ import { useDisclosure } from "@mantine/hooks";
 // Mantine Form
 import { useForm } from "@mantine/form";
 // Services
-import { useAddSubscriberMutation, useGetSubscribersQuery  } from "@/services/subscribers";
+import {
+  useAddSubscriberMutation,
+  useGetSubscribersQuery,
+} from "@/services/subscribers";
 // Mantine Components
 import { Modal, Button, Group, ModalProps, Box, Text } from "@mantine/core";
 // Components
@@ -161,22 +164,22 @@ function AddSubscriber() {
 
   const handleSubmit = () => {
     addSubscriber({
-      imsi: imsi,
       schema_version: 1,
+      imsi: imsi,
       msisdn: msisdn,
       imeisv: imeisv,
       security: {
         k: subK,
-        op: opType === "OP" ? opKey : null,
+        // op: opType === "OP" ? opKey : null,
         opc: opType === "OPc" ? opKey : null,
-        amf: amf,
+        amf: amf
       },
       mme_host: [],
       mme_realm: [],
       purge_flag: [],
       ambr: {
         downlink: { value: Number(downValue), unit: Number(downUnit) },
-        uplink: { value: Number(upValue), unit: Number(upUnit) },
+        uplink: { value: Number(upValue), unit: Number(upUnit) }
       },
       slice: [
         {
@@ -187,42 +190,34 @@ function AddSubscriber() {
             {
               name: "internet",
               type: +type,
-              ambr: {
-                downlink: {
-                  value: +ambrDownlink,
-                  unit: +ambrDownUnit,
-                },
-                uplink: {
-                  value: +ambrUplink,
-                  unit: +ambrUpUnit,
-                },
-              },
               qos: {
                 index: +qci,
                 arp: {
                   priority_level: +arp,
                   pre_emption_capability: +capability,
-                  pre_emption_vulnerability: +vulnerability,
+                  pre_emption_vulnerability: +vulnerability
+                }
+              },
+              ambr: {
+                downlink: {
+                  value: +ambrDownlink,
+                  unit: +ambrDownUnit
                 },
+                uplink: {
+                  value: +ambrUplink,
+                  unit: +ambrUpUnit
+                }
               },
-              ue: {
-                addr: ueIpv4,
-                addr6: ueIpv6,
-              },
-              smf: {
-                addr: smfIpv4,
-                addr6: smfIpv6,
-              },
-              pcc_rule: [],
-            },
-          ],
-        },
+              pcc_rule: []
+            }
+          ]
+        }
       ],
-      "access_restriction_data": 32,
-      "subscriber_status": 0,
-      "network_access_mode": 0,
-      "subscribed_rau_tau_timer": 12,
-      "__v": 0
+      access_restriction_data: 32,
+      subscriber_status: 0,
+      network_access_mode: 0,
+      subscribed_rau_tau_timer: 12,
+      __v: 0
     });
     close();
   };
@@ -233,7 +228,6 @@ function AddSubscriber() {
       subK: "",
     },
   });
-
 
   return (
     <>

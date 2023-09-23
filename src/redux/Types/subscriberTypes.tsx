@@ -31,7 +31,7 @@ export interface DataType {
   imeisv: string[];
 schema_version: number;
   security: {
-    op: string | null;
+    // op: string | null;
     opc: string | null;
     amf: string;
     k: string;
@@ -70,11 +70,11 @@ schema_version: number;
               pre_emption_vulnerability: number;
             };
           };
-          ue: {
+          ue?: {
             addr: string;
             addr6: string;
           };
-          smf: {
+          smf?: {
             addr: string;
             addr6: string;
           };

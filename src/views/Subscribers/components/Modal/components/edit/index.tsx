@@ -209,15 +209,13 @@ function IMSIInput(props: TextInputProps) {
       imsi: imsi,
       msisdn: msisdn,
       imeisv: imeisv,
-      // schema_version: 1,
+      schema_version: 1,
       security: {
-        k: Subscriber.security.k,
-        op: Subscriber.security.opc,
-        opc: Subscriber.security.opc,
-        amf: Subscriber.security.amf,
+        k: subK,
+        // op:opType === "OP" ? opKey : null,
+        opc: opType === "OP" ? opKey : null,
+        amf: amf,
       },
-     
-
       mme_host: [],
       mme_realm: [],
       purge_flag: [],
@@ -264,10 +262,11 @@ function IMSIInput(props: TextInputProps) {
           ],
         },
       ],
-      // access_restriction_data: 32,
-      // subscriber_status: 0,
-      // network_access_mode: 0,
-      // subscribed_rau_tau_timer: 12,
+      access_restriction_data: 32,
+      subscriber_status: 0,
+      network_access_mode: 0,
+      subscribed_rau_tau_timer: 12,
+      __v: 0
     });
   };
   return (
@@ -463,7 +462,7 @@ function IMSIInput(props: TextInputProps) {
                             hiddenSlice={hiddenSlice}
                             onClickDelete={handleOnDelete}
                             onClickAdd={handleOnAdd}
-                            sst={Subscriber.slice[0].sst}
+                            sst={sst}
                             handleSST={setSst}
                             sd={Subscriber.slice[0].sd}
                             handleSD={handleSD}
