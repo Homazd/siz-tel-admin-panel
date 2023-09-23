@@ -1,16 +1,16 @@
 import { ModalsProvider } from "@mantine/modals";
 import IMSIInput from "./components/Modal/components/edit";
-import SubscriberModal from "./components/Modal/index";
+import AddSubscriber from "./components/Modal/add";
 
 function Subscribers() {
   return (
     <>
       <ModalsProvider>
         <div className="grid place-content-center">
-          <span className="text-white">PSearch</span>
+          <span className="text-[18px] font-bold">Search</span>
           <IMSIInput />
         </div>
-        <SubscriberModal />
+        <AddSubscriber />
       </ModalsProvider>
     </>
   );

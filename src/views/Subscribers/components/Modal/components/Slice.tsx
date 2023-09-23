@@ -33,24 +33,7 @@ const Slice: React.FC<SlicePropsTypes> = ({
   handleSST,
 }) => {
   const [checked, setChecked] = useState(true);
-  // const [SSTValue, setSSTValue] = useState("1");
-  // const [sliceForm, setSliceForm] = useState<SliceType>(SliceInitialState);
 
-  // const handleChange = (event: any) => {
-  //   event.preventDefault();
-  //   const { name, value } = event.target;
-  //   setSliceForm((prevFormData) => ({
-  //     ...prevFormData,
-  //     [name]: value,
-  //   }));
-  // };
-  // const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-  //   if (event.key === "Enter") {
-  //     console.log("form is:", sliceForm);
-  //     sliceForm.sst = SSTValue;
-  //     sliceForm.nssai = checked;
-  //   }
-  // };
 
   return (
     <div className="mt-10">
@@ -61,6 +44,7 @@ const Slice: React.FC<SlicePropsTypes> = ({
           <Radio.Group
             name="SST"
             label="SST"
+            required
             withAsterisk
             value={sst}
             onChange={handleSST}

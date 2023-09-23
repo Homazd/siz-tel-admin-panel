@@ -62,42 +62,8 @@ export default function LoginPage() {
       // Handle successful login
     } catch (error) {
       console.error("error is", error);
-      // Handle login error
     }
   };
-  // const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   setUsername(event.target.value);
-  // };
-  // const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   setPassword(event.target.value);
-  // };
-
-  // const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  // TODO: handle login logic here
-  // fetch("/api/login", {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify({ username, password }),
-  // })
-  //   .then((response) => {
-  //     if (response.ok) {
-  //       return response.json();
-  //     } else {
-  //       throw new Error("Login failed");
-  //     }
-  //   })
-  //   .then((data) => {
-  //     localStorage.setItem("token", data.token); // store the token in local storage
-  //     const navigate = useNavigate(); // get the navigate function from the hook
-  //     navigate("/dashboard"); // navigate to the dashboard page
-  //   })
-  //   .catch((error) => {
-  //     console.error(error);
-  //   });
-  // };
 
   return (
     <>

@@ -1,50 +1,52 @@
+// Hooks
 import React, { useState } from "react";
 // Mantine Components
 import { Button, Divider, Select, TextInput } from "@mantine/core";
-import { op_value } from "@/views/Subscribers/Types/subscriberTypes";
 
 interface InputChildProps {
   imsi: string;
-  handleImsi: (data: React.ChangeEvent<HTMLInputElement>) => void;
+  setImsi: (data: string) => void;
+  msisdn: string;
+  setMsisdn: (data: string) => void;
   subK: string;
-  handleSubk: (data: React.ChangeEvent<HTMLInputElement>) => void;
-  // op: string | null;
-  // handleOp: (data: React.ChangeEvent<HTMLInputElement>) => void;
-  opType: op_value;
-  handleOpType: (data: string) => void;
+  setSubk: (data: string) => void;
+  opType: string;
+  setOpType: (data: string) => void;
   opKey: string;
-  handleOpKey: (data: React.ChangeEvent<HTMLInputElement>) => void;
+  setOpKey: (data: string) => void;
   amf: string;
-  handleAmf: (data: React.ChangeEvent<HTMLInputElement>) => void;
+  setAmf: (data: string) => void;
   downValue: string;
+  setDownValue: (data: string) => void;
   upValue: string;
-  downUnit: number;
-  upUnit: number;
-  handleDownValue: (data: React.ChangeEvent<HTMLInputElement>) => void;
-  handleUpValue: (data: React.ChangeEvent<HTMLInputElement>) => void;
-  handleDownUnit: (data: number) => void;
-  handleUpUnit: (data: number) => void;
+  setUpValue: (data: string) => void;
+  upUnit: string;
+  setUpUnit: (data: string) => void;
+  downUnit: string;
+  setDownUnit: (data: string) => void;
 }
 
 const SubscriberConfig: React.FC<InputChildProps> = ({
   imsi,
-  handleImsi,
+  setImsi,
+  msisdn,
+  setMsisdn,
   subK,
-  handleSubk,
+  setSubk,
   opKey,
-  handleOpKey,
+  setOpKey,
   amf,
-  handleAmf,
+  setAmf,
   downValue,
-  handleDownValue,
+  setDownValue,
   opType,
-  handleOpType,
+  setOpType,
   downUnit,
-  handleDownUnit,
+  setDownUnit,
   upValue,
-  handleUpValue,
+  setUpValue,
   upUnit,
-  handleUpUnit,
+  setUpUnit,
 }) => {
   const [isMSIVisible, setIsMSIVisible] = useState(true);
   const [msisdnClicked, setMsisdnClicked] = useState(false);
@@ -81,15 +83,14 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
         <TextInput
           label="IMSI"
           name="imsi"
-          pattern="^\d+$"
+          required
           placeholder="Enter IMSI"
           classNames={{
             label: "static",
           }}
           className="mt-3"
           value={imsi}
-          onChange={handleImsi}
-          // onKeyDown={handleKey}
+          onChange={(e) => setImsi(e.target.value)}
         />
         <div className="grid place-content-center">
           {isMSIVisible && (
@@ -109,13 +110,12 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
                       label="MSISDN"
                       name="msisdn"
                       placeholder="MSISDN"
-                      // onKeyDown={handleKey}
                       classNames={{
                         label: "static",
                       }}
                       className="w-[300px]"
-                      value={formData.msisdn}
-                      // onChange={handleForm}
+                      value={msisdn}
+                      onChange={(e) => setMsisdn(e.target.value)}
                     />
                   </>
                 ) : null}
@@ -144,18 +144,18 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
           classNames={{
             label: "static",
           }}
-          // onKeyDown={handleKey}
+          required
           className="w-[400px] mr-6"
           name="subK"
           value={subK}
-          onChange={handleSubk}
+          onChange={(e) => setSubk(e.target.value)}
         />
         <TextInput
           label="Authentication Management Field (AMF)"
           name="amf"
           value={amf}
-          onChange={handleAmf}
-          // onKeyDown={handleKey}
+          required
+          onChange={(e) => setAmf(e.target.value)}
           classNames={{
             label: "static",
           }}
@@ -170,12 +170,12 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
           }}
           placeholder="OP"
           data={[
-            { value: "0", unit: "OP" },
-            { value: "1", unit: "OPc" },
+            { value: "OP", label: "OP" },
+            { value: "OPc", label: "OPc" },
           ]}
           className="mr-6 w-[300px]"
-          value={(opType)}
-          onChange={handleOpKey}
+          value={opType}
+          onChange={setOpType}
         />
         <TextInput
           label="Operator Key (OPc/OP)"
@@ -183,9 +183,9 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
           classNames={{
             label: "static",
           }}
+          required
           value={opKey}
-          onChange={handleOpKey}
-          // onKeyDown={handleKey}
+          onChange={(e) => setOpKey(e.target.value)}
           className="w-[500px]"
         />
       </div>
@@ -197,9 +197,9 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
             label: "static",
           }}
           placeholder="1"
+          required
           value={downValue}
-          onChange={handleDownValue}
-          // onKeyDown={handleKey}
+          onChange={(e) => setDownValue(e.target.value)}
           className="w-[250px]"
         />
         <Select
@@ -215,22 +215,21 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
             { value: "3", label: "Gbps" },
             { value: "4", label: "Tbps" },
           ]}
-          defaultValue={"Gbps"}
           className="ml-3 w-[100px]"
           value={downUnit}
-          onChange={handleDownUnit}
+          onChange={setDownUnit}
         />
         <TextInput
           label="UE-AMBR Uplink"
           value={upValue}
-          onChange={handleUpValue}
+          onChange={(e) => setUpValue(e.target.value)}
           name="ueUplink"
           classNames={{
             label: "static",
           }}
           placeholder="1"
+          required
           className="w-[250px] ml-2"
-          // onKeyDown={handleKey}
         />
         <Select
           label="Unit"
@@ -238,7 +237,7 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
             label: "static",
           }}
           value={upUnit}
-          onChange={handleUpUnit}
+          onChange={setUpUnit}
           data={[
             { value: "0", label: "bps" },
             { value: "1", label: "Kbps" },
