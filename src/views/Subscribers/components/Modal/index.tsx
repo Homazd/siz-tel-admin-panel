@@ -58,13 +58,7 @@ function SubscriberModal() {
   const handleSubk = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setSubk(e.currentTarget.value);
-    // if (!/^\[0-9a-fA-F\\s]+$/.test(subK)) {
-    //   setError("Only hexadecimal digits are allowed");
-    //   console.log(error);
-    //   error;
-    // } else {
-    //   setError("");
-    // }
+  
   };
   const handleOpType = (e: op_value) => {
     console.log("opKey is:", e);

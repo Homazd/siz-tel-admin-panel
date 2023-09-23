@@ -48,8 +48,6 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
 }) => {
   const [isMSIVisible, setIsMSIVisible] = useState(true);
   const [msisdnClicked, setMsisdnClicked] = useState(false);
-  // const [isTyping, setIsTyping] = useState(false);
-  // const [value, setValue] = useState<string>("");
 
   const formData = {
     imsi: "",
@@ -221,7 +219,6 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
           className="ml-3 w-[100px]"
           value={downUnit}
           onChange={handleDownUnit}
-          // onKeyDown={handleKey}
         />
         <TextInput
           label="UE-AMBR Uplink"
