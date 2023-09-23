@@ -3,7 +3,10 @@ export const FETCH_SUBSCRIBER_SUCCESS = "FETCH_SUBSCRIBER_SUCCESS";
 export const FETCH_SUBSCRIBER_FAILURE = "FETCH_SUBSCRIBER_FAILURE";
 
 export interface pccRules {
-  flow: [];
+  flow?: [
+    direction: number,
+    description: string,
+  ];
   qos: {
     index: number;
     arp: {
@@ -43,7 +46,7 @@ schema_version: number;
   slice: [
     {
       sst: string;
-      // sd: string;
+      sd?: string;
       default_indicator: boolean;
       session: [
         {
@@ -93,5 +96,5 @@ schema_version: number;
       subscriber_status: number;
       network_access_mode: number;
       subscribed_rau_tau_timer: number;
-      __v: number;
+      // __v: number;
 }

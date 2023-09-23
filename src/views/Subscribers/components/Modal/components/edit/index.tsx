@@ -43,19 +43,23 @@ function IMSIInput(props: TextInputProps) {
   const theme = useMantineTheme();
   // Config States
   const [imsi, setImsi] = useState("");
-  const [msisdn, setMsisdn] = useState("");
+  const [msisdn, setMsisdn] = useState([]);
+  const [imeisv, setImeisv] = useState([]);
   const [subK, setSubK] = useState("");
-  const [usimType, setUsimType] = useState("OP");
-  // const [op, setOp] = useState('');
+  const [opType, setOpType] = useState("OPc");
   const [opKey, setOpKey] = useState("");
   const [amf, setAmf] = useState("");
-  const [downValue, setDownValue] = useState(1);
-  const [downUnit, setDownUnit] = useState<number>(3);
-  const [upValue, setUpValue] = useState(1);
-  const [upUnit, setUpUnit] = useState<number>(3);
+  const [downValue, setDownValue] = useState("1");
+  const [downUnit, setDownUnit] = useState("3");
+  const [upValue, setUpValue] = useState("1");
+  const [upUnit, setUpUnit] = useState("3");
   // Slice States
   const [sst, setSst] = useState("1");
   const [sd, setSd] = useState("");
+  const [ueIpv4, setUeIpv4] = useState("");
+  const [ueIpv6, setUeIpv6] = useState("");
+  const [smfIpv4, setSmfIpv4] = useState("");
+  const [smfIpv6, setSmfIpv6] = useState("");
   const [deleteSubscriber] = useDeleteSubscriberMutation();
   const [updateSubscriber] = useUpdateSubscriberMutation();
   // Session States
@@ -97,15 +101,6 @@ function IMSIInput(props: TextInputProps) {
     }
   }, [Subscriber, usimType]);
 
-  const handleImsi = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setImsi(e.currentTarget.value);
-  };
-
-  const handleMsisdn = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setMsisdn(e.currentTarget.value);
-  };
 
   const handleSubk = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -234,13 +229,16 @@ function IMSIInput(props: TextInputProps) {
 
     updateSubscriber({
       imsi: imsi,
+      msisdn: msisdn,
+      imeisv: imeisv,
+      schema_version: 1,
       security: {
         k: Subscriber.security.k,
-        op: 
+        op: Subscriber.security.opc,
         opc: Subscriber.security.opc,
         amf: Subscriber.security.amf,
       },
-      msisdn: Subscriber.msisdn[0],
+      msisdn: msisdn,
 
       mme_host: [],
       mme_realm: [],
@@ -253,6 +251,7 @@ function IMSIInput(props: TextInputProps) {
         {
           sst: sst,
           sd: sd,
+          default_indicator: true,
           session: [
             {
               name: "internet",
@@ -275,10 +274,22 @@ function IMSIInput(props: TextInputProps) {
                   pre_emption_vulnerability: 1,
                 },
               },
+              ue: {
+                addr: ueIpv4,
+                addr6: ueIpv6,
+              };
+              smf: {
+                addr: string;
+                addr6: string;
+              };
             },
           ],
         },
       ],
+      access_restriction_data: 32,
+      subscriber_status: 0,
+      network_access_mode: 0,
+      subscribed_rau_tau_timer: 12,
     });
   };
   return (
@@ -449,29 +460,26 @@ function IMSIInput(props: TextInputProps) {
                           className="block relative"
                         >
                           <EditConfig
-                            Subscriber={Subscriber}
+                            searchedSubscriber={Subscriber}
                             imsi={imsi}
                             msisdn={msisdn}
-                            handleMsisdn={handleMsisdn}
-                            // imeisv={imeisv}
-                            usimType={usimType}
-                            handleUsimType={setUsimType}
-                            handleImsi={handleImsi}
+                            setMsisdn={setMsisdn}
                             subK={subK}
-                            handleSubK={handleSubk}
-                            // op={op}
+                            setSubK={setSubK}
+                            opType={opType}
+                            setOpType={setOpType}
                             opKey={opKey}
-                            handleOpKey={handleOpKey}
+                            setOpKey={setOpKey}
                             amf={amf}
-                            handleAmf={handleAmf}
+                            setAmf={setAmf}
                             downValue={downValue}
-                            handleDownValue={handleDownValue}
+                            setDownValue={setDownValue}
                             downUnit={downUnit}
-                            handleDownUnit={setDownUnit}
+                            setDownUnit={setDownUnit}
                             upValue={upValue}
-                            handleUpValue={handleUpValue}
+                            setUpValue={setUpValue}
                             upUnit={upUnit}
-                            handleUpUnit={setUpUnit}
+                            setUpUnit={setUpUnit}
                           />
                           <Slice
                             hiddenSlice={hiddenSlice}

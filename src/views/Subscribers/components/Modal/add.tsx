@@ -57,7 +57,6 @@ function AddSubscriber() {
   // PCC Rules
   const [inputs, setInputs] = useState<pccRules[]>([
     {
-      flow: [],
       qos: {
         index: 1,
         arp: {
@@ -221,7 +220,7 @@ function AddSubscriber() {
       subscriber_status: 0,
       network_access_mode: 0,
       subscribed_rau_tau_timer: 12,
-      __v: 0,
+      // __v: 0,
     });
     close();
   };
@@ -376,13 +375,12 @@ function AddSubscriber() {
                   >
                     <Box mx="auto" className="w-[800px]">
                       <form
-                        onSubmit={form.onSubmit(handleSubmitUpdate)}
+                        onSubmit={form.onSubmit(handleSubmit)}
                         className="block relative"
                       >
                         <EditConfig
                           searchedSubscriber={subscriber}
-                          // imsi={imsi}
-                          // handleImsi={handleImsi}
+                          imsi={imsi}
                           subK={subK}
                           setSubK={setSubK}
                           msisdn={msisdn}

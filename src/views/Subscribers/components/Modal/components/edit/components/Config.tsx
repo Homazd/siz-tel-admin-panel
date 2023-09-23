@@ -7,10 +7,11 @@ import { DataType } from "@/redux/Types/subscriberTypes";
 
 interface InputChildProps {
   searchedSubscriber: DataType;
+  imsi: string;
   opKey: string;
   setOpKey: (data: string) => void;
-  msisdn: string;
-  setMsisdn: (data: string) => void;
+  msisdn: string[];
+  setMsisdn: (data: any) => void;
   amf: string;
   setAmf: (data: string) => void;
   opType: string;
