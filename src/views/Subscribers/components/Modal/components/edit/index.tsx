@@ -61,8 +61,19 @@ function IMSIInput(props: TextInputProps) {
   const [smfIpv4, setSmfIpv4] = useState("");
   const [smfIpv6, setSmfIpv6] = useState("");
   const [deleteSubscriber] = useDeleteSubscriberMutation();
-  const [updateSubscriber] = useUpdateSubscriberMutation();
+  const [updateSubscriber] = useUpdateSubscriberMutation();  
   // Session States
+  const [type, setType] = useState("3");
+  const [qci, setQci] = useState("");
+  const [arp, setArp] = useState("");
+  const [capability, setCapability] = useState("");
+  const [vulnerability, setVulnerability] = useState("");
+  const [ambrDownlink, setAmbrDownlink] = useState("");
+  const [ambrUplink, setAmbrUplink] = useState("");
+  const [ambrDownUnit, setAmbrDownUnit] = useState("");
+  const [ambrUpUnit, setAmbrUpUnit] = useState("");
+  
+
 
   // Validation
 
@@ -89,44 +100,13 @@ function IMSIInput(props: TextInputProps) {
       setUpValue(Subscriber.ambr.uplink.value);
       setUpUnit(Subscriber.ambr.uplink.unit);
       console.log(Subscriber);
-      if (Subscriber.security.opc && Subscriber.security.opc.length > 0) {
-        setUsimType("OPC");
-      } else {
-        setUsimType("OP");
-      }
-      console.log(usimType);
-      console.log(Subscriber.security);
-      console.log(Subscriber.ambr.downlink);
       
+      setSst(Subscriber.slice[0].sst)
     }
-  }, [Subscriber, usimType]);
+  }, [Subscriber]);
 
 
-  const handleSubk = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setSubK(e.currentTarget.value);
-
-    // console.log("subK", subK);
-  };
-  const handleOpKey = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setOpKey(e.currentTarget.value);
-  };
-  const handleAmf = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setAmf(e.currentTarget.value);
-  };
-
-  const handleDownValue = (e: any) => {
-    e.preventDefault();
-    setDownValue(e.currentTarget.value);
-  };
-
-  const handleUpValue = (e: any) => {
-    e.preventDefault();
-    setUpValue(e.currentTarget.value);
-  };
-
+ 
   const handleSD = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setSd(e.currentTarget.value);
@@ -223,29 +203,27 @@ function IMSIInput(props: TextInputProps) {
     deleteSubscriber(Subscriber.imsi);
   };
   const handleSubmitUpdate = () => {
-    console.log("usim type:", usimType);
     console.log("submit edit");
-    
-
+  
     updateSubscriber({
       imsi: imsi,
       msisdn: msisdn,
       imeisv: imeisv,
-      schema_version: 1,
+      // schema_version: 1,
       security: {
         k: Subscriber.security.k,
         op: Subscriber.security.opc,
         opc: Subscriber.security.opc,
         amf: Subscriber.security.amf,
       },
-      msisdn: msisdn,
+     
 
       mme_host: [],
       mme_realm: [],
       purge_flag: [],
       ambr: {
-        downlink: { value: downValue, unit: downUnit },
-        uplink: { value: upValue, unit: upUnit },
+        downlink: { value: +downValue, unit: +downUnit },
+        uplink: { value: +upValue, unit: +upUnit },
       },
       slice: [
         {
@@ -275,21 +253,21 @@ function IMSIInput(props: TextInputProps) {
                 },
               },
               ue: {
-                addr: ueIpv4,
-                addr6: ueIpv6,
-              };
+                addr: "",
+                addr6: "",
+              },
               smf: {
-                addr: string;
-                addr6: string;
-              };
+                addr: "",
+                addr6: "",
+              },
             },
           ],
         },
       ],
-      access_restriction_data: 32,
-      subscriber_status: 0,
-      network_access_mode: 0,
-      subscribed_rau_tau_timer: 12,
+      // access_restriction_data: 32,
+      // subscriber_status: 0,
+      // network_access_mode: 0,
+      // subscribed_rau_tau_timer: 12,
     });
   };
   return (
@@ -494,6 +472,25 @@ function IMSIInput(props: TextInputProps) {
                             hiddenSession={hiddenSession}
                             onClickDeleteSession={onClickDeleteSession}
                             onClickAddSession={onClickAddSession}
+                            type={type}
+                            setType={setType}
+                            qci={qci}
+                            setQci={setQci}
+                            arp={arp}
+                            setArp={setArp}
+                            capability={capability}
+                            setCapability={setCapability}
+                            vulnerability={vulnerability}
+                            setVulnerability={setVulnerability}
+                            ambrUplink={ambrUplink}
+                            setAmbrUplink={setAmbrUplink}
+                            ambrDownlink={ambrDownlink}
+                            setAmbrDownlink={setAmbrDownlink}
+                            ambrDownUnit={ambrDownUnit}
+                            setAmbrDownUnit={setAmbrDownUnit}
+                            ambrUpUnit={ambrUpUnit}
+                            setAmbrUpUnit={setAmbrUpUnit}
+              
                           />
                           <PccRules />
 

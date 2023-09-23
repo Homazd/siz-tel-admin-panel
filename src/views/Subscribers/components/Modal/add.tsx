@@ -5,30 +5,32 @@ import { useDisclosure } from "@mantine/hooks";
 // Mantine Form
 import { useForm } from "@mantine/form";
 // Services
-import { useAddSubscriberMutation } from "@/services/subscribers";
+import { useAddSubscriberMutation, useGetSubscribersQuery  } from "@/services/subscribers";
 // Mantine Components
-import { Modal, Button, Group, ModalProps, Box } from "@mantine/core";
+import { Modal, Button, Group, ModalProps, Box, Text } from "@mantine/core";
 // Components
 import SubscriberConfig from "./components/SubscriberConfig";
 import Slice from "./components/Slice";
 import Session from "./components/Session";
 import PccRules from "./components/PccRules";
-// Types
-import { pccRules } from "@/redux/Types/subscriberTypes";
-
-import { useGetSubscribersQuery } from "@/services/subscribers";
 import Detail from "./components/edit/components/Detail";
 import EditConfig from "./components/edit/components/Config";
+// Types
+import { pccRules } from "@/redux/Types/subscriberTypes";
+// Icons
+import { FaPencilAlt } from "react-icons/fa";
+import { RiDeleteBinLine } from "react-icons/ri";
 
 function AddSubscriber() {
   const [opened, { open, close }] = useDisclosure(false);
   const [editOpened, setEditOpened] = useState(false);
+  const [deleteOpened, setDeleteOpened] = useState(false);
   const [hiddenSession, setHiddenSession] = useState(true);
   const [hiddenSlice, setHiddenSlice] = useState(false);
   const [imsi, setImsi] = useState("");
   const [msisdn, setMsisdn] = useState([]);
   const [imeisv, setImeisv] = useState([]);
-  const [subK, setSubk] = useState("465B5CE8 B199B49F AA5F0A2E E238A6BC");
+  const [subK, setSubK] = useState("465B5CE8 B199B49F AA5F0A2E E238A6BC");
   const [opType, setOpType] = useState("OPc");
   const [opKey, setOpKey] = useState("E8ED289D EBA952E4 283B54E8 8E6183CA");
   const [amf, setAmf] = useState("8000");
@@ -160,9 +162,9 @@ function AddSubscriber() {
   const handleSubmit = () => {
     addSubscriber({
       imsi: imsi,
+      schema_version: 1,
       msisdn: msisdn,
       imeisv: imeisv,
-      schema_version: 1,
       security: {
         k: subK,
         op: opType === "OP" ? opKey : null,
@@ -216,11 +218,11 @@ function AddSubscriber() {
           ],
         },
       ],
-      access_restriction_data: 32,
-      subscriber_status: 0,
-      network_access_mode: 0,
-      subscribed_rau_tau_timer: 12,
-      // __v: 0,
+      "access_restriction_data": 32,
+      "subscriber_status": 0,
+      "network_access_mode": 0,
+      "subscribed_rau_tau_timer": 12,
+      "__v": 0
     });
     close();
   };
@@ -231,6 +233,7 @@ function AddSubscriber() {
       subK: "",
     },
   });
+
 
   return (
     <>
@@ -252,7 +255,7 @@ function AddSubscriber() {
               msisdn={msisdn}
               setMsisdn={setMsisdn}
               subK={subK}
-              setSubk={setSubk}
+              setSubK={setSubK}
               opType={opType}
               setOpType={setOpType}
               opKey={opKey}
@@ -413,12 +416,38 @@ function AddSubscriber() {
                           hiddenSession={hiddenSession}
                           onClickDeleteSession={onClickDeleteSession}
                           onClickAddSession={onClickAddSession}
+                          type={type}
+                          setType={setType}
+                          qci={qci}
+                          setQci={setQci}
+                          arp={arp}
+                          setArp={setArp}
+                          capability={capability}
+                          setCapability={setCapability}
+                          vulnerability={vulnerability}
+                          setVulnerability={setVulnerability}
+                          ambrUplink={ambrUplink}
+                          setAmbrUplink={setAmbrUplink}
+                          ambrDownlink={ambrDownlink}
+                          setAmbrDownlink={setAmbrDownlink}
+                          ambrDownUnit={ambrDownUnit}
+                          setAmbrDownUnit={setAmbrDownUnit}
+                          ambrUpUnit={ambrUpUnit}
+                          setAmbrUpUnit={setAmbrUpUnit}
+                          ueIpv4={ueIpv4}
+                          setUeIpv4={setUeIpv4}
+                          ueIpv6={ueIpv6}
+                          setUeIpv6={setUeIpv6}
+                          smfIpv4={smfIpv4}
+                          setSmfIpv4={setSmfIpv4}
+                          smfIpv6={smfIpv6}
+                          setSmfIpv6={setSmfIpv6}
                         />
-                        {subscriber.slice[0].session[0].pcc_rule !== undefined
+                        {/* {subscriber.slice[0].session[0].pcc_rule !== undefined
                           ? subscriber.slice[0].session[0].pcc_rule.map(
                               (item: pccRules) => <PccRules item={item} />
                             )
-                          : null}
+                          : null} */}
 
                         <Button
                           className="font-bold bg-blue-500 absolute w-36 right-0 mt-6"

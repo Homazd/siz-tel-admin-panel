@@ -96,5 +96,5 @@ schema_version: number;
       subscriber_status: number;
       network_access_mode: number;
       subscribed_rau_tau_timer: number;
-      // __v: number;
+      __v: number;
 }
