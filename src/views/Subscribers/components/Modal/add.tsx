@@ -9,6 +9,7 @@ import {
   useAddSubscriberMutation,
   useDeleteSubscriberMutation,
   useGetSubscribersQuery,
+  useLazyGetSubscribersQuery,
 } from "@/services/subscribers";
 // Mantine Components
 import { Modal, Button, Group, ModalProps, Box, Text } from "@mantine/core";
@@ -85,6 +86,10 @@ function AddSubscriber() {
   const { data: subscriber } = useGetSubscribersQuery(imsi, {
     skip: isFetching,
   });
+  const [
+    getSubscriberAfterPost,
+    { data: addedSubscriber },
+  ] = useLazyGetSubscribersQuery();
 
   const handleInputChange = (index: number, inputData: pccRules) => {
     setInputs((prevInputs) => {
@@ -93,7 +98,6 @@ function AddSubscriber() {
       return updatedInputs;
     });
   };
-
   // const handleAddInput = () => {
   //   setInputs((prevInputs) => [
   //     ...prevInputs,
@@ -165,12 +169,11 @@ function AddSubscriber() {
     },
   };
   useEffect(() => {
-    console.log("imsi is", imsi);
     setIsFetching(true);
   }, [subscriber, isFetching, imsi]);
 
-  const handleSubmit = () => {
-    addSubscriber({
+  const handleSubmit = async () => {
+    await addSubscriber({
       schema_version: 1,
       imsi: imsi,
       msisdn: msisdn,
@@ -191,7 +194,7 @@ function AddSubscriber() {
       slice: [
         {
           sst: +sst,
-          sd: sd? sd : null,
+          sd: sd ? sd : null,
           default_indicator: true,
           session: [
             {
@@ -233,7 +236,10 @@ function AddSubscriber() {
       network_access_mode: 0,
       subscribed_rau_tau_timer: 12,
       __v: 0,
-    });
+    }).unwrap();
+    console.log("imsi is:", imsi);
+    getSubscriberAfterPost(imsi);
+    console.log("subscriber is:", addedSubscriber);
     close();
   };
   const form = useForm({
