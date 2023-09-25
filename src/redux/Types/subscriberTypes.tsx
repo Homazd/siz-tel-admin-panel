@@ -3,7 +3,10 @@ export const FETCH_SUBSCRIBER_SUCCESS = "FETCH_SUBSCRIBER_SUCCESS";
 export const FETCH_SUBSCRIBER_FAILURE = "FETCH_SUBSCRIBER_FAILURE";
 
 export interface pccRules {
-  flow: [];
+  flow?: [
+    direction: number,
+    description: string,
+  ];
   qos: {
     index: number;
     arp: {
@@ -28,6 +31,7 @@ export interface DataType {
   imeisv: string[];
 schema_version: number;
   security: {
+    // op: string | null;
     // op: string | null;
     opc: string | null;
     amf: string;

@@ -9,7 +9,7 @@ interface InputChildProps {
   msisdn: string[];
   setMsisdn: (data: any) => void;
   subK: string;
-  setSubk: (data: string) => void;
+  setSubK: (data: string) => void;
   opType: string;
   setOpType: (data: string) => void;
   opKey: string;
@@ -32,7 +32,7 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
   msisdn,
   setMsisdn,
   subK,
-  setSubk,
+  setSubK,
   opKey,
   setOpKey,
   amf,
@@ -148,7 +148,7 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
           className="w-[400px] mr-6"
           name="subK"
           value={subK}
-          onChange={(e) => setSubk(e.target.value)}
+          onChange={(e) => setSubK(e.target.value)}
         />
         <TextInput
           label="Authentication Management Field (AMF)"

@@ -1,10 +1,20 @@
 import { useEffect, useState } from "react";
 import { ChangeEvent, FormEvent } from "react";
-import { pccRules } from "@/redux/Types/subscriberTypes"
 // Mantine
-import { Box, Modal, Group, Button, ModalProps, Text } from "@mantine/core";
+import {
+  TextInputProps,
+  ActionIcon,
+  useMantineTheme,
+  Box,
+  Modal,
+  Group,
+  Button,
+  ModalProps,
+  Text,
+} from "@mantine/core";
 // Mantine Form
-import { useForm } from "@mantine/form";
+
+import { IconSearch, IconArrowRight, IconArrowLeft } from "@tabler/icons-react";
 import {
   useGetSubscribersQuery,
   useDeleteSubscriberMutation,
@@ -12,31 +22,32 @@ import {
 } from "../../../../../../services/subscribers";
 import { ModalsProvider } from "@mantine/modals";
 // Styles
+import StyledInput from "./style";
 import { FaPencilAlt } from "react-icons/fa";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { useDisclosure } from "@mantine/hooks";
 // Components
 import Slice from "../Slice";
 import Session from "../Session";
-import PccRules from "@/views/Subscribers/components/Modal/components/edit/components/PccRule";
+import PccRules from "../PccRules";
 import EditConfig from "./components/Config";
-import Search from "../../Search/Search";
-import Detail from "./components/Detail";
 
-function IMSIInput() {
-  const [value, setValue] = useState("");
+function IMSIInput(props: TextInputProps) {
+  const [value, setValue] = useState<string>("");
   const [isTyping, setIsTyping] = useState(false);
   const [hiddenSession, setHiddenSession] = useState(true);
   const [hiddenSlice, setHiddenSlice] = useState(false);
   const [opened, { open, close }] = useDisclosure();
   const [editOpened, setEditOpened] = useState(false);
   const [deleteOpened, setDeleteOpened] = useState(false);
+  const theme = useMantineTheme();
   // Config States
-  const [imeisv, setImeisv] = useState("");
-  const [msisdn, setMsisdn] = useState("");
+  const [imsi, setImsi] = useState("");
+  const [msisdn, setMsisdn] = useState([]);
+  const [imeisv, setImeisv] = useState([]);
   const [subK, setSubK] = useState("");
+  const [opType, setOpType] = useState("OPc");
   const [opKey, setOpKey] = useState("");
-  const [opType, setOpType] = useState("");
   const [amf, setAmf] = useState("");
   const [downValue, setDownValue] = useState("1");
   const [downUnit, setDownUnit] = useState("3");
@@ -45,9 +56,24 @@ function IMSIInput() {
   // Slice States
   const [sst, setSst] = useState("1");
   const [sd, setSd] = useState("");
+  const [ueIpv4, setUeIpv4] = useState("");
+  const [ueIpv6, setUeIpv6] = useState("");
+  const [smfIpv4, setSmfIpv4] = useState("");
+  const [smfIpv6, setSmfIpv6] = useState("");
   const [deleteSubscriber] = useDeleteSubscriberMutation();
-  const [updateSubscriber] = useUpdateSubscriberMutation();
+  const [updateSubscriber] = useUpdateSubscriberMutation();  
   // Session States
+  const [type, setType] = useState("3");
+  const [qci, setQci] = useState("");
+  const [arp, setArp] = useState("");
+  const [capability, setCapability] = useState("");
+  const [vulnerability, setVulnerability] = useState("");
+  const [ambrDownlink, setAmbrDownlink] = useState("");
+  const [ambrUplink, setAmbrUplink] = useState("");
+  const [ambrDownUnit, setAmbrDownUnit] = useState("");
+  const [ambrUpUnit, setAmbrUpUnit] = useState("");
+  
+
 
   // Validation
 
@@ -122,6 +148,7 @@ function IMSIInput() {
       setSst(searchedSubscriber.slice[0].sst)
     }
     console.log("searchedSubscriber is:", searchedSubscriber);
+    
   }, [searchedSubscriber]);
 
   const handleSD = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -151,6 +178,48 @@ function IMSIInput() {
     },
   };
 
+  const sessionType = () => {
+    const sessionItem = Subscriber.ambr.downlink.unit;
+    switch (sessionItem) {
+      case 1:
+        return "IPv4";
+      case 2:
+        return "IPv6";
+      case 3:
+        return "IPv4v6";
+      default:
+        break;
+    }
+  };
+
+  const capabilityApr = () => {
+    const aprCapability =
+      Subscriber.slice[0].session[0].qos.arp.pre_emption_capability;
+    switch (aprCapability) {
+      case 1:
+        return "Disabled";
+      case 2:
+        return "Enabled";
+
+      default:
+        break;
+    }
+  };
+
+  const vulnerabilitySST = () => {
+    const vulnerability =
+      searchedSubscriber.slice[0].session[0].qos.arp.pre_emption_vulnerability;
+    switch (vulnerability) {
+      case 1:
+        return "Disabled";
+      case 2:
+        return "Enabled";
+
+      default:
+        break;
+    }
+  };
+
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       console.log("Subscriber is:", searchedSubscriber);
@@ -158,14 +227,12 @@ function IMSIInput() {
   };
 
   const handleOnInput = (event: ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
     setIsTyping(true);
     setValue(event.target.value);
   };
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     setIsTyping(false);
-
     event.preventDefault();
   }
   const handleOnDeleteModal = () => {
@@ -177,89 +244,104 @@ function IMSIInput() {
     setEditOpened(true);
   };
   const handleDelete = () => {
-    deleteSubscriber(searchedSubscriber.imsi);
+    deleteSubscriber(Subscriber.imsi);
   };
-  const handleSubmitUpdate = async () => {
-    try {
-      await updateSubscriber({
-        imsi: searchedSubscriber.imsi,
-        security: {
-          k: subK,
-          op: opKey,
-          opc: opKey,
-          amf: amf,
-        },
-        imeisv: [imeisv],
-        msisdn: [msisdn],
-
-        mme_host: [],
-        mme_realm: [],
-        purge_flag: [],
-        ambr: {
-          downlink: { value: Number(downValue), unit: Number(downUnit) },
-          uplink: { value: Number(upValue), unit: Number(upUnit) },
-        },
-        slice: [
-          {
-            sst: sst,
-            sd: sd,
-            session: [
-              {
-                name: "internet",
-                type: 3,
-                ambr: {
-                  downlink: {
-                    value: 1,
-                    unit: 3,
-                  },
-                  uplink: {
-                    value: 1,
-                    unit: 3,
-                  },
+  const handleSubmitUpdate = () => {
+    console.log("submit edit");
+  
+    updateSubscriber({
+      imsi: imsi,
+      msisdn: msisdn,
+      imeisv: imeisv,
+      schema_version: 1,
+      security: {
+        k: subK,
+        // op:opType === "OP" ? opKey : null,
+        opc: opType === "OP" ? opKey : null,
+        amf: amf,
+      },
+      mme_host: [],
+      mme_realm: [],
+      purge_flag: [],
+      ambr: {
+        downlink: { value: +downValue, unit: +downUnit },
+        uplink: { value: +upValue, unit: +upUnit },
+      },
+      slice: [
+        {
+          sst: sst,
+          sd: sd,
+          default_indicator: true,
+          session: [
+            {
+              name: "internet",
+              type: 3,
+              ambr: {
+                downlink: {
+                  value: 1,
+                  unit: 3,
                 },
-                qos: {
-                  index: 9,
-                  arp: {
-                    priority_level: 8,
-                    pre_emption_capability: 1,
-                    pre_emption_vulnerability: 1,
-                  },
-                },
-                ue: {
-                  addr: "",
-                  addr6: "",
-                },
-                smf: {
-                  addr: "",
-                  addr6: "",
+                uplink: {
+                  value: 1,
+                  unit: 3,
                 },
               },
-            ],
-          },
-        ],
-      });
-      console.log("Data updated");
-      setEditOpened(false);
-    } catch (error) {
-      console.log("Failed to update the data!");
-    }
+              qos: {
+                index: 9,
+                arp: {
+                  priority_level: 8,
+                  pre_emption_capability: 1,
+                  pre_emption_vulnerability: 1,
+                },
+              },
+              ue: {
+                addr: "",
+                addr6: "",
+              },
+              smf: {
+                addr: "",
+                addr6: "",
+              },
+            },
+          ],
+        },
+      ],
+      access_restriction_data: 32,
+      subscriber_status: 0,
+      network_access_mode: 0,
+      subscribed_rau_tau_timer: 12,
+      __v: 0
+    });
   };
-
-  const form = useForm({
-    initialValues: {
-      imsi: "55",
-      msisdn: "",
-      subK: "",
-    },
-  });
   return (
     <>
       <ModalsProvider>
         <form onSubmit={handleSubmit}>
-          <Search
+          <StyledInput
+            icon={<IconSearch size="1.1rem" stroke={1.5} />}
+            radius="xl"
+            size="lg"
+            rightSection={
+              <ActionIcon
+                size={22}
+                radius="xl"
+                color={theme.primaryColor}
+                variant="filled"
+                maw={320}
+              >
+                {theme.dir === "ltr" ? (
+                  <IconArrowRight size="1.1rem" stroke={1.5} />
+                ) : (
+                  <IconArrowLeft size="1.1rem" stroke={1.5} />
+                )}
+              </ActionIcon>
+            }
+            placeholder="IMSI"
+            rightSectionWidth={22}
             value={value}
-            handleOnInput={handleOnInput}
-            handleKeyPress={handleKeyPress}
+            onChange={handleOnInput}
+            onKeyDown={handleKeyPress}
+            {...props}
           />
         </form>
         {isLoading && <div>Loading...</div>}
@@ -274,7 +356,86 @@ function IMSIInput() {
               classNames={{ body: "pt-0 pl-0" }}
               size="75%"
             >
-              <Detail searchedSubscriber={searchedSubscriber} />
+              <div className="h-[50px] bg-gray-100 text-[20px] pt-2">
+                <span className="p-6">IMSI: {Subscriber.imsi}</span>
+              </div>{" "}
+              <div className="mt-6 pl-3">
+                <h3 className="font-bold mb-3 text-[18px]">
+                  Subscriber Configuration
+                </h3>
+                <div className="grid grid-cols-2 gap-[200px]">
+                  <div className="col-span-1 text-[16px]">
+                    {/* <p>{Subscriber.imeisv}...</p> */}
+                    <p>
+                      {Subscriber.security.k}
+                      <span className="text-gray-400 text-[14px]">...K</span>
+                    </p>
+                    <p>
+                      {Subscriber.security.opc}
+                      <span className="text-gray-400 text-[14px]">...OPc</span>
+                    </p>
+                    <p>
+                      {Subscriber.security.amf}
+                      <span className="text-gray-400 text-[14px]">...AMF</span>
+                    </p>
+                    <p>
+                      {Subscriber.security.sqn}
+                      <span className="text-gray-400 text-[14px]">...SQN</span>
+                    </p>
+                  </div>
+                  <div className="col-span-1">
+                    <p>
+                      {Subscriber.ambr.downlink.value} Gbps
+                      <span className="text-gray-300 text-sm">...DL</span>
+                    </p>
+                    <span>{Subscriber.ambr.uplink.value} Gbps</span>
+                    <span className="text-gray-300 text-sm">...UL</span>
+                  </div>
+                </div>
+                <div className="mt-6">
+                  <h3 className="font-bold mb-3">SST:1 (Default S-NSSAI)</h3>
+
+                  <div className="grid grid-cols-8">
+                    <div className="col-span-1 text-gray-400 text-sm">
+                      DNN/APN
+                    </div>
+                    <div className="col-span-1 text-gray-400 text-sm">Type</div>
+                    <div className="col-span-1 text-gray-400 text-sm">
+                      5QI/QCI
+                    </div>
+                    <div className="col-span-1 text-gray-400 text-sm">ARP</div>
+                    <div className="col-span-1 text-gray-400 text-sm">
+                      Capability
+                    </div>
+                    <div className="col-span-1 text-gray-400 text-sm">
+                      Vulnerability
+                    </div>
+                    <div className="col-span-1 text-gray-400 text-sm">
+                      MBR DL/UL
+                    </div>
+                    <div className="col-span-1 text-gray-400 text-sm">
+                      GBR DL/UL
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-8 mt-3">
+                    <div className="col-span-1 text-sm">
+                      {Subscriber.slice[0].session[0].name}
+                    </div>
+                    <div className="col-span-1 text-sm">{sessionType()}</div>
+                    <div className="col-span-1 text-sm">
+                      {Subscriber.slice[0].session[0].qos.index}
+                    </div>
+                    <div className="col-span-1 text-sm">
+                      {Subscriber.slice[0].session[0].qos.arp.priority_level}
+                    </div>
+                    <div className="col-span-1 text-sm">{capabilityApr()}</div>
+                    <div className="col-span-1 text-sm">
+                      {vulnerabilitySST()}
+                    </div>
+                    <div className="col-span-1 text-sm">{}</div>
+                  </div>
+                </div>
+              </div>
             </Modal>
             <Group position="center">
               <Box
@@ -304,7 +465,7 @@ function IMSIInput() {
                 })}
               >
                 <div className="" onClick={open}>
-                  IMSI: {searchedSubscriber.imsi}
+                  IMSI: {Subscriber.imsi}
                 </div>
                 <div className="right-0 justify-center absolute grid grid-cols-2 w-16">
                   <div className="col-span-1">
@@ -316,17 +477,16 @@ function IMSIInput() {
                     >
                       <Box mx="auto" className="w-[800px]">
                         <form
-                          onSubmit={form.onSubmit(handleSubmitUpdate)}
+                          onSubmit={handleSubmitUpdate}
                           className="block relative"
                         >
                           <EditConfig
-                            searchedSubscriber={searchedSubscriber}
-                            // imsi={imsi}
-                            // handleImsi={handleImsi}
-                            subK={subK}
-                            setSubK={setSubK}
+                            searchedSubscriber={Subscriber}
+                            imsi={imsi}
                             msisdn={msisdn}
                             setMsisdn={setMsisdn}
+                            subK={subK}
+                            setSubK={setSubK}
                             opType={opType}
                             setOpType={setOpType}
                             opKey={opKey}
@@ -348,23 +508,39 @@ function IMSIInput() {
                             onClickAdd={handleOnAdd}
                             sst={sst}
                             handleSST={setSst}
-                            sd={sd}
+                            sd={Subscriber.slice[0].sd}
                             handleSD={handleSD}
                           />
                           <Session
                             hiddenSession={hiddenSession}
                             onClickDeleteSession={onClickDeleteSession}
                             onClickAddSession={onClickAddSession}
+                            type={type}
+                            setType={setType}
+                            qci={qci}
+                            setQci={setQci}
+                            arp={arp}
+                            setArp={setArp}
+                            capability={capability}
+                            setCapability={setCapability}
+                            vulnerability={vulnerability}
+                            setVulnerability={setVulnerability}
+                            ambrUplink={ambrUplink}
+                            setAmbrUplink={setAmbrUplink}
+                            ambrDownlink={ambrDownlink}
+                            setAmbrDownlink={setAmbrDownlink}
+                            ambrDownUnit={ambrDownUnit}
+                            setAmbrDownUnit={setAmbrDownUnit}
+                            ambrUpUnit={ambrUpUnit}
+                            setAmbrUpUnit={setAmbrUpUnit}
+              
                           />
-                          {searchedSubscriber.slice[0].session[0].pcc_rule !== undefined
-                            ? searchedSubscriber.slice[0].session[0].pcc_rule.map(
-                                (item: pccRules) => <PccRules item={item} />
-                              )
-                            : null}
+                          <PccRules />
 
                           <Button
                             className="font-bold bg-blue-500 absolute w-36 right-0 mt-6"
                             type="submit"
+                            onClick={() => setEditOpened(false)}
                           >
                             Save
                           </Button>
