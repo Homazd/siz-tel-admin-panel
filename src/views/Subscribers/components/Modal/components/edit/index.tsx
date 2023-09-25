@@ -119,6 +119,7 @@ function IMSIInput() {
       setDownValue(searchedSubscriber.ambr.downlink.value);
       setUpValue(searchedSubscriber.ambr.uplink.value);
       setUpUnit(upLinkUnit);
+      setSst(searchedSubscriber.slice[0].sst)
     }
     console.log("searchedSubscriber is:", searchedSubscriber);
   }, [searchedSubscriber]);

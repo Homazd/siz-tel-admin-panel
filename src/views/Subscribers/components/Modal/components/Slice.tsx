@@ -18,7 +18,7 @@ interface SlicePropsTypes {
   onClickAdd: () => void;
   sst: string;
   sd: string | undefined;
-  handleSST: (data: string) => void;
+  setSst: (data: string) => void;
   handleSD: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -30,7 +30,7 @@ const Slice: React.FC<SlicePropsTypes> = ({
   sst,
   sd,
   handleSD,
-  handleSST,
+  setSst,
 }) => {
   const [checked, setChecked] = useState(true);
 
@@ -42,12 +42,12 @@ const Slice: React.FC<SlicePropsTypes> = ({
       {!hiddenSlice ? (
         <div className="flex">
           <Radio.Group
-            name="SST"
+            name="sst"
             label="SST"
             required
             withAsterisk
             value={sst}
-            onChange={handleSST}
+            onChange={setSst}
           >
             <Group mt="xs">
               <Radio

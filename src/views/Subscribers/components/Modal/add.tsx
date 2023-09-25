@@ -160,68 +160,68 @@ function AddSubscriber() {
 
   const handleSubmit = () => {
     addSubscriber({
+      schema_version: 1,
       imsi: imsi,
       msisdn: msisdn,
       imeisv: imeisv,
-      schema_version: 1,
-      security: {
-        k: subK,
-        op: opType === "OP" ? opKey : null,
-        opc: opType === "OPc" ? opKey : null,
-        amf: amf,
-      },
       mme_host: [],
       mme_realm: [],
       purge_flag: [],
+      security: {
+        k: subK,
+        // op: opType === "OP" ? opKey : null,
+        opc: opType === "OPc" ? opKey : null,
+        amf: amf
+      },
       ambr: {
         downlink: { value: Number(downValue), unit: Number(downUnit) },
-        uplink: { value: Number(upValue), unit: Number(upUnit) },
+        uplink: { value: Number(upValue), unit: Number(upUnit) }
       },
       slice: [
         {
-          sst: sst,
+          sst: +sst,
           // sd: sd,
           default_indicator: true,
           session: [
             {
               name: "internet",
-              type: +type,
-              ambr: {
-                downlink: {
-                  value: +ambrDownlink,
-                  unit: +ambrDownUnit,
-                },
-                uplink: {
-                  value: +ambrUplink,
-                  unit: +ambrUpUnit,
-                },
-              },
+              type: +type,  
               qos: {
                 index: +qci,
                 arp: {
                   priority_level: +arp,
                   pre_emption_capability: +capability,
-                  pre_emption_vulnerability: +vulnerability,
+                  pre_emption_vulnerability: +vulnerability
+                }
+              },
+              ambr: {
+                downlink: {
+                  value: +ambrDownlink,
+                  unit: +ambrDownUnit
                 },
+                uplink: {
+                  value: +ambrUplink,
+                  unit: +ambrUpUnit
+                }
               },
-              ue: {
-                addr: ueIpv4,
-                addr6: ueIpv6,
-              },
-              smf: {
-                addr: smfIpv4,
-                addr6: smfIpv6,
-              },
-              pcc_rule: [],
-            },
-          ],
-        },
+              // ue: {
+              //   addr: ueIpv4,
+              //   addr6: ueIpv6,
+              // },
+              // smf: {
+              //   addr: smfIpv4,
+              //   addr6: smfIpv6,
+              // },
+              pcc_rule: []
+            }
+          ]
+        }
       ],
       access_restriction_data: 32,
       subscriber_status: 0,
       network_access_mode: 0,
       subscribed_rau_tau_timer: 12,
-      __v: 0,
+      __v: 0
     });
     close();
   };
@@ -275,7 +275,7 @@ function AddSubscriber() {
               onClickDelete={handleOnDelete}
               onClickAdd={handleOnAdd}
               sst={sst}
-              handleSST={setSst}
+              setSst={setSst}
               sd={sd}
               handleSD={handleSD}
             />
@@ -384,7 +384,7 @@ function AddSubscriber() {
                           // imsi={imsi}
                           // handleImsi={handleImsi}
                           subK={subK}
-                          setSubK={setSubK}
+                          setSubK={setSubk}
                           msisdn={msisdn}
                           setMsisdn={setMsisdn}
                           opType={opType}
@@ -416,11 +416,11 @@ function AddSubscriber() {
                           onClickDeleteSession={onClickDeleteSession}
                           onClickAddSession={onClickAddSession}
                         />
-                        {subscriber.slice[0].session[0].pcc_rule !== undefined
+                        {/* {subscriber.slice[0].session[0].pcc_rule !== undefined
                           ? subscriber.slice[0].session[0].pcc_rule.map(
                               (item: pccRules) => <PccRules item={item} />
                             )
-                          : null}
+                          : null} */}
 
                         <Button
                           className="font-bold bg-blue-500 absolute w-36 right-0 mt-6"

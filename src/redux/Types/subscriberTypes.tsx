@@ -28,7 +28,7 @@ export interface DataType {
   imeisv: string[];
 schema_version: number;
   security: {
-    op: string | null;
+    // op: string | null;
     opc: string | null;
     amf: string;
     k: string;
@@ -37,18 +37,26 @@ schema_version: number;
     downlink: { value: number; unit: number };
     uplink: { value: number; unit: number };
   };
-  mme_host: [];
-  mme_realm: [];
-  purge_flag: [];
+  mme_host: string[];
+  mme_realm: string[];
+  purge_flag: boolean[];
   slice: [
     {
-      sst: string;
+      sst: number;
       // sd: string;
       default_indicator: boolean;
       session: [
         {
           name: string;
           type: number;
+          qos: {
+            index: number;
+            arp: {
+              priority_level: number;
+              pre_emption_capability: number;
+              pre_emption_vulnerability: number;
+            };
+          };
           ambr: {
             downlink: {
               value: number;
@@ -59,22 +67,14 @@ schema_version: number;
               unit: number;
             };
           };
-          qos: {
-            index: number;
-            arp: {
-              priority_level: number;
-              pre_emption_capability: number;
-              pre_emption_vulnerability: number;
-            };
-          };
-          ue: {
-            addr: string;
-            addr6: string;
-          };
-          smf: {
-            addr: string;
-            addr6: string;
-          };
+          // ue: {
+          //   addr: string;
+          //   addr6: string;
+          // };
+          // smf: {
+          //   addr: string;
+          //   addr6: string;
+          // };
           pcc_rule?: [
             pccRules?,
             pccRules?,

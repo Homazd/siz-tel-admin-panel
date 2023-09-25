@@ -9,8 +9,8 @@ interface InputChildProps {
   searchedSubscriber: DataType;
   opKey: string;
   setOpKey: (data: string) => void;
-  msisdn: string;
-  setMsisdn: (data: string) => void;
+  msisdn: string[];
+  setMsisdn: (data: any) => void;
   amf: string;
   setAmf: (data: string) => void;
   opType: string;

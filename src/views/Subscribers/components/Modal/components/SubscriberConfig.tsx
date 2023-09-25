@@ -6,8 +6,8 @@ import { Button, Divider, Select, TextInput } from "@mantine/core";
 interface InputChildProps {
   imsi: string;
   setImsi: (data: string) => void;
-  msisdn: string;
-  setMsisdn: (data: string) => void;
+  msisdn: string[];
+  setMsisdn: (data: any) => void;
   subK: string;
   setSubk: (data: string) => void;
   opType: string;
