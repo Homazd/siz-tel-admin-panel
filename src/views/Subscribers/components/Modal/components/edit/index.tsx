@@ -19,7 +19,7 @@ import {
   useGetSubscribersQuery,
   useDeleteSubscriberMutation,
   useUpdateSubscriberMutation,
-} from "../../../../../../services/subscribers";
+} from "@/services/subscribers";
 import { ModalsProvider } from "@mantine/modals";
 // Styles
 import StyledInput from "./style";
@@ -27,10 +27,10 @@ import { FaPencilAlt } from "react-icons/fa";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { useDisclosure } from "@mantine/hooks";
 // Components
-import Slice from "../Slice";
 import Session from "../Session";
-import PccRules from "../PccRules";
+// import PccRules from "../PccRules";
 import EditConfig from "./components/Config";
+import EditSlice from "./components/EditSlice";
 
 function IMSIInput(props: TextInputProps) {
   const [value, setValue] = useState<string>("");
@@ -61,7 +61,7 @@ function IMSIInput(props: TextInputProps) {
   const [smfIpv4, setSmfIpv4] = useState("");
   const [smfIpv6, setSmfIpv6] = useState("");
   const [deleteSubscriber] = useDeleteSubscriberMutation();
-  const [updateSubscriber] = useUpdateSubscriberMutation();  
+  const [updateSubscriber] = useUpdateSubscriberMutation();
   // Session States
   const [type, setType] = useState("3");
   const [qci, setQci] = useState("");
@@ -72,8 +72,6 @@ function IMSIInput(props: TextInputProps) {
   const [ambrUplink, setAmbrUplink] = useState("");
   const [ambrDownUnit, setAmbrDownUnit] = useState("");
   const [ambrUpUnit, setAmbrUpUnit] = useState("");
-  
-
 
   // Validation
 
@@ -145,16 +143,11 @@ function IMSIInput(props: TextInputProps) {
       setDownValue(searchedSubscriber.ambr.downlink.value);
       setUpValue(searchedSubscriber.ambr.uplink.value);
       setUpUnit(upLinkUnit);
-      setSst(searchedSubscriber.slice[0].sst)
+      setSst(searchedSubscriber.slice[0].sst);
+      setSd(searchedSubscriber.slice[0].sd)
     }
     console.log("searchedSubscriber is:", searchedSubscriber);
-    
   }, [searchedSubscriber]);
-
-  const handleSD = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setSd(e.currentTarget.value);
-  };
 
   const handleOnDelete = () => {
     setHiddenSlice(true);
@@ -179,7 +172,7 @@ function IMSIInput(props: TextInputProps) {
   };
 
   const sessionType = () => {
-    const sessionItem = Subscriber.ambr.downlink.unit;
+    const sessionItem = searchedSubscriber.ambr.downlink.unit;
     switch (sessionItem) {
       case 1:
         return "IPv4";
@@ -194,7 +187,7 @@ function IMSIInput(props: TextInputProps) {
 
   const capabilityApr = () => {
     const aprCapability =
-      Subscriber.slice[0].session[0].qos.arp.pre_emption_capability;
+      searchedSubscriber.slice[0].session[0].qos.arp.pre_emption_capability;
     switch (aprCapability) {
       case 1:
         return "Disabled";
@@ -244,11 +237,11 @@ function IMSIInput(props: TextInputProps) {
     setEditOpened(true);
   };
   const handleDelete = () => {
-    deleteSubscriber(Subscriber.imsi);
+    deleteSubscriber(searchedSubscriber.imsi);
   };
   const handleSubmitUpdate = () => {
     console.log("submit edit");
-  
+
     updateSubscriber({
       imsi: imsi,
       msisdn: msisdn,
@@ -256,7 +249,7 @@ function IMSIInput(props: TextInputProps) {
       schema_version: 1,
       security: {
         k: subK,
-        // op:opType === "OP" ? opKey : null,
+        op:opType === "OP" ? opKey : null,
         opc: opType === "OP" ? opKey : null,
         amf: amf,
       },
@@ -269,8 +262,8 @@ function IMSIInput(props: TextInputProps) {
       },
       slice: [
         {
-          sst: sst,
-          sd: sd,
+          sst: +sst,
+          sd: sd ? sd : "",
           default_indicator: true,
           session: [
             {
@@ -294,14 +287,14 @@ function IMSIInput(props: TextInputProps) {
                   pre_emption_vulnerability: 1,
                 },
               },
-              ue: {
-                addr: "",
-                addr6: "",
-              },
-              smf: {
-                addr: "",
-                addr6: "",
-              },
+              // ue: {
+              //   addr: "",
+              //   addr6: "",
+              // },
+              // smf: {
+              //   addr: "",
+              //   addr6: "",
+              // },
             },
           ],
         },
@@ -310,7 +303,7 @@ function IMSIInput(props: TextInputProps) {
       subscriber_status: 0,
       network_access_mode: 0,
       subscribed_rau_tau_timer: 12,
-      __v: 0
+      __v: 0,
     });
   };
   return (
@@ -357,7 +350,7 @@ function IMSIInput(props: TextInputProps) {
               size="75%"
             >
               <div className="h-[50px] bg-gray-100 text-[20px] pt-2">
-                <span className="p-6">IMSI: {Subscriber.imsi}</span>
+                <span className="p-6">IMSI: {searchedSubscriber.imsi}</span>
               </div>{" "}
               <div className="mt-6 pl-3">
                 <h3 className="font-bold mb-3 text-[18px]">
@@ -367,28 +360,28 @@ function IMSIInput(props: TextInputProps) {
                   <div className="col-span-1 text-[16px]">
                     {/* <p>{Subscriber.imeisv}...</p> */}
                     <p>
-                      {Subscriber.security.k}
+                      {searchedSubscriber.security.k}
                       <span className="text-gray-400 text-[14px]">...K</span>
                     </p>
                     <p>
-                      {Subscriber.security.opc}
+                      {searchedSubscriber.security.opc}
                       <span className="text-gray-400 text-[14px]">...OPc</span>
                     </p>
                     <p>
-                      {Subscriber.security.amf}
+                      {searchedSubscriber.security.amf}
                       <span className="text-gray-400 text-[14px]">...AMF</span>
                     </p>
                     <p>
-                      {Subscriber.security.sqn}
+                      {searchedSubscriber.security.sqn}
                       <span className="text-gray-400 text-[14px]">...SQN</span>
                     </p>
                   </div>
                   <div className="col-span-1">
                     <p>
-                      {Subscriber.ambr.downlink.value} Gbps
+                      {searchedSubscriber.ambr.downlink.value} Gbps
                       <span className="text-gray-300 text-sm">...DL</span>
                     </p>
-                    <span>{Subscriber.ambr.uplink.value} Gbps</span>
+                    <span>{searchedSubscriber.ambr.uplink.value} Gbps</span>
                     <span className="text-gray-300 text-sm">...UL</span>
                   </div>
                 </div>
@@ -419,14 +412,17 @@ function IMSIInput(props: TextInputProps) {
                   </div>
                   <div className="grid grid-cols-8 mt-3">
                     <div className="col-span-1 text-sm">
-                      {Subscriber.slice[0].session[0].name}
+                      {searchedSubscriber.slice[0].session[0].name}
                     </div>
                     <div className="col-span-1 text-sm">{sessionType()}</div>
                     <div className="col-span-1 text-sm">
-                      {Subscriber.slice[0].session[0].qos.index}
+                      {searchedSubscriber.slice[0].session[0].qos.index}
                     </div>
                     <div className="col-span-1 text-sm">
-                      {Subscriber.slice[0].session[0].qos.arp.priority_level}
+                      {
+                        searchedSubscriber.slice[0].session[0].qos.arp
+                          .priority_level
+                      }
                     </div>
                     <div className="col-span-1 text-sm">{capabilityApr()}</div>
                     <div className="col-span-1 text-sm">
@@ -465,7 +461,7 @@ function IMSIInput(props: TextInputProps) {
                 })}
               >
                 <div className="" onClick={open}>
-                  IMSI: {Subscriber.imsi}
+                  IMSI: {searchedSubscriber.imsi}
                 </div>
                 <div className="right-0 justify-center absolute grid grid-cols-2 w-16">
                   <div className="col-span-1">
@@ -481,7 +477,7 @@ function IMSIInput(props: TextInputProps) {
                           className="block relative"
                         >
                           <EditConfig
-                            searchedSubscriber={Subscriber}
+                            searchedSubscriber={searchedSubscriber}
                             imsi={imsi}
                             msisdn={msisdn}
                             setMsisdn={setMsisdn}
@@ -502,14 +498,14 @@ function IMSIInput(props: TextInputProps) {
                             upUnit={upUnit}
                             setUpUnit={setUpUnit}
                           />
-                          <Slice
+                          <EditSlice
                             hiddenSlice={hiddenSlice}
                             onClickDelete={handleOnDelete}
                             onClickAdd={handleOnAdd}
                             sst={sst}
-                            handleSST={setSst}
-                            sd={Subscriber.slice[0].sd}
-                            handleSD={handleSD}
+                            setSst={setSst}
+                            sd={sd}
+                            setSd={setSd}
                           />
                           <Session
                             hiddenSession={hiddenSession}
@@ -533,9 +529,16 @@ function IMSIInput(props: TextInputProps) {
                             setAmbrDownUnit={setAmbrDownUnit}
                             ambrUpUnit={ambrUpUnit}
                             setAmbrUpUnit={setAmbrUpUnit}
-              
+                            ueIpv4={ueIpv4}
+                            setUeIpv4={setUeIpv4}
+                            ueIpv6={ueIpv6}
+                            setUeIpv6={setUeIpv6}
+                            smfIpv4={smfIpv4}
+                            setSmfIpv4={setSmfIpv4}
+                            smfIpv6={smfIpv6}
+                            setSmfIpv6={setSmfIpv6}
                           />
-                          <PccRules />
+                          {/* <PccRules /> */}
 
                           <Button
                             className="font-bold bg-blue-500 absolute w-36 right-0 mt-6"

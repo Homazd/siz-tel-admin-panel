@@ -31,9 +31,8 @@ export interface DataType {
   imeisv: string[];
 schema_version: number;
   security: {
-    // op: string | null;
-    // op: string | null;
-    opc: string | null;
+    op?: string | null;
+    opc?: string | null;
     amf: string;
     k: string;
   };
@@ -47,7 +46,7 @@ schema_version: number;
   slice: [
     {
       sst: number;
-      // sd: string;
+      sd?: string | null;
       default_indicator: boolean;
       session: [
         {

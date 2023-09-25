@@ -7,6 +7,7 @@ import { useForm } from "@mantine/form";
 // Services
 import {
   useAddSubscriberMutation,
+  useDeleteSubscriberMutation,
   useGetSubscribersQuery,
 } from "@/services/subscribers";
 // Mantine Components
@@ -32,7 +33,6 @@ function AddSubscriber() {
   const [hiddenSlice, setHiddenSlice] = useState(false);
   const [imsi, setImsi] = useState("");
   const [msisdn, setMsisdn] = useState([]);
-  const [imeisv, setImeisv] = useState([]);
   const [subK, setSubK] = useState("465B5CE8 B199B49F AA5F0A2E E238A6BC");
   const [opType, setOpType] = useState("OPc");
   const [opKey, setOpKey] = useState("E8ED289D EBA952E4 283B54E8 8E6183CA");
@@ -41,7 +41,6 @@ function AddSubscriber() {
   const [downUnit, setDownUnit] = useState("3");
   const [upValue, setUpValue] = useState("1");
   const [upUnit, setUpUnit] = useState("3");
-
   // Slice States
   const [sst, setSst] = useState("1");
   const [sd, setSd] = useState("");
@@ -80,6 +79,8 @@ function AddSubscriber() {
       },
     },
   ]);
+  const [deleteSubscriber] = useDeleteSubscriberMutation();
+
   const [isFetching, setIsFetching] = useState(false);
   const { data: subscriber } = useGetSubscribersQuery(imsi, {
     skip: isFetching,
@@ -139,7 +140,13 @@ function AddSubscriber() {
     setHiddenSlice(true);
     setHiddenSession(false);
   };
-
+  const handleDelete = () => {
+    deleteSubscriber(subscriber.imsi);
+  };
+  const handleOnDeleteModal = () => {
+    close();
+    setDeleteOpened(true);
+  };
   const handleOnAdd = () => {
     setHiddenSlice(false);
   };
@@ -165,52 +172,48 @@ function AddSubscriber() {
   const handleSubmit = () => {
     addSubscriber({
       schema_version: 1,
-      schema_version: 1,
       imsi: imsi,
       msisdn: msisdn,
-      imeisv: imeisv,
+      imeisv: [],
       mme_host: [],
       mme_realm: [],
       purge_flag: [],
       security: {
         k: subK,
-        // op: opType === "OP" ? opKey : null,
-        // op: opType === "OP" ? opKey : null,
+        op: opType === "OP" ? opKey : null,
         opc: opType === "OPc" ? opKey : null,
-        amf: amf
-        amf: amf
+        amf: amf,
       },
       ambr: {
         downlink: { value: Number(downValue), unit: Number(downUnit) },
-        uplink: { value: Number(upValue), unit: Number(upUnit) }
-        uplink: { value: Number(upValue), unit: Number(upUnit) }
+        uplink: { value: Number(upValue), unit: Number(upUnit) },
       },
       slice: [
         {
           sst: +sst,
-          // sd: sd,
+          sd: sd? sd : null,
           default_indicator: true,
           session: [
             {
               name: "internet",
-              type: +type,  
+              type: +type,
               qos: {
                 index: +qci,
                 arp: {
                   priority_level: +arp,
                   pre_emption_capability: +capability,
-                  pre_emption_vulnerability: +vulnerability
-                }
+                  pre_emption_vulnerability: +vulnerability,
+                },
               },
               ambr: {
                 downlink: {
                   value: +ambrDownlink,
-                  unit: +ambrDownUnit
+                  unit: +ambrDownUnit,
                 },
                 uplink: {
                   value: +ambrUplink,
-                  unit: +ambrUpUnit
-                }
+                  unit: +ambrUpUnit,
+                },
               },
               // ue: {
               //   addr: ueIpv4,
@@ -220,17 +223,16 @@ function AddSubscriber() {
               //   addr: smfIpv4,
               //   addr6: smfIpv6,
               // },
-              pcc_rule: []
-            }
-          ]
-        }
+              pcc_rule: [],
+            },
+          ],
+        },
       ],
       access_restriction_data: 32,
       subscriber_status: 0,
       network_access_mode: 0,
       subscribed_rau_tau_timer: 12,
-      __v: 0
-      __v: 0
+      __v: 0,
     });
     close();
   };
@@ -392,7 +394,7 @@ function AddSubscriber() {
                           searchedSubscriber={subscriber}
                           imsi={imsi}
                           subK={subK}
-                          setSubK={setSubk}
+                          setSubK={setSubK}
                           msisdn={msisdn}
                           setMsisdn={setMsisdn}
                           opType={opType}
@@ -415,7 +417,7 @@ function AddSubscriber() {
                           onClickDelete={handleOnDelete}
                           onClickAdd={handleOnAdd}
                           sst={sst}
-                          handleSST={setSst}
+                          setSst={setSst}
                           sd={sd}
                           handleSD={handleSD}
                         />
@@ -454,7 +456,6 @@ function AddSubscriber() {
                           ? subscriber.slice[0].session[0].pcc_rule.map(
                               (item: pccRules) => <PccRules item={item} />
                             )
-                          : null} */}
                           : null} */}
 
                         <Button

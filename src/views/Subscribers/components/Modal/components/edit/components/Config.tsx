@@ -100,7 +100,7 @@ const EditConfig: React.FC<InputChildProps> = ({
                         label: "static",
                       }}
                       className="w-[300px]"
-                      value={searchedSubscriber.msisdn[0]}
+                      value={msisdn}
                       onChange={(e) => setMsisdn(e.target.value)}
                     />
                   </>

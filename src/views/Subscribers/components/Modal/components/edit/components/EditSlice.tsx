@@ -10,31 +10,29 @@ import {
   List,
   TextInput,
 } from "@mantine/core";
-import { StyledCheckbox } from "./style/style.module";
+// Style
+import { StyledCheckbox } from "../../style/style.module";
 
 interface SlicePropsTypes {
   hiddenSlice: boolean;
   onClickDelete: () => void;
   onClickAdd: () => void;
   sst: string;
-  sd: string | undefined;
+  sd?: string;
   setSst: (data: string) => void;
-  handleSD: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  setSd: (data: string) => void;
 }
 
-
-const Slice: React.FC<SlicePropsTypes> = ({
+const EditSlice: React.FC<SlicePropsTypes> = ({
   hiddenSlice,
   onClickDelete,
   onClickAdd,
   sst,
   sd,
-  handleSD,
+  setSd,
   setSst,
-  
 }) => {
   const [checked, setChecked] = useState(true);
-
 
   return (
     <div className="mt-10">
@@ -47,7 +45,7 @@ const Slice: React.FC<SlicePropsTypes> = ({
             label="SST"
             required
             withAsterisk
-            value={sst}
+            value={String(sst)}
             onChange={setSst}
           >
             <Group mt="xs">
@@ -88,8 +86,7 @@ const Slice: React.FC<SlicePropsTypes> = ({
             label="SD"
             className="ml-6 w-[300px]"
             value={sd}
-            onChange={handleSD}
-            // onKeyDown={handleKeyPress}
+            onChange={(e) => setSd(e.currentTarget.value)}
           />
           {checked ? (
             <Checkbox
@@ -138,4 +135,4 @@ const Slice: React.FC<SlicePropsTypes> = ({
   );
 };
 
-export default Slice;
+export default EditSlice;
