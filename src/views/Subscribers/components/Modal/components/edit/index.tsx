@@ -73,6 +73,9 @@ function IMSIInput(props: TextInputProps) {
   const [ambrDownUnit, setAmbrDownUnit] = useState("");
   const [ambrUpUnit, setAmbrUpUnit] = useState("");
 
+  // PCC Rules
+  const [pcc, setPcc] = useState([]);
+
   // Validation
 
   const {
@@ -144,10 +147,12 @@ function IMSIInput(props: TextInputProps) {
       setUpValue(searchedSubscriber.ambr.uplink.value);
       setUpUnit(upLinkUnit);
       setSst(searchedSubscriber.slice[0].sst);
-      setSd(searchedSubscriber.slice[0].sd)
+      setSd(searchedSubscriber.slice[0].sd);
+      setPcc(searchedSubscriber.slice[0].session[0].pcc_rule)
     }
     console.log("searchedSubscriber is:", searchedSubscriber);
-  }, [searchedSubscriber]);
+    console.log("PCC Rule is:", pcc)
+  }, [searchedSubscriber, pcc]);
 
   const handleOnDelete = () => {
     setHiddenSlice(true);

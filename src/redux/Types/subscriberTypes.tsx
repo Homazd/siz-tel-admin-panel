@@ -2,11 +2,42 @@ export const FETCH_SUBSCRIBER_BEGIN = "FETCH_SUBSCRIBER_BEGIN";
 export const FETCH_SUBSCRIBER_SUCCESS = "FETCH_SUBSCRIBER_SUCCESS";
 export const FETCH_SUBSCRIBER_FAILURE = "FETCH_SUBSCRIBER_FAILURE";
 
+export interface Slice {
+  sst: number;
+  sd?: string | null;
+  default_indicator: boolean;
+  session: Session[];
+}
+
+interface Session {
+  name: string;
+  type: number;
+  qos: Qos;
+  ambr: Ambr;
+  pcc_rule?: pccRules;
+}
+
+interface Qos {
+  index: number;
+  arp: {
+    priority_level: number;
+    pre_emption_capability: number;
+    pre_emption_vulnerability: number;
+  };
+}
+
+interface Ambr {
+  downlink: {
+    value: number;
+    unit: number;
+  };
+  uplink: {
+    value: number;
+    unit: number;
+  };
+}
 export interface pccRules {
-  flow?: [
-    direction: number,
-    description: string,
-  ];
+  flow?: [direction: number, description: string];
   qos: {
     index: number;
     arp: {
@@ -29,7 +60,7 @@ export interface DataType {
   imsi: string;
   msisdn: string[];
   imeisv: string[];
-schema_version: number;
+  schema_version: number;
   security: {
     op?: string | null;
     opc?: string | null;
@@ -43,58 +74,10 @@ schema_version: number;
   mme_host: string[];
   mme_realm: string[];
   purge_flag: boolean[];
-  slice: [
-    {
-      sst: number;
-      sd?: string | null;
-      default_indicator: boolean;
-      session: [
-        {
-          name: string;
-          type: number;
-          qos: {
-            index: number;
-            arp: {
-              priority_level: number;
-              pre_emption_capability: number;
-              pre_emption_vulnerability: number;
-            };
-          };
-          ambr: {
-            downlink: {
-              value: number;
-              unit: number;
-            };
-            uplink: {
-              value: number;
-              unit: number;
-            };
-          };
-          // ue: {
-          //   addr: string;
-          //   addr6: string;
-          // };
-          // smf: {
-          //   addr: string;
-          //   addr6: string;
-          // };
-          pcc_rule?: [
-            pccRules?,
-            pccRules?,
-            pccRules?,
-            pccRules?,
-            pccRules?,
-            pccRules?,
-            pccRules?,
-            pccRules?
-          ];
-        }
-      ];
-    }
-  ];
+  slice: Slice[];
   access_restriction_data: number;
-      subscriber_status: number;
-      network_access_mode: number;
-      subscribed_rau_tau_timer: number;
-      __v: number;
+  subscriber_status: number;
+  network_access_mode: number;
+  subscribed_rau_tau_timer: number;
+  __v: number;
 }

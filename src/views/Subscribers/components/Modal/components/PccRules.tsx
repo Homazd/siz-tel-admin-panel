@@ -308,6 +308,19 @@ const PccRules: React.FC<PccProps> = ({ inputs, onInputChange }) => {
                         value: num.toString(),
                         label: num.toString(),
                       }))}
+                      value={String(input.qos.arp.priority_level)}
+                      onChange={(value) =>
+                        onInputChange(indexItem, {
+                          ...input,
+                          qos: {
+                            ...input.qos,
+                            arp: {
+                              ...input.qos.arp,
+                              priority_level: value !== null ? +value :2,
+                            },
+                          },
+                        })
+                      }
                     />
 
                     <div className="flex">
@@ -320,8 +333,8 @@ const PccRules: React.FC<PccProps> = ({ inputs, onInputChange }) => {
                         required
                         clearable
                         data={[
-                          { value: "Disabled", label: "Disabled" },
-                          { value: "Enabeled", label: "Enabled" },
+                          { value: "1", label: "Disabled" },
+                          { value: "2", label: "Enabled" },
                         ]}
                       />
                       <Select
