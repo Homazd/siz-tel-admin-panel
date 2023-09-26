@@ -16,12 +16,12 @@ import { Modal, Button, Group, ModalProps, Box, Text } from "@mantine/core";
 // Components
 import SubscriberConfig from "./components/SubscriberConfig";
 import Slice from "./components/Slice";
-import Session from "./components/Session";
 import PccRules from "./components/PccRules";
 import Detail from "./components/edit/components/Detail";
 import EditConfig from "./components/edit/components/Config";
+import Session from "./components/Session";
 // Types
-import { pccRules } from "@/redux/Types/subscriberTypes";
+import { DataType, SessionType, SliceType, pccRules } from "@/redux/Types/subscriberTypes";
 // Icons
 import { FaPencilAlt } from "react-icons/fa";
 import { RiDeleteBinLine } from "react-icons/ri";
@@ -80,16 +80,98 @@ function AddSubscriber() {
       },
     },
   ]);
+  const [sliceInputs, setSliceInputs] = useState<SliceType>({
+    sst: 1,
+    sd: "",
+    default_indicator: true,
+    session: [{
+      name: "Internet",
+      type: 1,
+      qos: {
+        index: 1,
+        arp:{
+          priority_level: 1,
+    pre_emption_capability: 1,
+    pre_emption_vulnerability: 1,
+        },
+      },
+      ambr: {
+        downlink: {
+          value: 1,
+          unit: 1
+        },
+        uplink: {
+          value: 1,
+          unit: 1,
+        },
+      }
+    }],
+  })
+
+  const [addSlice, setAddSlice] = useState(false);
+  const [newSlice, setNewSlice] = useState({
+    sst: +sst,
+    sd: sd ? sd : null,
+    default_indicator: true,
+    session: [
+      {
+        name: "internet",
+        type: +type,
+        qos: {
+          index: +qci,
+          arp: {
+            priority_level: +arp,
+            pre_emption_capability: +capability,
+            pre_emption_vulnerability: +vulnerability,
+          },
+        },
+        ambr: {
+          downlink: {
+            value: +ambrDownlink,
+            unit: +ambrDownUnit,
+          },
+          uplink: {
+            value: +ambrUplink,
+            unit: +ambrUpUnit,
+          },
+        },
+        // ue: {
+        //   addr: ueIpv4,
+        //   addr6: ueIpv6,
+        // },
+        // smf: {
+        //   addr: smfIpv4,
+        //   addr6: smfIpv6,
+        // },
+        pcc_rule: {
+          qos: {
+            index: 1,
+            arp: {
+              priority_level: 1,
+              pre_emption_capability: 1,
+              pre_emption_vulnerability: 1,
+            },
+            gbr: {
+              downlink: { value: 1, unit: 1 },
+              uplink: { value: 1, unit: 1 },
+            },
+            mbr: {
+              downlink: { value: 1, unit: 1 },
+              uplink: { value: 1, unit: 1 },
+            },
+          },
+        },
+      },
+    ],
+  });
   const [deleteSubscriber] = useDeleteSubscriberMutation();
 
   const [isFetching, setIsFetching] = useState(false);
   const { data: subscriber } = useGetSubscribersQuery(imsi, {
     skip: isFetching,
   });
-  const [
-    getSubscriberAfterPost,
-    { data: addedSubscriber },
-  ] = useLazyGetSubscribersQuery();
+  const [getSubscriberAfterPost, { data: addedSubscriber }] =
+    useLazyGetSubscribersQuery();
 
   const handleInputChange = (index: number, inputData: pccRules) => {
     setInputs((prevInputs) => {
@@ -172,71 +254,89 @@ function AddSubscriber() {
     setIsFetching(true);
   }, [subscriber, isFetching, imsi]);
 
-  const handleSubmit = async () => {
-    await addSubscriber({
-      schema_version: 1,
-      imsi: imsi,
-      msisdn: msisdn,
-      imeisv: [],
-      mme_host: [],
-      mme_realm: [],
-      purge_flag: [],
-      security: {
-        k: subK,
-        op: opType === "OP" ? opKey : null,
-        opc: opType === "OPc" ? opKey : null,
-        amf: amf,
-      },
-      ambr: {
-        downlink: { value: Number(downValue), unit: Number(downUnit) },
-        uplink: { value: Number(upValue), unit: Number(upUnit) },
-      },
-      slice: [
-        {
-          sst: +sst,
-          sd: sd ? sd : null,
-          default_indicator: true,
-          session: [
-            {
-              name: "internet",
-              type: +type,
-              qos: {
-                index: +qci,
-                arp: {
-                  priority_level: +arp,
-                  pre_emption_capability: +capability,
-                  pre_emption_vulnerability: +vulnerability,
-                },
+  const addingSubscriber = {
+    schema_version: 1,
+    imsi: imsi,
+    msisdn: msisdn,
+    imeisv: [],
+    mme_host: [],
+    mme_realm: [],
+    purge_flag: [],
+    security: {
+      k: subK,
+      op: opType === "OP" ? opKey : null,
+      opc: opType === "OPc" ? opKey : null,
+      amf: amf,
+    },
+    ambr: {
+      downlink: { value: Number(downValue), unit: Number(downUnit) },
+      uplink: { value: Number(upValue), unit: Number(upUnit) },
+    },
+    slice: [
+      {
+        sst: +sst,
+        sd: sd ? sd : null,
+        default_indicator: true,
+        session: [
+          {
+            name: "internet",
+            type: +type,
+            qos: {
+              index: +qci,
+              arp: {
+                priority_level: +arp,
+                pre_emption_capability: +capability,
+                pre_emption_vulnerability: +vulnerability,
               },
-              ambr: {
-                downlink: {
-                  value: +ambrDownlink,
-                  unit: +ambrDownUnit,
-                },
-                uplink: {
-                  value: +ambrUplink,
-                  unit: +ambrUpUnit,
-                },
-              },
-              // ue: {
-              //   addr: ueIpv4,
-              //   addr6: ueIpv6,
-              // },
-              // smf: {
-              //   addr: smfIpv4,
-              //   addr6: smfIpv6,
-              // },
-              pcc_rule: [],
             },
-          ],
-        },
-      ],
-      access_restriction_data: 32,
-      subscriber_status: 0,
-      network_access_mode: 0,
-      subscribed_rau_tau_timer: 12,
-      __v: 0,
-    }).unwrap();
+            ambr: {
+              downlink: {
+                value: +ambrDownlink,
+                unit: +ambrDownUnit,
+              },
+              uplink: {
+                value: +ambrUplink,
+                unit: +ambrUpUnit,
+              },
+            },
+            // ue: {
+            //   addr: ueIpv4,
+            //   addr6: ueIpv6,
+            // },
+            // smf: {
+            //   addr: smfIpv4,
+            //   addr6: smfIpv6,
+            // },
+            pcc_rule: {
+              qos: {
+                index: 1,
+                arp: {
+                  priority_level: 1,
+                  pre_emption_capability: 1,
+                  pre_emption_vulnerability: 1,
+                },
+                gbr: {
+                  downlink: { value: 1, unit: 1 },
+                  uplink: { value: 1, unit: 1 },
+                },
+                mbr: {
+                  downlink: { value: 1, unit: 1 },
+                  uplink: { value: 1, unit: 1 },
+                },
+              },
+            },
+          },
+        ],
+      },
+    ],
+    access_restriction_data: 32,
+    subscriber_status: 0,
+    network_access_mode: 0,
+    subscribed_rau_tau_timer: 12,
+    __v: 0,
+  };
+  const handleSubmit = async () => {
+    await addSubscriber(addingSubscriber).unwrap();
     console.log("imsi is:", imsi);
     getSubscriberAfterPost(imsi);
     console.log("subscriber is:", addedSubscriber);
@@ -249,6 +349,18 @@ function AddSubscriber() {
       subK: "",
     },
   });
+
+  function addSliceArray(addingSubscriber: DataType, newSlice: SliceType) {
+    if (addingSubscriber.slice.length < 9) {
+      addingSubscriber.slice.push(newSlice);
+      setAddSlice(true);
+      console.log("adding Subscriber is:", addingSubscriber);
+
+      console.log("addSlice", addSlice);
+    } else {
+      throw new Error("Cannot add more than 8 slices");
+    }
+  }
 
   return (
     <>
@@ -286,6 +398,59 @@ function AddSubscriber() {
               upUnit={upUnit}
               setUpUnit={setUpUnit}
             />
+            <>
+              {addingSubscriber.slice.map((item: SliceType) => {
+                <>
+                  <Slice
+                    hiddenSlice={hiddenSlice}
+                    onClickDelete={handleOnDelete}
+                    onClickAdd={handleOnAdd}
+                    sst={String(item.sst)}
+                    setSst={setSst}
+                    sd={String(item.sd)}
+                    handleSD={handleSD}
+                  />
+
+                  <Session
+                    hiddenSession={hiddenSession}
+                    onClickDeleteSession={onClickDeleteSession}
+                    onClickAddSession={onClickAddSession}
+                    type={type}
+                    setType={setType}
+                    qci={qci}
+                    setQci={setQci}
+                    arp={arp}
+                    setArp={setArp}
+                    capability={capability}
+                    setCapability={setCapability}
+                    vulnerability={vulnerability}
+                    setVulnerability={setVulnerability}
+                    ambrUplink={ambrUplink}
+                    setAmbrUplink={setAmbrUplink}
+                    ambrDownlink={ambrDownlink}
+                    setAmbrDownlink={setAmbrDownlink}
+                    ambrDownUnit={ambrDownUnit}
+                    setAmbrDownUnit={setAmbrDownUnit}
+                    ambrUpUnit={ambrUpUnit}
+                    setAmbrUpUnit={setAmbrUpUnit}
+                    ueIpv4={ueIpv4}
+                    setUeIpv4={setUeIpv4}
+                    ueIpv6={ueIpv6}
+                    setUeIpv6={setUeIpv6}
+                    smfIpv4={smfIpv4}
+                    setSmfIpv4={setSmfIpv4}
+                    smfIpv6={smfIpv6}
+                    setSmfIpv6={setSmfIpv6}
+                  />
+                  {hiddenSession && (
+                    <PccRules
+                      inputs={inputs}
+                      onInputChange={handleInputChange}
+                    />
+                  )}
+                </>;
+              })}
+            </>
 
             <Slice
               hiddenSlice={hiddenSlice}
@@ -296,6 +461,7 @@ function AddSubscriber() {
               sd={sd}
               handleSD={handleSD}
             />
+
             <Session
               hiddenSession={hiddenSession}
               onClickDeleteSession={onClickDeleteSession}
@@ -327,7 +493,75 @@ function AddSubscriber() {
               smfIpv6={smfIpv6}
               setSmfIpv6={setSmfIpv6}
             />
-            <PccRules inputs={inputs} onInputChange={handleInputChange} />
+            {hiddenSession && (
+              <PccRules inputs={inputs} onInputChange={handleInputChange} />
+            )}
+            <p className="text-center ml-[300px] mt-6">
+              <Button className="bg-sky-500 text-white font-semibold w-28">
+                +
+              </Button>
+            </p>
+
+            <p className="text-center ml-[600px] mt-6">
+              <Button
+                className="bg-sky-500 text-white font-semibold w-28"
+                onClick={() => addSliceArray(addingSubscriber, newSlice)}
+              >
+                add slice
+              </Button>
+            </p>
+            {/* {addSlice && (
+              <>
+                <Session
+                  hiddenSession={hiddenSession}
+                  onClickDeleteSession={onClickDeleteSession}
+                  onClickAddSession={onClickAddSession}
+                  type={type}
+                  setType={setType}
+                  qci={qci}
+                  setQci={setQci}
+                  arp={arp}
+                  setArp={setArp}
+                  capability={capability}
+                  setCapability={setCapability}
+                  vulnerability={vulnerability}
+                  setVulnerability={setVulnerability}
+                  ambrUplink={ambrUplink}
+                  setAmbrUplink={setAmbrUplink}
+                  ambrDownlink={ambrDownlink}
+                  setAmbrDownlink={setAmbrDownlink}
+                  ambrDownUnit={ambrDownUnit}
+                  setAmbrDownUnit={setAmbrDownUnit}
+                  ambrUpUnit={ambrUpUnit}
+                  setAmbrUpUnit={setAmbrUpUnit}
+                  ueIpv4={ueIpv4}
+                  setUeIpv4={setUeIpv4}
+                  ueIpv6={ueIpv6}
+                  setUeIpv6={setUeIpv6}
+                  smfIpv4={smfIpv4}
+                  setSmfIpv4={setSmfIpv4}
+                  smfIpv6={smfIpv6}
+                  setSmfIpv6={setSmfIpv6}
+                />
+                {hiddenSession && (
+                  <PccRules inputs={inputs} onInputChange={handleInputChange} />
+                )}
+              </>
+            )} */}
+            {/* <p className="text-center ml-[300px] mt-6">
+              <Button className="bg-sky-500 text-white font-semibold w-28">
+                +
+              </Button>
+            </p>
+
+            <p className="text-center ml-[600px] mt-6">
+              <Button
+                className="bg-sky-500 text-white font-semibold w-28"
+                onClick={() => addSliceArray(addingSubscriber, newSlice)}
+              >
+                add slice
+              </Button>
+            </p> */}
 
             <Button className="font-bold bg-blue-500 mt-3" type="submit">
               Submit

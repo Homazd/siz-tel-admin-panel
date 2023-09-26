@@ -469,12 +469,8 @@ const PccRules: React.FC<PccProps> = ({ inputs, onInputChange }) => {
         </p>
       )}
 
-      <p className="text-center ml-[300px] mt-6">
-        <Button className="bg-sky-500 text-white font-semibold w-28">+</Button>
-      </p>
-      <p className="text-center ml-[600px] mt-6">
-        <Button className="bg-sky-500 text-white font-semibold w-28">+</Button>
-      </p>
+     
+     
     </div>
   );
 };

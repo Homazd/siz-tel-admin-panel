@@ -2,14 +2,14 @@ export const FETCH_SUBSCRIBER_BEGIN = "FETCH_SUBSCRIBER_BEGIN";
 export const FETCH_SUBSCRIBER_SUCCESS = "FETCH_SUBSCRIBER_SUCCESS";
 export const FETCH_SUBSCRIBER_FAILURE = "FETCH_SUBSCRIBER_FAILURE";
 
-export interface Slice {
+export interface SliceType {
   sst: number;
   sd?: string | null;
   default_indicator: boolean;
-  session: Session[];
+  session: SessionType[];
 }
 
-interface Session {
+export interface SessionType {
   name: string;
   type: number;
   qos: Qos;
