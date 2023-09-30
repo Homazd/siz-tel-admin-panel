@@ -44,7 +44,7 @@ export interface DataType {
   slice: [
     {
       sst: number;
-      sd: string;
+      sd?: string;
       default_indicator: boolean;
       session: [
         {

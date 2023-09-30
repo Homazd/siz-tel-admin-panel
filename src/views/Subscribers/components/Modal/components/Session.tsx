@@ -67,6 +67,7 @@ const Session: React.FC<SessionProps> = ({
   smfIpv4,
   smfIpv6,
 }) => {
+  const apn = localStorage.getItem("apn");
   return (
     <div>
       {hiddenSession ? (
@@ -82,9 +83,9 @@ const Session: React.FC<SessionProps> = ({
                   }}
                   label="DNN/APN"
                   required
-                  defaultValue="Internet"
-                  placeholder="Internet"
+                  disabled
                   className="w-[300px]"
+                  defaultValue={apn ? apn : ""}
                 />
                 <Select
                   label="Type"

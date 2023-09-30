@@ -21,7 +21,10 @@ import Detail from "./components/edit/components/Detail";
 import EditConfig from "./components/edit/components/Config";
 import Session from "./components/Session";
 // Types
-import { DataType, SessionType, SliceType, pccRules } from "@/redux/Types/subscriberTypes";
+import {
+  DataType,
+  pccRules,
+} from "@/redux/Types/subscriberTypes";
 // Icons
 import { FaPencilAlt } from "react-icons/fa";
 import { RiDeleteBinLine } from "react-icons/ri";
@@ -80,33 +83,35 @@ function AddSubscriber() {
       },
     },
   ]);
-  const [sliceInputs, setSliceInputs] = useState<SliceType>({
-    sst: 1,
-    sd: "",
-    default_indicator: true,
-    session: [{
-      name: "Internet",
-      type: 1,
-      qos: {
-        index: 1,
-        arp:{
-          priority_level: 1,
-    pre_emption_capability: 1,
-    pre_emption_vulnerability: 1,
-        },
-      },
-      ambr: {
-        downlink: {
-          value: 1,
-          unit: 1
-        },
-        uplink: {
-          value: 1,
-          unit: 1,
-        },
-      }
-    }],
-  })
+  // const [sliceInputs, setSliceInputs] = useState<SliceType>({
+  //   sst: 1,
+  //   sd: "",
+  //   default_indicator: true,
+  //   session: [
+  //     {
+  //       name: "Internet",
+  //       type: 1,
+  //       qos: {
+  //         index: 1,
+  //         arp: {
+  //           priority_level: 1,
+  //           pre_emption_capability: 1,
+  //           pre_emption_vulnerability: 1,
+  //         },
+  //       },
+  //       ambr: {
+  //         downlink: {
+  //           value: 1,
+  //           unit: 1,
+  //         },
+  //         uplink: {
+  //           value: 1,
+  //           unit: 1,
+  //         },
+  //       },
+  //     },
+  //   ],
+  // });
 
   const [addSlice, setAddSlice] = useState(false);
   const [newSlice, setNewSlice] = useState({
@@ -165,6 +170,10 @@ function AddSubscriber() {
     ],
   });
   const [deleteSubscriber] = useDeleteSubscriberMutation();
+  const apn = localStorage.getItem("apn");
+  useEffect(() => {
+    console.log("apn", apn);
+  }, [apn]);
 
   const [isFetching, setIsFetching] = useState(false);
   const { data: subscriber } = useGetSubscribersQuery(imsi, {
@@ -275,11 +284,11 @@ function AddSubscriber() {
     slice: [
       {
         sst: +sst,
-        sd: sd ? sd : null,
+        sd: sd,
         default_indicator: true,
         session: [
           {
-            name: "internet",
+            name: apn,
             type: +type,
             qos: {
               index: +qci,

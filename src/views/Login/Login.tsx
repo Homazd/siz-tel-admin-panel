@@ -3,17 +3,10 @@ import axios from "axios";
 // Hooks
 import { Navigate } from "react-router-dom";
 // Mantine Components
-import {
-  Paper,
-  TextInput,
-  PasswordInput,
-  Checkbox,
-  Button,
-  Title,
-} from "@mantine/core";
+import { Paper, TextInput, PasswordInput, Button, Title } from "@mantine/core";
 import backImage from "../../images/5g-login.jpeg";
 // Styles
-import { labelStyles, checkboxLabelStyle } from "./style.module";
+import { labelStyles, toggleStyles, inputStyles } from "./style.module";
 
 interface Credentials {
   username: string;
@@ -55,6 +48,7 @@ export default function LoginPage() {
       console.log("resonse.data is:", response.data);
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("access_token", response.data.access_token);
+      localStorage.setItem("apn", response.data.apn);
       setLoggedIn(true);
       alert("شما با موفقیت وارد شدید.");
     } catch (error) {
@@ -86,7 +80,6 @@ export default function LoginPage() {
               <TextInput
                 name="username"
                 label="نام کاربری"
-                placeholder="hello@gmail.com"
                 size="md"
                 onChange={handleInputChange}
                 styles={{
@@ -96,13 +89,13 @@ export default function LoginPage() {
               <PasswordInput
                 name="password"
                 label="رمز عبور"
-                placeholder="رمز عبور"
                 mt="md"
                 size="md"
                 onChange={handleInputChange}
                 styles={{
                   label: labelStyles,
-                 
+                  rightSection: toggleStyles,
+                  input: inputStyles,
                 }}
               />
               {/* <Checkbox
