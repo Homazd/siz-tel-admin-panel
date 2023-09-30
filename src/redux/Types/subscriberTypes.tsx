@@ -46,7 +46,7 @@ schema_version: number;
   slice: [
     {
       sst: number;
-      sd?: string | null;
+      sd: string;
       default_indicator: boolean;
       session: [
         {

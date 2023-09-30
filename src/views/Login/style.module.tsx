@@ -2,11 +2,12 @@ import { CSSObject } from "@mantine/styles";
 
 export const labelStyles: CSSObject = {
   display: "block",
-  color: "text-gray-700",
+  color: "white",
   fontWeight: "bold",
   marginBottom: "0.5rem",
   width: "100%",
   position: "static",
+  direction: "rtl"
 };
 
 export const checkboxLabelStyle: CSSObject = {

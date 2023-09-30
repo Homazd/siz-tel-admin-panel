@@ -11,7 +11,7 @@ import {
   Button,
   Title,
 } from "@mantine/core";
-import backImage from "../../images/background-admin.png";
+import backImage from "../../images/5g-login.jpeg";
 // Styles
 import { labelStyles, checkboxLabelStyle } from "./style.module";
 
@@ -53,15 +53,13 @@ export default function LoginPage() {
         }
       );
       console.log("resonse.data is:", response.data);
-      // const { access_token } = response.data;
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("access_token", response.data.access_token);
-      // localStorage.setItem("username", credentials.username);
       setLoggedIn(true);
-
-      // Handle successful login
+      alert("شما با موفقیت وارد شدید.");
     } catch (error) {
       console.error("error is", error);
+      alert("ورود ناموفق");
     }
   };
 
@@ -73,21 +71,21 @@ export default function LoginPage() {
         className="bg-cover min-h-full"
         style={{ backgroundImage: `url(${backImage})` }}
       >
-        <Paper className="p-[30px] rounded-none max-w-md min-h-screen">
+        <Paper className="p-[30px] rounded-none max-w-md min-h-screen bg-sky-800">
           <form onSubmit={handleSubmit} className="grid grid-cols-1">
             <div className="">
               <Title
                 order={2}
-                className="text-3xl font-bold text-center block"
+                className="text-2xl font-bold text-center block text-sky-100"
                 ta="center"
                 mt="md"
                 mb={50}
               >
-                Welcome back!
+                سامانه مدیریت سیمکارت
               </Title>
               <TextInput
                 name="username"
-                label="username address"
+                label="نام کاربری"
                 placeholder="hello@gmail.com"
                 size="md"
                 onChange={handleInputChange}
@@ -97,27 +95,28 @@ export default function LoginPage() {
               />
               <PasswordInput
                 name="password"
-                label="Password"
-                placeholder="Your password"
+                label="رمز عبور"
+                placeholder="رمز عبور"
                 mt="md"
                 size="md"
                 onChange={handleInputChange}
                 styles={{
                   label: labelStyles,
+                 
                 }}
               />
-              <Checkbox
+              {/* <Checkbox
                 label="Keep me logged in"
                 mt="xl"
                 size="md"
                 styles={{
                   label: checkboxLabelStyle,
                 }}
-              />
+              /> */}
             </div>
             <Button
               type="submit"
-              className="w-full mt-14 bg-blue-600"
+              className="w-full mt-14 bg-sky-600"
               size="md"
               onClick={() => console.log(credentials)}
             >

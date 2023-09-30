@@ -18,7 +18,7 @@ interface SlicePropsTypes {
   onClickDelete: () => void;
   onClickAdd: () => void;
   sst: string;
-  sd?: string;
+  sd: string;
   setSst: (data: string) => void;
   setSd: (data: string) => void;
 }
