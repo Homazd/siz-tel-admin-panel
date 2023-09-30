@@ -2,11 +2,9 @@ export const FETCH_SUBSCRIBER_BEGIN = "FETCH_SUBSCRIBER_BEGIN";
 export const FETCH_SUBSCRIBER_SUCCESS = "FETCH_SUBSCRIBER_SUCCESS";
 export const FETCH_SUBSCRIBER_FAILURE = "FETCH_SUBSCRIBER_FAILURE";
 
+
 export interface pccRules {
-  flow?: [
-    direction: number,
-    description: string,
-  ];
+  flow?: [direction: number, description: string];
   qos: {
     index: number;
     arp: {
@@ -29,7 +27,7 @@ export interface DataType {
   imsi: string;
   msisdn: string[];
   imeisv: string[];
-schema_version: number;
+  schema_version: number;
   security: {
     op?: string | null;
     opc?: string | null;
@@ -93,8 +91,8 @@ schema_version: number;
     }
   ];
   access_restriction_data: number;
-      subscriber_status: number;
-      network_access_mode: number;
-      subscribed_rau_tau_timer: number;
-      __v: number;
+  subscriber_status: number;
+  network_access_mode: number;
+  subscribed_rau_tau_timer: number;
+  __v: number;
 }

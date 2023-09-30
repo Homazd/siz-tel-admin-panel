@@ -64,4 +64,5 @@ export const {
   useAddSubscriberMutation,
   useUpdateSubscriberMutation,
   useDeleteSubscriberMutation,
+  useLazyGetSubscribersQuery
 } = subscriberApi;
