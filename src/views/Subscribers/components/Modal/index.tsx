@@ -13,22 +13,21 @@ import SubscriberConfig from "./components/SubscriberConfig";
 import Slice from "./components/Slice";
 import Session from "./components/Session";
 import PccRules from "./components/PccRules";
-import { op_value } from "../../Types/subscriberTypes";
 
 function SubscriberModal() {
   const [opened, { open, close }] = useDisclosure(false);
   const [hiddenSession, setHiddenSession] = useState(true);
   const [hiddenSlice, setHiddenSlice] = useState(false);
   const [imsi, setImsi] = useState("");
-  const [subK, setSubk] = useState("");
-  const [opType, setOpType] = useState<op_value | null>(0);
+  const [msisdn, setMsisdn] = useState([]);
+  const [subK, setSubK] = useState("");
+  const [opType, setOpType] = useState("OP");
   const [opKey, setOpKey] = useState("");
   const [amf, setAmf] = useState("");
-  const [downValue, setDownValue] = useState(1);
-  const [downUnit, setDownUnit] = useState<number>(3);
-  const [upValue, setUpValue] = useState(1);
-  const [upUnit, setUpUnit] = useState<number>(3);
-  const [usimType, setUsimType] = useState(0);
+  const [downValue, setDownValue] = useState("1");
+  const [downUnit, setDownUnit] = useState("3");
+  const [upValue, setUpValue] = useState("1");
+  const [upUnit, setUpUnit] = useState("3");
 
   // Slice States
   const [sst, setSst] = useState("1");
@@ -40,56 +39,7 @@ function SubscriberModal() {
 
   const [addSubscriber] = useAddSubscriberMutation();
 
-  const handleImsi = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setImsi(e.currentTarget.value);
 
-    if (imsi.length > 15 || !/^\d+$/.test(imsi)) {
-      setError(
-        "Only digits are allowed and lenght must be less than 15 numbers."
-      );
-      console.log(error);
-      error;
-    } else {
-      setError("");
-    }
-  };
-
-  const handleSubk = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setSubk(e.currentTarget.value);
-  
-  };
-  const handleOpType = (e: op_value) => {
-    console.log("opKey is:", e);
-
-    (e: op_value) => setOpType(e);
-  };
-  const handleOpKey = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setOpKey(e.currentTarget.value);
-  };
-  const handleAmf = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setAmf(e.currentTarget.value);
-  };
-
-  const handleDownValue = (e: any) => {
-    e.preventDefault();
-    console.log("DownValue", e.currentTarget.value);
-
-    setDownValue(Number(e.currentTarget.value));
-  };
-
-  const handleUpValue = (e: any) => {
-    e.preventDefault();
-    setUpValue(e.currentTarget.value);
-  };
-
-  const handleSD = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setSd(e.currentTarget.value);
-  };
 
   const handleOnDelete = () => {
     setHiddenSlice(true);
@@ -114,30 +64,35 @@ function SubscriberModal() {
   };
 
   const handleSubmit = () => {
-    // const { imsi } = form.values;
+
     console.log("imsi is:", imsi);
     if (error) {
       console.log(error);
     } else {
       addSubscriber({
+        schema_version: 1,
         imsi: imsi,
+        msisdn: msisdn,
+        imeisv: [],
+
         security: {
           k: subK,
-          op_type: usimType,
-          op_value: opKey,
+          // op: usimType,
+          opc: opKey,
           amf: amf,
         },
         mme_host: [],
         mme_realm: [],
         purge_flag: [],
         ambr: {
-          downlink: { value: downValue, unit: 3 },
-          uplink: { value: upValue, unit: 3 },
+          downlink: { value: +downValue, unit: 3 },
+          uplink: { value: +upValue, unit: 3 },
         },
         slice: [
           {
-            sst: sst,
-            sd: sd,
+            sst: +sst,
+            default_indicator: true,
+            // sd: sd,
             session: [
               {
                 name: "internet",
@@ -160,10 +115,16 @@ function SubscriberModal() {
                     pre_emption_vulnerability: 1,
                   },
                 },
+                pcc_rule: []
               },
             ],
           },
         ],
+        access_restriction_data: 32,
+        subscriber_status: 0,
+        network_access_mode: 0,
+        subscribed_rau_tau_timer: 12,
+        __v: 0
       });
     }
   };
@@ -191,32 +152,34 @@ function SubscriberModal() {
           >
             <SubscriberConfig
               imsi={imsi}
-              handleImsi={handleImsi}
+              setImsi={setImsi}
+              msisdn={msisdn}
+              setMsisdn={setMsisdn}
               subK={subK}
-              handleSubk={handleSubk}
+              setSubK={setSubK}
               opType={opType}
-              handleOpType={handleOpType}
+              setOpType={setOpType}
               opKey={opKey}
-              handleOpKey={handleOpKey}
+              setOpKey={setOpKey}
               amf={amf}
-              handleAmf={handleAmf}
+              setAmf={setAmf}
               downValue={downValue}
-              handleDownValue={handleDownValue}
+              setDownValue={setDownValue}
               downUnit={downUnit}
-              handleDownUnit={setDownUnit}
+              setDownUnit={setDownUnit}
               upValue={upValue}
-              handleUpValue={handleUpValue}
+              setUpValue={setUpValue}
               upUnit={upUnit}
-              handleUpUnit={setUpUnit}
+              setUpUnit={setUpUnit}
             />
             <Slice
               hiddenSlice={hiddenSlice}
               onClickDelete={handleOnDelete}
               onClickAdd={handleOnAdd}
               sst={sst}
-              handleSST={setSst}
+              setSst={setSst}
               sd={sd}
-              handleSD={handleSD}
+              setSd={setSd}
             />
             <Session
               hiddenSession={hiddenSession}

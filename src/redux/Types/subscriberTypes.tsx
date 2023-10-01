@@ -29,7 +29,7 @@ export interface DataType {
   imeisv: string[];
   schema_version: number;
   security: {
-    op?: string | null;
+    // op?: string | null;
     opc?: string | null;
     amf: string;
     k: string;
@@ -44,7 +44,7 @@ export interface DataType {
   slice: [
     {
       sst: number;
-      sd?: string;
+      // sd?: string;
       default_indicator: boolean;
       session: [
         {
@@ -76,7 +76,7 @@ export interface DataType {
           //   addr: string;
           //   addr6: string;
           // };
-          pcc_rule?: [
+          pcc_rule: [
             pccRules?,
             pccRules?,
             pccRules?,

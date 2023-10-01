@@ -7,7 +7,7 @@ function Subscribers() {
     <>
       <ModalsProvider>
         <div className="grid place-content-center">
-          <span className="text-[18px] font-bold">Search</span>
+          <span className="text-[18px] font-bold text-blue-800">Search IMSI</span>
           <IMSIInput />
         </div>
         <AddSubscriber />

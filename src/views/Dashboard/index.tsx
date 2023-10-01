@@ -19,11 +19,12 @@ import {
   createStyles,
 } from "@mantine/core";
 import { IconSun, IconMoonStars } from "@tabler/icons-react";
+import gasBackGround from "@/images/gas.jpg";
+import oilBackGround from "@/images/oil.jpg"; 
 
 // Components
 import Subscribers from "../Subscribers";
 import Profile from "../Profile";
-
 const { Header, Sider, Content } = Layout;
 
 const useStyles = createStyles((theme) => ({
@@ -42,6 +43,8 @@ const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const { classes } = useStyles();
+
+  const apn = localStorage.getItem("apn");
 
   const handleOnSubscribers = () => {
     navigate("/dashboard/subscribers");
@@ -84,7 +87,7 @@ const Dashboard: React.FC = () => {
                 color:
                   theme.colorScheme === "dark"
                     ? theme.colors.yellow[4]
-                    : theme.colors.blue[6],
+                    : theme.colors.blue[2],
               })}
             >
               {colorScheme === "dark" ? (
@@ -98,6 +101,7 @@ const Dashboard: React.FC = () => {
       </Header>
       <Layout hasSider>
         <Sider
+        
           trigger={null}
           collapsible
           collapsed={collapsed}
@@ -147,7 +151,7 @@ const Dashboard: React.FC = () => {
             onClick={() => setCollapsed(!collapsed)}
             style={{
               fontSize: "16px",
-              // color: "white",
+              color: "white",
               width: 64,
               height: 64,
             }}
@@ -158,7 +162,9 @@ const Dashboard: React.FC = () => {
             // margin: "10px 10px",
             padding: 24,
             minHeight: 1000,
-            // background: "#0A2647",
+            background: "#0A2646",
+            backgroundImage: `url(${apn=== "GAS" ? gasBackGround : oilBackGround})`,
+            backgroundSize: 'cover',
             margin: 0,
             maxWidth: "100%",
           }}

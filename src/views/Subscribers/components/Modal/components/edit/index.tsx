@@ -151,8 +151,7 @@ function IMSIInput(props: TextInputProps) {
       setPcc(searchedSubscriber.slice[0].session[0].pcc_rule)
     }
     console.log("searchedSubscriber is:", searchedSubscriber);
-    console.log("PCC Rule is:", pcc)
-  }, [searchedSubscriber, pcc]);
+  }, [searchedSubscriber]);
 
   const handleOnDelete = () => {
     setHiddenSlice(true);
@@ -254,7 +253,7 @@ function IMSIInput(props: TextInputProps) {
       schema_version: 1,
       security: {
         k: subK,
-        op:opType === "OP" ? opKey : null,
+        // op:opType === "OP" ? opKey : null,
         opc: opType === "OP" ? opKey : null,
         amf: amf,
       },
@@ -268,7 +267,7 @@ function IMSIInput(props: TextInputProps) {
       slice: [
         {
           sst: +sst,
-          sd: sd ? sd : "",
+          // sd: sd ? sd : "",
           default_indicator: true,
           session: [
             {
@@ -300,6 +299,7 @@ function IMSIInput(props: TextInputProps) {
               //   addr: "",
               //   addr6: "",
               // },
+              pcc_rule: [],
             },
           ],
         },
@@ -343,7 +343,7 @@ function IMSIInput(props: TextInputProps) {
           />
         </form>
         {isLoading && <div>Loading...</div>}
-        {isError && <div>Error Fetching Subscriber data</div>}
+        {isError && <p className="text-16px font-bold text-blue-600">Error Fetching Subscriber data</p>}
         {isSuccess && (
           <>
             <Modal
