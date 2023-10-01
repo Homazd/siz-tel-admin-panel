@@ -83,6 +83,7 @@ function IMSIInput(props: TextInputProps) {
     isLoading,
     isSuccess,
     isError,
+    error
   } = useGetSubscribersQuery(value, {
     skip: isTyping,
   });
@@ -343,7 +344,7 @@ function IMSIInput(props: TextInputProps) {
           />
         </form>
         {isLoading && <div>Loading...</div>}
-        {isError && <p className="text-16px font-bold text-blue-600">Error Fetching Subscriber data</p>}
+        {isError && error && <p className="text-16px font-bold text-blue-600">Error Fetching Subscriber data</p>}
         {isSuccess && (
           <>
             <Modal

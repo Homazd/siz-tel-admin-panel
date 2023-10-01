@@ -5,6 +5,7 @@ import {
   MenuUnfoldOutlined,
   // UploadOutlined,
   UserOutlined,
+  ContactsOutlined
   // VideoCameraOutlined,
 } from "@ant-design/icons";
 // Images
@@ -82,7 +83,7 @@ const Dashboard: React.FC = () => {
               sx={(theme) => ({
                 backgroundColor:
                   theme.colorScheme === "dark"
-                    ? theme.colors.dark[1]
+                    ? theme.colors.dark[6]
                     : theme.colors.gray[8],
                 color:
                   theme.colorScheme === "dark"
@@ -101,10 +102,16 @@ const Dashboard: React.FC = () => {
       </Header>
       <Layout hasSider>
         <Sider
-        
+        width={250}
+       
           trigger={null}
           collapsible
           collapsed={collapsed}
+          style={{
+            width: '500px',
+            maxWidth: '500px',
+            flex: '0 0 500px'
+          }}
           // style={{
           //   backgroundColor: ${({theme})} =>
           //     theme.colorScheme === "dark"
@@ -118,7 +125,7 @@ const Dashboard: React.FC = () => {
             <img className="w-16" src={logoImage} alt="logo" />
           </div>
           <Menu
-            // style={{ backgroundColor: "#2C74B3" }}
+            style={{ backgroundColor: "#B4B4B3" }}
             mode="inline"
             defaultSelectedKeys={["1"]}
             items={[
@@ -128,7 +135,7 @@ const Dashboard: React.FC = () => {
                 label: (
                   <Button
                     onClick={handleOnSubscribers}
-                    className="text-blue-400"
+                    className="text-blue-400 text-[18px]"
                   >
                     Subscribers
                   </Button>
@@ -136,9 +143,9 @@ const Dashboard: React.FC = () => {
               },
               {
                 key: "2",
-                icon: <UserOutlined />,
+                icon: <ContactsOutlined />,
                 label: (
-                  <Button onClick={handleOnProfile} className="text-blue-400">
+                  <Button onClick={handleOnProfile} className="text-blue-400 text-[18px]">
                     Profile
                   </Button>
                 ),
