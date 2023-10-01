@@ -37,7 +37,8 @@ export default function LoginPage() {
     event.preventDefault();
     try {
       const response = await axios.post(
-        "http://192.168.0.203:8008/token",
+        // "http://192.168.0.203:8008/token",
+        "http://127.0.0.1:8008/token",
         formData,
         {
           headers: {
