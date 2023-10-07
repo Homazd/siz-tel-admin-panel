@@ -1,5 +1,5 @@
 // Hooks
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 // Mantine Hooks
 import { useDisclosure } from "@mantine/hooks";
 // Mantine Form
@@ -9,7 +9,6 @@ import {
   useAddSubscriberMutation,
   useDeleteSubscriberMutation,
   useGetSubscribersQuery,
-  useLazyGetSubscribersQuery,
 } from "@/services/subscribers";
 // Mantine Components
 import { Modal, Button, Group, ModalProps, Box, Text } from "@mantine/core";
@@ -26,7 +25,7 @@ import { pccRules } from "@/redux/Types/subscriberTypes";
 import { FaPencilAlt } from "react-icons/fa";
 import { RiDeleteBinLine } from "react-icons/ri";
 
-function AddSubscriber() {
+function AddSubscriber({ onStateChange : any }) {
   const [opened, { open, close }] = useDisclosure(false);
   const [editOpened, setEditOpened] = useState(false);
   const [deleteOpened, setDeleteOpened] = useState(false);
@@ -83,16 +82,13 @@ function AddSubscriber() {
 
   const [deleteSubscriber] = useDeleteSubscriberMutation();
   const apn = localStorage.getItem("apn");
-  useEffect(() => {
-    console.log("apn is:", apn);
-  }, [apn]);
 
   const [isFetching, setIsFetching] = useState(false);
-  const { data: subscriber } = useGetSubscribersQuery(imsi, {
+  const { data: subscriber, isSuccess } = useGetSubscribersQuery(imsi, {
     skip: isFetching,
   });
-  const [getSubscriberAfterPost, { data: addedSubscriber }] =
-    useLazyGetSubscribersQuery();
+  // const [getSubscriberAfterPost, { data: addedSubscriber }] =
+  //   useLazyGetSubscribersQuery();
 
   const handleInputChange = (index: number, inputData: pccRules) => {
     setInputs((prevInputs) => {
@@ -132,7 +128,7 @@ function AddSubscriber() {
   //     return updatedInputs;
   //   });
   // };
-  const [addSubscriber] = useAddSubscriberMutation();
+  const [addSubscriber, { isLoading: isAdding }] = useAddSubscriberMutation();
 
   const handleOnEditModal = () => {
     close();
@@ -175,93 +171,100 @@ function AddSubscriber() {
     setIsFetching(true);
   }, [subscriber, isFetching, imsi]);
 
-  const addingSubscriber = {
-    schema_version: 1,
-    imsi: imsi,
-    msisdn: msisdn,
-    imeisv: [],
-    mme_host: [],
-    mme_realm: [],
-    purge_flag: [],
-    security: {
-      k: subK,
-      // op: opType === "OP" ? opKey : null,
-      opc: opType === "OPc" ? opKey : null,
-      amf: amf,
-    },
-    ambr: {
-      downlink: { value: Number(downValue), unit: Number(downUnit) },
-      uplink: { value: Number(upValue), unit: Number(upUnit) },
-    },
-    slice: [
-      {
-        sst: +sst,
-        // sd: sd,
-        default_indicator: true,
-        session: [
-          {
-            name: apn ? apn : "GAS",
-            type: +type,
-            qos: {
-              index: +qci,
-              arp: {
-                priority_level: +arp,
-                pre_emption_capability: +capability,
-                pre_emption_vulnerability: +vulnerability,
-              },
-            },
-            ambr: {
-              downlink: {
-                value: +ambrDownlink,
-                unit: +ambrDownUnit,
-              },
-              uplink: {
-                value: +ambrUplink,
-                unit: +ambrUpUnit,
-              },
-            },
-            // ue: {
-            //   addr: ueIpv4,
-            //   addr6: ueIpv6,
-            // },
-            // smf: {
-            //   addr: smfIpv4,
-            //   addr6: smfIpv6,
-            // },
-            pcc_rule: [],
-            //  {
-            //   qos: {
-            //     index: 1,
-            //     arp: {
-            //       priority_level: 1,
-            //       pre_emption_capability: 1,
-            //       pre_emption_vulnerability: 1,
-            //     },
-            //     gbr: {
-            //       downlink: { value: 1, unit: 1 },
-            //       uplink: { value: 1, unit: 1 },
-            //     },
-            //     mbr: {
-            //       downlink: { value: 1, unit: 1 },
-            //       uplink: { value: 1, unit: 1 },
-            //     },
-            //   },
-            // },
-          },
-        ],
+  const addingSubscriber =  {
+  
+      schema_version: 1,
+      imsi: imsi,
+      msisdn: msisdn,
+      imeisv: [],
+      mme_host: [],
+      mme_realm: [],
+      purge_flag: [],
+      security: {
+        k: subK,
+        // op: opType === "OP" ? opKey : null,
+        opc: opType === "OPc" ? opKey : null,
+        amf: amf,
       },
-    ],
-    access_restriction_data: 32,
-    subscriber_status: 0,
-    network_access_mode: 0,
-    subscribed_rau_tau_timer: 12,
-    __v: 0,
-  };
-  const handleSubmit = () => {
-    addSubscriber(addingSubscriber).unwrap();
-    console.log("imsi is:", imsi);
-    getSubscriberAfterPost(imsi);
-    console.log("subscriber is:", addedSubscriber);
+      ambr: {
+        downlink: { value: +downValue, unit: +downUnit },
+        uplink: { value: +upValue, unit: +upUnit },
+      },
+      slice: [
+        {
+          sst: +sst,
+          // sd: sd,
+          default_indicator: true,
+          session: [
+            {
+              name: apn ? apn : "GAS",
+              type: +type,
+              qos: {
+                index: +qci,
+                arp: {
+                  priority_level: +arp,
+                  pre_emption_capability: +capability,
+                  pre_emption_vulnerability: +vulnerability,
+                },
+              },
+              ambr: {
+                downlink: {
+                  value: +ambrDownlink,
+                  unit: +ambrDownUnit,
+                },
+                uplink: {
+                  value: +ambrUplink,
+                  unit: +ambrUpUnit,
+                },
+              },
+              // ue: {
+              //   addr: ueIpv4,
+              //   addr6: ueIpv6,
+              // },
+              // smf: {
+              //   addr: smfIpv4,
+              //   addr6: smfIpv6,
+              // },
+              pcc_rule: [],
+              //  {
+              //   qos: {
+              //     index: 1,
+              //     arp: {
+              //       priority_level: 1,
+              //       pre_emption_capability: 1,
+              //       pre_emption_vulnerability: 1,
+              //     },
+              //     gbr: {
+              //       downlink: { value: 1, unit: 1 },
+              //       uplink: { value: 1, unit: 1 },
+              //     },
+              //     mbr: {
+              //       downlink: { value: 1, unit: 1 },
+              //       uplink: { value: 1, unit: 1 },
+              //     },
+              //   },
+              // },
+            },
+          ],
+        },
+      ],
+      access_restriction_data: 32,
+      subscriber_status: 0,
+      network_access_mode: 0,
+      subscribed_rau_tau_timer: 12,
+      __v: 0,
+    };
+  
+
+  const handleSubmit = async () => {
+    try {
+      console.log("imsi is:", imsi);
+      await addSubscriber(addingSubscriber);
+    } catch (error) {
+      console.error(error);
+    } 
+    // .then((addingSubscriber) => onStateChange(addingSubscriber))
+    // .then(() => getSubscriberAfterPost(imsi))
     close();
   };
   const form = useForm({
@@ -354,7 +357,7 @@ function AddSubscriber() {
                 <PccRules inputs={inputs} onInputChange={handleInputChange} />
               )}
             </>
-            
+
             {/* <Slice
               hiddenSlice={hiddenSlice}
               onClickDelete={handleOnDelete}
@@ -468,7 +471,10 @@ function AddSubscriber() {
       </Modal>
 
       <Group position="center">
-        <Button className="bg-blue-500 rounded-full mt-7 w-40 animate__animated animate__swing" onClick={open}>
+        <Button
+          className="bg-blue-500 rounded-full mt-7 w-40 animate__animated animate__swing"
+          onClick={open}
+        >
           Add Subscriber
         </Button>
       </Group>

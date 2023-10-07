@@ -24,10 +24,10 @@ export interface pccRules {
 }
 
 export interface DataType {
+  schema_version: number;
   imsi: string;
   msisdn: string[];
   imeisv: string[];
-  schema_version: number;
   security: {
     // op?: string | null;
     opc?: string | null;

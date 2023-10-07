@@ -152,7 +152,8 @@ function IMSIInput(props: TextInputProps) {
       setPcc(searchedSubscriber.slice[0].session[0].pcc_rule)
     }
     console.log("searchedSubscriber is:", searchedSubscriber);
-  }, [searchedSubscriber]);
+    
+  }, [searchedSubscriber, imsi]);
 
   const handleOnDelete = () => {
     setHiddenSlice(true);
