@@ -468,7 +468,7 @@ function AddSubscriber() {
       </Modal>
 
       <Group position="center">
-        <Button className="bg-blue-400 rounded-full mt-7" onClick={open}>
+        <Button className="bg-blue-500 rounded-full mt-7 w-40 animate__animated animate__swing" onClick={open}>
           Add Subscriber
         </Button>
       </Group>
