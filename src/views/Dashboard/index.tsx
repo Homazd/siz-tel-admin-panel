@@ -5,7 +5,7 @@ import {
   MenuUnfoldOutlined,
   // UploadOutlined,
   UserOutlined,
-  ContactsOutlined
+  ContactsOutlined,
   // VideoCameraOutlined,
 } from "@ant-design/icons";
 // Images
@@ -21,7 +21,7 @@ import {
 } from "@mantine/core";
 import { IconSun, IconMoonStars } from "@tabler/icons-react";
 import gasBackGround from "@/images/gas.jpg";
-import oilBackGround from "@/images/oil.jpg"; 
+import oilBackGround from "@/images/oil.jpg";
 
 // Components
 import Subscribers from "../Subscribers";
@@ -73,11 +73,16 @@ const Dashboard: React.FC = () => {
       >
         <div className="flex justify-center relative">
           <Space align="center">
-            <h1 className="text-white text-center">Welcome to Admin Panel!</h1>
+            <h1
+              className="text-center font-semibold"
+              style={{ color: "#FFC436" }}
+            >
+              Welcome to Admin Panel!
+            </h1>
           </Space>
           <Group position="center" my="xl">
             <ActionIcon
-            className="absolute right-0 bg-white"
+              className="absolute right-0 bg-white"
               onClick={() => toggleColorScheme()}
               size="lg"
               sx={(theme) => ({
@@ -102,15 +107,15 @@ const Dashboard: React.FC = () => {
       </Header>
       <Layout hasSider>
         <Sider
-        width={250}
-       
+          width={250}
           trigger={null}
           collapsible
           collapsed={collapsed}
           style={{
-            width: '500px',
-            maxWidth: '500px',
-            flex: '0 0 500px'
+            width: "500px",
+            maxWidth: "500px",
+            flex: "0 0 500px",
+            backgroundColor: "#1450A3",
           }}
           // style={{
           //   backgroundColor: ${({theme})} =>
@@ -125,7 +130,7 @@ const Dashboard: React.FC = () => {
             <img className="w-16" src={logoImage} alt="logo" />
           </div>
           <Menu
-            style={{ backgroundColor: "#B4B4B3" }}
+            style={{ backgroundColor: "#1450A3" }}
             mode="inline"
             defaultSelectedKeys={["1"]}
             items={[
@@ -136,6 +141,7 @@ const Dashboard: React.FC = () => {
                   <Button
                     onClick={handleOnSubscribers}
                     className="text-blue-400 text-[18px]"
+                    style={{ color: "#FFC436" }}
                   >
                     Subscribers
                   </Button>
@@ -145,7 +151,11 @@ const Dashboard: React.FC = () => {
                 key: "2",
                 icon: <ContactsOutlined />,
                 label: (
-                  <Button onClick={handleOnProfile} className="text-blue-400 text-[18px]">
+                  <Button
+                    onClick={handleOnProfile}
+                    className="text-[18px] text-custom-yellow hover:text-custom-blue-medium"
+                    style={{ color: "#FFC436" }}
+                  >
                     Profile
                   </Button>
                 ),
@@ -170,8 +180,10 @@ const Dashboard: React.FC = () => {
             padding: 24,
             minHeight: 1000,
             background: "#0A2646",
-            backgroundImage: `url(${apn=== "GAS" ? gasBackGround : oilBackGround})`,
-            backgroundSize: 'cover',
+            backgroundImage: `url(${
+              apn === "GAS" ? gasBackGround : oilBackGround
+            })`,
+            backgroundSize: "cover",
             margin: 0,
             maxWidth: "100%",
           }}
