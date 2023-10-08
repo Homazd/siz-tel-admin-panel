@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { ChangeEvent, FormEvent } from "react";
 // Mantine
 import {
-  TextInputProps,
+  // TextInputProps,
   ActionIcon,
   useMantineTheme,
   Box,
@@ -32,7 +32,10 @@ import Session from "../Session";
 import EditConfig from "./components/Config";
 import EditSlice from "./components/EditSlice";
 
-function IMSIInput(props: TextInputProps) {
+interface imsiInputProps {
+  addedImsi: string;
+}
+const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
   const [value, setValue] = useState<string>("");
   const [isTyping, setIsTyping] = useState(false);
   const [hiddenSession, setHiddenSession] = useState(true);
@@ -43,11 +46,11 @@ function IMSIInput(props: TextInputProps) {
   const theme = useMantineTheme();
   // Config States
   const [imsi, setImsi] = useState("");
-  const [msisdn, setMsisdn] = useState([]);
-  const [imeisv, setImeisv] = useState([]);
+  const [msisdn, setMsisdn] = useState([""]);
+  const [imeisv, setImeisv] = useState([""]);
   const [subK, setSubK] = useState("");
   const [opType, setOpType] = useState("OPc");
-  const [opKey, setOpKey] = useState("");
+  const [opKey, setOpKey] = useState<string | null>("");
   const [amf, setAmf] = useState("");
   const [downValue, setDownValue] = useState("1");
   const [downUnit, setDownUnit] = useState("3");
@@ -74,7 +77,7 @@ function IMSIInput(props: TextInputProps) {
   const [ambrUpUnit, setAmbrUpUnit] = useState("");
 
   // PCC Rules
-  const [pcc, setPcc] = useState([]);
+  // const [pcc, setPcc] = useState([]);
 
   // Validation
 
@@ -83,12 +86,13 @@ function IMSIInput(props: TextInputProps) {
     isLoading,
     isSuccess,
     isError,
-    error
+    error,
   } = useGetSubscribersQuery(value, {
     skip: isTyping,
   });
 
   useEffect(() => {
+    console.log("added imsi in index is:", addedImsi);
     if (searchedSubscriber) {
       let downLinkUnit: string;
       let upLinkUnit: string;
@@ -137,23 +141,23 @@ function IMSIInput(props: TextInputProps) {
       }
       setSubK(searchedSubscriber.security.k);
       setAmf(searchedSubscriber.security.amf);
-      setMsisdn(searchedSubscriber.msisdn[0]);
+      // setMsisdn(searchedSubscriber.msisdn[0]);
+      setOpType(searchedSubscriber.security.opc ? "OPc" : "OP")
       setOpKey(
-        searchedSubscriber.security.opc !== null
+        searchedSubscriber.security.opc
           ? searchedSubscriber.security.opc
           : searchedSubscriber.security.op
       );
       setDownUnit(downLinkUnit);
-      setDownValue(searchedSubscriber.ambr.downlink.value);
-      setUpValue(searchedSubscriber.ambr.uplink.value);
+      setDownValue(String(searchedSubscriber.ambr.downlink.value));
+      setUpValue(String(searchedSubscriber.ambr.uplink.value));
       setUpUnit(upLinkUnit);
-      setSst(searchedSubscriber.slice[0].sst);
-      setSd(searchedSubscriber.slice[0].sd);
-      setPcc(searchedSubscriber.slice[0].session[0].pcc_rule)
+      setSst(String(searchedSubscriber.slice[0].sst));
+      setSd(searchedSubscriber.slice[0].sd !== undefined ? String(searchedSubscriber.slice[0].sd) : '');
+      // setPcc(searchedSubscriber.slice[0].session[0].pcc_rule)
     }
     console.log("searchedSubscriber is:", searchedSubscriber);
-    
-  }, [searchedSubscriber, imsi]);
+  }, [searchedSubscriber, imsi, addedImsi]);
 
   const handleOnDelete = () => {
     setHiddenSlice(true);
@@ -178,30 +182,34 @@ function IMSIInput(props: TextInputProps) {
   };
 
   const sessionType = () => {
-    const sessionItem = searchedSubscriber.ambr.downlink.unit;
-    switch (sessionItem) {
-      case 1:
-        return "IPv4";
-      case 2:
-        return "IPv6";
-      case 3:
-        return "IPv4v6";
-      default:
-        break;
+    if (searchedSubscriber) {
+      const sessionItem = searchedSubscriber.ambr.downlink.unit;
+      switch (sessionItem) {
+        case 1:
+          return "IPv4";
+        case 2:
+          return "IPv6";
+        case 3:
+          return "IPv4v6";
+        default:
+          break;
+      }
     }
   };
 
   const capabilityApr = () => {
-    const aprCapability =
-      searchedSubscriber.slice[0].session[0].qos.arp.pre_emption_capability;
-    switch (aprCapability) {
-      case 1:
-        return "Disabled";
-      case 2:
-        return "Enabled";
+    if (searchedSubscriber) {
+      const aprCapability =
+        searchedSubscriber.slice[0].session[0].qos.arp.pre_emption_capability;
+      switch (aprCapability) {
+        case 1:
+          return "Disabled";
+        case 2:
+          return "Enabled";
 
-      default:
-        break;
+        default:
+          break;
+      }
     }
   };
 
@@ -243,7 +251,9 @@ function IMSIInput(props: TextInputProps) {
     setEditOpened(true);
   };
   const handleDelete = () => {
-    deleteSubscriber(searchedSubscriber.imsi);
+    if (searchedSubscriber) {
+      deleteSubscriber(searchedSubscriber.imsi);
+    }
   };
   const handleSubmitUpdate = () => {
     console.log("submit edit");
@@ -255,7 +265,7 @@ function IMSIInput(props: TextInputProps) {
       schema_version: 1,
       security: {
         k: subK,
-        // op:opType === "OP" ? opKey : null,
+        op: opType === "OP" ? opKey : null,
         opc: opType === "OP" ? opKey : null,
         amf: amf,
       },
@@ -269,7 +279,7 @@ function IMSIInput(props: TextInputProps) {
       slice: [
         {
           sst: +sst,
-          // sd: sd ? sd : "",
+          sd: sd ? sd : "",
           default_indicator: true,
           session: [
             {
@@ -341,11 +351,15 @@ function IMSIInput(props: TextInputProps) {
             value={value}
             onChange={handleOnInput}
             onKeyDown={handleKeyPress}
-            {...props}
+            // {...props}
           />
         </form>
         {isLoading && <div>Loading...</div>}
-        {isError && error && <p className="text-16px font-bold text-blue-600">Error Fetching Subscriber data</p>}
+        {isError && error && (
+          <p className="text-16px font-bold text-blue-600">
+            Error Fetching Subscriber data
+          </p>
+        )}
         {isSuccess && (
           <>
             <Modal
@@ -602,5 +616,5 @@ function IMSIInput(props: TextInputProps) {
       </ModalsProvider>
     </>
   );
-}
+};
 export default IMSIInput;

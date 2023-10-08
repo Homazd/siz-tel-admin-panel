@@ -187,7 +187,6 @@ const EditConfig: React.FC<InputChildProps> = ({
           placeholder="1"
           value={downValue}
           onChange={(e) => setDownValue(e.target.value)}
-          // onKeyDown={handleKey}
           className="w-[250px]"
         />
         <Select
@@ -219,7 +218,6 @@ const EditConfig: React.FC<InputChildProps> = ({
           }}
           placeholder="1"
           className="w-[250px] ml-2"
-          // onKeyDown={handleKey}
         />
         <Select
           label="Unit"

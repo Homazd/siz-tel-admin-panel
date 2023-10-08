@@ -5,10 +5,15 @@ import AddSubscriber from "./components/Modal/add";
 import "animate.css";
 
 function Subscribers() {
-  const [addedSub, setAddedSub] = useState(null);
-  const handleAddedSubChange = (newAddedSub : any) => {
-    setAddedSub(newAddedSub);
-    console.log("addedSub", addedSub);
+  // const [addedSub, setAddedSub] = useState(null);
+  // const handleAddedSubChange = (newAddedSub : any) => {
+  //   setAddedSub(newAddedSub);
+  //   console.log("addedSub", addedSub);
+  // }
+  const [addedImsi, setAddedImsi] = useState('');
+  const handleSetImsi = (imsi : string) => {
+    setAddedImsi(imsi);
+    console.log("added imsi is:", addedImsi)
   }
   return (
     <>
@@ -17,9 +22,9 @@ function Subscribers() {
           <span className="text-[24px] font-bold text-blue-600">
             Search IMSI
           </span>
-          <IMSIInput />
+          <IMSIInput addedImsi={addedImsi} />
         </div>
-        <AddSubscriber onStateChange={handleAddedSubChange} />
+        <AddSubscriber addedImsi={addedImsi} handleSetImsi={handleSetImsi} />
       </ModalsProvider>
     </>
   );

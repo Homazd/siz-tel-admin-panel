@@ -3,7 +3,7 @@ import { DataType } from "@/redux/Types/subscriberTypes";
 
 export const subscriberApi = createApi({
   reducerPath: "subscriberApi",
-  tagTypes: ["Subscribers"],
+  tagTypes: ['DataType'],
   baseQuery: fetchBaseQuery({
     baseUrl: "http://192.168.0.203:8008",
     prepareHeaders: (headers) => {
@@ -17,26 +17,28 @@ export const subscriberApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getSubscribers: builder.query({
+    getSubscribers: builder.query<DataType, string>({
       query: (imsi: string) => ({
         url: `/mon/${imsi}`,
         method: "GET",
       }),
-
-      providesTags: ["Subscribers"],
+      providesTags: (result, error, id) => [{ type: 'DataType', id}]
     }),
-    addSubscriber: builder.mutation({
+    addSubscriber: builder.mutation<DataType, Partial<DataType>>({
       query: (data: DataType) => ({
         url: "/mon/",
         method: "POST",
         body: data,
         headers: { "Content-Type": "application/json" },
       }),
-      invalidatesTags: ["Subscribers"],
+      invalidatesTags: (result) => [{ type: 'DataType', id: result?.imsi}],
     }),
     //
 
-    updateSubscriber: builder.mutation({
+    updateSubscriber: builder.mutation<
+      DataType,
+      Partial<DataType> & Pick<DataType, "imsi">
+    >({
       query: (data: DataType) => ({
         url: `/mon/`,
         method: "PUT",
@@ -46,14 +48,14 @@ export const subscriberApi = createApi({
         },
         body: data,
       }),
-      invalidatesTags: ["Subscribers"],
+      invalidatesTags: (result, error, {imsi}) => [{ type: 'subscriber', imsi}],
     }),
     deleteSubscriber: builder.mutation({
       query: (imsi: string) => ({
         url: `/mon/${imsi}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Subscribers"],
+      invalidatesTags: ['DataType'],
     }),
   }),
 });
@@ -64,5 +66,5 @@ export const {
   useAddSubscriberMutation,
   useUpdateSubscriberMutation,
   useDeleteSubscriberMutation,
-  useLazyGetSubscribersQuery
+  useLazyGetSubscribersQuery,
 } = subscriberApi;

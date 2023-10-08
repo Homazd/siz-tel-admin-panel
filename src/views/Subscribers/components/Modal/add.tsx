@@ -20,22 +20,29 @@ import Detail from "./components/edit/components/Detail";
 import EditConfig from "./components/edit/components/Config";
 import Session from "./components/Session";
 // Types
-import { pccRules } from "@/redux/Types/subscriberTypes";
+import { DataType, pccRules } from "@/redux/Types/subscriberTypes";
 // Icons
 import { FaPencilAlt } from "react-icons/fa";
 import { RiDeleteBinLine } from "react-icons/ri";
 
-function AddSubscriber({ onStateChange : any }) {
+interface addSubscriberProps {
+  addedImsi: string;
+  handleSetImsi: (data: string) => void;
+}
+const AddSubscriber: React.FC<addSubscriberProps> = ({
+  addedImsi,
+  handleSetImsi,
+}) => {
   const [opened, { open, close }] = useDisclosure(false);
   const [editOpened, setEditOpened] = useState(false);
   const [deleteOpened, setDeleteOpened] = useState(false);
   const [hiddenSession, setHiddenSession] = useState(true);
   const [hiddenSlice, setHiddenSlice] = useState(false);
   const [imsi, setImsi] = useState("");
-  const [msisdn, setMsisdn] = useState([]);
+  const [msisdn, setMsisdn] = useState([""]);
   const [subK, setSubK] = useState("465B5CE8 B199B49F AA5F0A2E E238A6BC");
   const [opType, setOpType] = useState("OPc");
-  const [opKey, setOpKey] = useState("E8ED289D EBA952E4 283B54E8 8E6183CA");
+  const [opKey, setOpKey] = useState<string | null>("E8ED289D EBA952E4 283B54E8 8E6183CA");
   const [amf, setAmf] = useState("8000");
   const [downValue, setDownValue] = useState("1");
   const [downUnit, setDownUnit] = useState("3");
@@ -43,7 +50,7 @@ function AddSubscriber({ onStateChange : any }) {
   const [upUnit, setUpUnit] = useState("3");
   // Slice States
   const [sst, setSst] = useState("1");
-  const [sd, setSd] = useState("");
+  const [sd, setSd] = useState<string>("");
   // Session States
   const [type, setType] = useState("3");
   const [qci, setQci] = useState("9");
@@ -144,7 +151,9 @@ function AddSubscriber({ onStateChange : any }) {
     setHiddenSession(false);
   };
   const handleDelete = () => {
-    deleteSubscriber(subscriber.imsi);
+    if (subscriber) {
+      deleteSubscriber(subscriber.imsi);
+    }
   };
   const handleOnDeleteModal = () => {
     close();
@@ -171,98 +180,99 @@ function AddSubscriber({ onStateChange : any }) {
     setIsFetching(true);
   }, [subscriber, isFetching, imsi]);
 
-  const addingSubscriber =  {
-  
-      schema_version: 1,
-      imsi: imsi,
-      msisdn: msisdn,
-      imeisv: [],
-      mme_host: [],
-      mme_realm: [],
-      purge_flag: [],
-      security: {
-        k: subK,
-        // op: opType === "OP" ? opKey : null,
-        opc: opType === "OPc" ? opKey : null,
-        amf: amf,
-      },
-      ambr: {
-        downlink: { value: +downValue, unit: +downUnit },
-        uplink: { value: +upValue, unit: +upUnit },
-      },
-      slice: [
-        {
-          sst: +sst,
-          // sd: sd,
-          default_indicator: true,
-          session: [
-            {
-              name: apn ? apn : "GAS",
-              type: +type,
-              qos: {
-                index: +qci,
-                arp: {
-                  priority_level: +arp,
-                  pre_emption_capability: +capability,
-                  pre_emption_vulnerability: +vulnerability,
-                },
+  const addingSubscriber = {
+    schema_version: 1,
+    imsi: imsi,
+    msisdn: msisdn,
+    imeisv: [],
+    mme_host: [],
+    mme_realm: [],
+    purge_flag: [],
+    security: {
+      k: subK,
+      op: opType === "OP" ? opKey : null,
+      opc: opType === "OPc" ? opKey : null,
+      amf: amf,
+    },
+    ambr: {
+      downlink: { value: +downValue, unit: +downUnit },
+      uplink: { value: +upValue, unit: +upUnit },
+    },
+    slice: [
+      {
+        sst: +sst,
+        sd: sd || undefined,
+        default_indicator: true,
+        session: [
+          {
+            name: apn ? apn : "GAS",
+            type: +type,
+            qos: {
+              index: +qci,
+              arp: {
+                priority_level: +arp,
+                pre_emption_capability: +capability,
+                pre_emption_vulnerability: +vulnerability,
               },
-              ambr: {
-                downlink: {
-                  value: +ambrDownlink,
-                  unit: +ambrDownUnit,
-                },
-                uplink: {
-                  value: +ambrUplink,
-                  unit: +ambrUpUnit,
-                },
-              },
-              // ue: {
-              //   addr: ueIpv4,
-              //   addr6: ueIpv6,
-              // },
-              // smf: {
-              //   addr: smfIpv4,
-              //   addr6: smfIpv6,
-              // },
-              pcc_rule: [],
-              //  {
-              //   qos: {
-              //     index: 1,
-              //     arp: {
-              //       priority_level: 1,
-              //       pre_emption_capability: 1,
-              //       pre_emption_vulnerability: 1,
-              //     },
-              //     gbr: {
-              //       downlink: { value: 1, unit: 1 },
-              //       uplink: { value: 1, unit: 1 },
-              //     },
-              //     mbr: {
-              //       downlink: { value: 1, unit: 1 },
-              //       uplink: { value: 1, unit: 1 },
-              //     },
-              //   },
-              // },
             },
-          ],
-        },
-      ],
-      access_restriction_data: 32,
-      subscriber_status: 0,
-      network_access_mode: 0,
-      subscribed_rau_tau_timer: 12,
-      __v: 0,
-    };
-  
+            ambr: {
+              downlink: {
+                value: +ambrDownlink,
+                unit: +ambrDownUnit,
+              },
+              uplink: {
+                value: +ambrUplink,
+                unit: +ambrUpUnit,
+              },
+            },
+            // ue: {
+            //   addr: ueIpv4,
+            //   addr6: ueIpv6,
+            // },
+            // smf: {
+            //   addr: smfIpv4,
+            //   addr6: smfIpv6,
+            // },
+            pcc_rule: [],
+            //  {
+            //   qos: {
+            //     index: 1,
+            //     arp: {
+            //       priority_level: 1,
+            //       pre_emption_capability: 1,
+            //       pre_emption_vulnerability: 1,
+            //     },
+            //     gbr: {
+            //       downlink: { value: 1, unit: 1 },
+            //       uplink: { value: 1, unit: 1 },
+            //     },
+            //     mbr: {
+            //       downlink: { value: 1, unit: 1 },
+            //       uplink: { value: 1, unit: 1 },
+            //     },
+            //   },
+            // },
+          },
+        ],
+      },
+    ],
+    access_restriction_data: 32,
+    subscriber_status: 0,
+    network_access_mode: 0,
+    subscribed_rau_tau_timer: 12,
+    __v: 0,
+  };
 
-  const handleSubmit = async () => {
+  const handleSubmit = (addingSubscriber: DataType) => {
     try {
       console.log("imsi is:", imsi);
-      await addSubscriber(addingSubscriber);
+      setImsi(imsi);
+      addSubscriber(addingSubscriber);
+      console.log(addingSubscriber);
+      handleSetImsi(imsi);
     } catch (error) {
       console.error(error);
-    } 
+    }
     // .then((addingSubscriber) => onStateChange(addingSubscriber))
     // .then(() => getSubscriberAfterPost(imsi))
     close();
@@ -286,7 +296,10 @@ function AddSubscriber({ onStateChange : any }) {
       >
         <Box maw={900} mx="auto">
           <form
-            onSubmit={form.onSubmit(handleSubmit)}
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSubmit(addingSubscriber);
+            }}
             className="block relative"
           >
             <SubscriberConfig
@@ -654,6 +667,6 @@ function AddSubscriber({ onStateChange : any }) {
       )}
     </>
   );
-}
+};
 
 export default AddSubscriber;

@@ -29,8 +29,8 @@ export interface DataType {
   msisdn: string[];
   imeisv: string[];
   security: {
-    // op?: string | null;
-    opc?: string | null;
+    op: string | null;
+    opc: string | null;
     amf: string;
     k: string;
   };
@@ -44,7 +44,7 @@ export interface DataType {
   slice: [
     {
       sst: number;
-      // sd?: string;
+      sd: string;
       default_indicator: boolean;
       session: [
         {
