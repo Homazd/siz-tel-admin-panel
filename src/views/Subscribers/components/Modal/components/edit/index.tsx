@@ -326,11 +326,12 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
   return (
     <>
       <ModalsProvider>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="w-[300px] laptop:w-[500px] desktop:w-[800px] h-18">
           <StyledInput
             icon={<IconSearch size="1.1rem" stroke={1.5} />}
             radius="xl"
             size="lg"
+            className="w-[200px]  laptop:w-[500px] desktop:[800px]"
             rightSection={
               <ActionIcon
                 size={22}

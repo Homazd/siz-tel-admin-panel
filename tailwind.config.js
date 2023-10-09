@@ -6,12 +6,18 @@ export default {
   ],
   theme: {
     extend: {
-      colors:{
-        'custom-yellow': '#FFC436',
-        'custom-blue-light': '#337CCF',
-        'custom-blue-medium': '#1450A3',
-        'custom-blue-dark': '#191D88'
-      }
+      colors: {
+        "custom-yellow": "#FFC436",
+        "custom-blue-light": "#337CCF",
+        "custom-blue-medium": "#1450A3",
+        "custom-blue-dark": "#191D88",
+      },
+    },
+    screens: {
+      tablet: "768px",
+      // => @media (min-width: 768px) { ... }
+      laptop: "1024px",
+      desktop: "1280px",
     },
   },
   plugins: [],
