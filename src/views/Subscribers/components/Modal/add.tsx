@@ -42,7 +42,7 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({
   const [msisdn, setMsisdn] = useState([""]);
   const [subK, setSubK] = useState("465B5CE8 B199B49F AA5F0A2E E238A6BC");
   const [opType, setOpType] = useState("OPc");
-  const [opKey, setOpKey] = useState("E8ED289D EBA952E4 283B54E8 8E6183CA");
+  const [opKey, setOpKey] = useState<string | null>("E8ED289D EBA952E4 283B54E8 8E6183CA");
   const [amf, setAmf] = useState("8000");
   const [downValue, setDownValue] = useState("1");
   const [downUnit, setDownUnit] = useState("3");
@@ -91,11 +91,9 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({
   const apn = localStorage.getItem("apn");
 
   const [isFetching, setIsFetching] = useState(false);
-  const { data: subscriber, isSuccess } = useGetSubscribersQuery(imsi, {
+  const { data: subscriber } = useGetSubscribersQuery(imsi, {
     skip: isFetching,
   });
-  // const [getSubscriberAfterPost, { data: addedSubscriber }] =
-  //   useLazyGetSubscribersQuery();
 
   const handleInputChange = (index: number, inputData: pccRules) => {
     setInputs((prevInputs) => {
@@ -135,7 +133,7 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({
   //     return updatedInputs;
   //   });
   // };
-  const [addSubscriber, { isLoading: isAdding }] = useAddSubscriberMutation();
+  const [addSubscriber] = useAddSubscriberMutation();
 
   const handleOnEditModal = () => {
     close();

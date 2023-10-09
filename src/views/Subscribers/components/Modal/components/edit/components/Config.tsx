@@ -8,8 +8,8 @@ import { DataType } from "@/redux/Types/subscriberTypes";
 interface InputChildProps {
   searchedSubscriber: DataType;
   imsi: string;
-  opKey: string ;
-  setOpKey: (data: string) => void;
+  opKey: string | null;
+  setOpKey: (data: string | null) => void;
   msisdn: string[];
   setMsisdn: (data: any) => void;
   amf: string;
@@ -172,7 +172,7 @@ const EditConfig: React.FC<InputChildProps> = ({
           classNames={{
             label: "static",
           }}
-          value={opKey}
+          value={opKey ? opKey : ''}
           onChange={(e) => setOpKey(e.target.value)}
           className="w-[500px]"
         />

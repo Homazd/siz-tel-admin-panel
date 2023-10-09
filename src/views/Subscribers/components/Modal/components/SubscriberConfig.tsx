@@ -12,8 +12,8 @@ interface InputChildProps {
   setSubK: (data: string) => void;
   opType: string;
   setOpType: (data: string) => void;
-  opKey: string;
-  setOpKey: (data: string) => void;
+  opKey: string | null;
+  setOpKey: (data: string | null) => void;
   amf: string;
   setAmf: (data: string) => void;
   downValue: string;
@@ -184,7 +184,7 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
             label: "static",
           }}
           required
-          value={opKey}
+          value={opKey ? opKey : ''}
           onChange={(e) => setOpKey(e.target.value)}
           className="w-[500px]"
         />

@@ -71,10 +71,10 @@ const Detail: React.FC<inputDetail> = ({ searchedSubscriber }) => {
               {searchedSubscriber.security.amf}
               <span className="text-gray-400 text-[14px]">...AMF</span>
             </p>
-            <p>
+            {/* <p>
               {searchedSubscriber.security.sqn}
               <span className="text-gray-400 text-[14px]">...SQN</span>
-            </p>
+            </p> */}
           </div>
           <div className="col-span-1">
             <p>

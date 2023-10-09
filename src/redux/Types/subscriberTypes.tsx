@@ -68,14 +68,14 @@ export interface DataType {
               unit: number;
             };
           };
-          // ue: {
-          //   addr: string;
-          //   addr6: string;
-          // };
-          // smf: {
-          //   addr: string;
-          //   addr6: string;
-          // };
+          ue: {
+            addr: string;
+            addr6: string;
+          };
+          smf: {
+            addr: string;
+            addr6: string;
+          };
           pcc_rule: [
             pccRules?,
             pccRules?,

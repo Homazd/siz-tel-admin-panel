@@ -27,10 +27,10 @@ import { FaPencilAlt } from "react-icons/fa";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { useDisclosure } from "@mantine/hooks";
 // Components
-import Session from "../Session";
 // import PccRules from "../PccRules";
 import EditConfig from "./components/Config";
 import EditSlice from "./components/EditSlice";
+import EditSession from "./components/EditSession";
 
 interface imsiInputProps {
   addedImsi: string;
@@ -50,7 +50,7 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
   const [imeisv, setImeisv] = useState([""]);
   const [subK, setSubK] = useState("");
   const [opType, setOpType] = useState("OPc");
-  const [opKey, setOpKey] = useState("");
+  const [opKey, setOpKey] = useState<string | null>("");
   const [amf, setAmf] = useState("");
   const [downValue, setDownValue] = useState("1");
   const [downUnit, setDownUnit] = useState("3");
@@ -59,10 +59,6 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
   // Slice States
   const [sst, setSst] = useState("1");
   const [sd, setSd] = useState("");
-  const [ueIpv4, setUeIpv4] = useState("");
-  const [ueIpv6, setUeIpv6] = useState("");
-  const [smfIpv4, setSmfIpv4] = useState("");
-  const [smfIpv6, setSmfIpv6] = useState("");
   const [deleteSubscriber] = useDeleteSubscriberMutation();
   const [updateSubscriber] = useUpdateSubscriberMutation();
   // Session States
@@ -75,7 +71,10 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
   const [ambrUplink, setAmbrUplink] = useState("");
   const [ambrDownUnit, setAmbrDownUnit] = useState("");
   const [ambrUpUnit, setAmbrUpUnit] = useState("");
-
+  const [ueIpv4, setUeIpv4] = useState("");
+  const [ueIpv6, setUeIpv6] = useState("");
+  const [smfIpv4, setSmfIpv4] = useState("");
+  const [smfIpv6, setSmfIpv6] = useState("");
   // PCC Rules
   // const [pcc, setPcc] = useState([]);
 
@@ -142,7 +141,7 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
       setSubK(searchedSubscriber.security.k);
       setAmf(searchedSubscriber.security.amf);
       // setMsisdn(searchedSubscriber.msisdn[0]);
-      setOpType(searchedSubscriber.security.opc ? "OPc" : "OP")
+      setOpType(searchedSubscriber.security.opc ? "OPc" : "OP");
       setOpKey(
         searchedSubscriber.security.opc
           ? searchedSubscriber.security.opc
@@ -153,8 +152,44 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
       setUpValue(String(searchedSubscriber.ambr.uplink.value));
       setUpUnit(upLinkUnit);
       setSst(String(searchedSubscriber.slice[0].sst));
-      setSd(searchedSubscriber.slice[0].sd !== undefined ? String(searchedSubscriber.slice[0].sd) : '');
+      setSd(
+        searchedSubscriber.slice[0].sd !== undefined
+          ? String(searchedSubscriber.slice[0].sd)
+          : ""
+      );
       // setPcc(searchedSubscriber.slice[0].session[0].pcc_rule)
+      setType(String(searchedSubscriber.slice[0].session[0].type));
+      setQci(String(searchedSubscriber.slice[0].session[0].qos.index));
+      setArp(
+        String(searchedSubscriber.slice[0].session[0].qos.arp.priority_level)
+      );
+      setCapability(
+        String(
+          searchedSubscriber.slice[0].session[0].qos.arp.pre_emption_capability
+        )
+      );
+      setVulnerability(
+        String(
+          searchedSubscriber.slice[0].session[0].qos.arp
+            .pre_emption_vulnerability
+        )
+      );
+      setAmbrDownlink(
+        String(searchedSubscriber.slice[0].session[0].ambr.downlink.value)
+      );
+      setAmbrUplink(
+        String(searchedSubscriber.slice[0].session[0].ambr.uplink.value)
+      );
+      setAmbrDownUnit(
+        String(searchedSubscriber.slice[0].session[0].ambr.downlink.unit)
+      );
+      setAmbrUpUnit(
+        String(searchedSubscriber.slice[0].session[0].ambr.uplink.unit)
+      );
+      setUeIpv4(searchedSubscriber.slice[0].session[0].ue.addr);
+      setUeIpv6(searchedSubscriber.slice[0].session[0].ue.addr6);
+      setSmfIpv4(searchedSubscriber.slice[0].session[0].smf.addr);
+      setSmfIpv6(searchedSubscriber.slice[0].session[0].smf.addr6);
     }
     console.log("searchedSubscriber is:", searchedSubscriber);
   }, [searchedSubscriber, imsi, addedImsi]);
@@ -214,19 +249,20 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
   };
 
   const vulnerabilitySST = () => {
-    if(searchedSubscriber){
-    const vulnerability =
-      searchedSubscriber.slice[0].session[0].qos.arp.pre_emption_vulnerability;
-    switch (vulnerability) {
-      case 1:
-        return "Disabled";
-      case 2:
-        return "Enabled";
+    if (searchedSubscriber) {
+      const vulnerability =
+        searchedSubscriber.slice[0].session[0].qos.arp
+          .pre_emption_vulnerability;
+      switch (vulnerability) {
+        case 1:
+          return "Disabled";
+        case 2:
+          return "Enabled";
 
-      default:
-        break;
+        default:
+          break;
+      }
     }
-  }
   };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -305,14 +341,14 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
                   pre_emption_vulnerability: 1,
                 },
               },
-              // ue: {
-              //   addr: "",
-              //   addr6: "",
-              // },
-              // smf: {
-              //   addr: "",
-              //   addr6: "",
-              // },
+              ue: {
+                addr: "",
+                addr6: "",
+              },
+              smf: {
+                addr: "",
+                addr6: "",
+              },
               pcc_rule: [],
             },
           ],
@@ -328,7 +364,10 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
   return (
     <>
       <ModalsProvider>
-        <form onSubmit={handleSubmit} className="w-[300px] laptop:w-[500px] desktop:w-[800px] h-18">
+        <form
+          onSubmit={handleSubmit}
+          className="w-[300px] laptop:w-[500px] desktop:w-[800px] h-18"
+        >
           <StyledInput
             icon={<IconSearch size="1.1rem" stroke={1.5} />}
             radius="xl"
@@ -496,7 +535,9 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
                       className="bg-gray-300 rounded-lg shadow-lg w-[1200px]"
                     >
                       <Box mx="auto" className="w-[800px]">
-                        <span className="text-[18px] text-blue-600 font-bold">Homa</span>
+                        <span className="text-[18px] text-blue-600 font-bold">
+                          Homa
+                        </span>
                         <form
                           onSubmit={(e) => {
                             e.preventDefault();
@@ -535,7 +576,7 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
                             sd={sd}
                             setSd={setSd}
                           />
-                          <Session
+                          <EditSession
                             hiddenSession={hiddenSession}
                             onClickDeleteSession={onClickDeleteSession}
                             onClickAddSession={onClickAddSession}
