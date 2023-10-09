@@ -50,7 +50,7 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
   const [imeisv, setImeisv] = useState([""]);
   const [subK, setSubK] = useState("");
   const [opType, setOpType] = useState("OPc");
-  const [opKey, setOpKey] = useState<string | null>("");
+  const [opKey, setOpKey] = useState("");
   const [amf, setAmf] = useState("");
   const [downValue, setDownValue] = useState("1");
   const [downUnit, setDownUnit] = useState("3");
@@ -214,6 +214,7 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
   };
 
   const vulnerabilitySST = () => {
+    if(searchedSubscriber){
     const vulnerability =
       searchedSubscriber.slice[0].session[0].qos.arp.pre_emption_vulnerability;
     switch (vulnerability) {
@@ -225,6 +226,7 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
       default:
         break;
     }
+  }
   };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -279,7 +281,7 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
       slice: [
         {
           sst: +sst,
-          sd: sd ? sd : "",
+          sd: sd || undefined,
           default_indicator: true,
           session: [
             {
@@ -393,10 +395,10 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
                       {searchedSubscriber.security.amf}
                       <span className="text-gray-400 text-[14px]">...AMF</span>
                     </p>
-                    <p>
+                    {/* <p>
                       {searchedSubscriber.security.sqn}
                       <span className="text-gray-400 text-[14px]">...SQN</span>
-                    </p>
+                    </p> */}
                   </div>
                   <div className="col-span-1">
                     <p>
@@ -494,8 +496,12 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
                       className="bg-gray-300 rounded-lg shadow-lg w-[1200px]"
                     >
                       <Box mx="auto" className="w-[800px]">
+                        <span className="text-[18px] text-blue-600 font-bold">Homa</span>
                         <form
-                          onSubmit={handleSubmitUpdate}
+                          onSubmit={(e) => {
+                            e.preventDefault();
+                            handleSubmitUpdate();
+                          }}
                           className="block relative"
                         >
                           <EditConfig
@@ -565,7 +571,7 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
                           <Button
                             className="font-bold bg-blue-500 absolute w-36 right-0 mt-6"
                             type="submit"
-                            onClick={() => setEditOpened(false)}
+                            // onClick={() => setEditOpened(false)}
                           >
                             Save
                           </Button>

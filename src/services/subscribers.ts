@@ -3,7 +3,7 @@ import { DataType } from "@/redux/Types/subscriberTypes";
 
 export const subscriberApi = createApi({
   reducerPath: "subscriberApi",
-  tagTypes: ['DataType'],
+  tagTypes: ["DataType"],
   baseQuery: fetchBaseQuery({
     baseUrl: "http://192.168.0.203:8008",
     prepareHeaders: (headers) => {
@@ -22,7 +22,7 @@ export const subscriberApi = createApi({
         url: `/mon/${imsi}`,
         method: "GET",
       }),
-      providesTags: (result, error, id) => [{ type: 'DataType', id}]
+      providesTags: (result, error, id) => [{ type: "DataType", id }],
     }),
     addSubscriber: builder.mutation<DataType, Partial<DataType>>({
       query: (data: DataType) => ({
@@ -31,14 +31,11 @@ export const subscriberApi = createApi({
         body: data,
         headers: { "Content-Type": "application/json" },
       }),
-      invalidatesTags: (result) => [{ type: 'DataType', id: result?.imsi}],
+      invalidatesTags: (result) => [{ type: "DataType", id: result?.imsi }],
     }),
     //
 
-    updateSubscriber: builder.mutation<
-      DataType,
-      Partial<DataType> & Pick<DataType, "imsi">
-    >({
+    updateSubscriber: builder.mutation<DataType, Partial<DataType>>({
       query: (data: DataType) => ({
         url: `/mon/`,
         method: "PUT",
@@ -48,14 +45,14 @@ export const subscriberApi = createApi({
         },
         body: data,
       }),
-      invalidatesTags: (result, error, {imsi}) => [{ type: 'subscriber', imsi}],
+      invalidatesTags: (data) => [{ type: "DataType", data }],
     }),
     deleteSubscriber: builder.mutation({
       query: (imsi: string) => ({
         url: `/mon/${imsi}`,
         method: "DELETE",
       }),
-      invalidatesTags: ['DataType'],
+      invalidatesTags: ["DataType"],
     }),
   }),
 });

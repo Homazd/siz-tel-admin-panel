@@ -185,7 +185,6 @@ const Session: React.FC<SessionProps> = ({
                   label="Session-AMBR Downlink"
                   placeholder="1"
                   className="w-[250px]"
-                  required
                   value={ambrDownlink}
                   onChange={(e) => setAmbrDownlink(e.target.value)}
 
@@ -215,7 +214,6 @@ const Session: React.FC<SessionProps> = ({
                     label: "static",
                   }}
                   label="Session-AMBR Uplink"
-                  required
                   placeholder="1"
                   className="w-[250px]"
                   value={ambrUplink}

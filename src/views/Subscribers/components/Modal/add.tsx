@@ -1,5 +1,5 @@
 // Hooks
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 // Mantine Hooks
 import { useDisclosure } from "@mantine/hooks";
 // Mantine Form
@@ -30,7 +30,7 @@ interface addSubscriberProps {
   handleSetImsi: (data: string) => void;
 }
 const AddSubscriber: React.FC<addSubscriberProps> = ({
-  addedImsi,
+  // addedImsi,
   handleSetImsi,
 }) => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -42,7 +42,7 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({
   const [msisdn, setMsisdn] = useState([""]);
   const [subK, setSubK] = useState("465B5CE8 B199B49F AA5F0A2E E238A6BC");
   const [opType, setOpType] = useState("OPc");
-  const [opKey, setOpKey] = useState<string | null>("E8ED289D EBA952E4 283B54E8 8E6183CA");
+  const [opKey, setOpKey] = useState("E8ED289D EBA952E4 283B54E8 8E6183CA");
   const [amf, setAmf] = useState("8000");
   const [downValue, setDownValue] = useState("1");
   const [downUnit, setDownUnit] = useState("3");
@@ -50,7 +50,7 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({
   const [upUnit, setUpUnit] = useState("3");
   // Slice States
   const [sst, setSst] = useState("1");
-  const [sd, setSd] = useState<string>("");
+  const [sd, setSd] = useState("");
   // Session States
   const [type, setType] = useState("3");
   const [qci, setQci] = useState("9");
@@ -225,14 +225,14 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({
                 unit: +ambrUpUnit,
               },
             },
-            // ue: {
-            //   addr: ueIpv4,
-            //   addr6: ueIpv6,
-            // },
-            // smf: {
-            //   addr: smfIpv4,
-            //   addr6: smfIpv6,
-            // },
+            ue: {
+              addr: ueIpv4,
+              addr6: ueIpv6,
+            },
+            smf: {
+              addr: smfIpv4,
+              addr6: smfIpv6,
+            },
             pcc_rule: [],
             //  {
             //   qos: {
