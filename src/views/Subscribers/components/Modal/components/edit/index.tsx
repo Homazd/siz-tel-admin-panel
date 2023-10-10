@@ -12,8 +12,6 @@ import {
   ModalProps,
   Text,
 } from "@mantine/core";
-// Mantine Form
-
 import { IconSearch, IconArrowRight, IconArrowLeft } from "@tabler/icons-react";
 import {
   useGetSubscribersQuery,
@@ -425,13 +423,12 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi, handleImsiChange, isTy
       <ModalsProvider>
         <form
           onSubmit={handleSubmit}
-          className="w-[300px] laptop:w-[500px] desktop:w-[800px] h-18"
+          className="w-[300px] laptop:w-[500px] desktop:w-[800px] h-18 border-none"
         >
           <StyledInput
             icon={<IconSearch size="1.1rem" stroke={1.5} />}
             radius="xl"
             size="lg"
-            className="w-[200px]  laptop:w-[500px] desktop:[800px]"
             rightSection={
               <ActionIcon
                 size={22}

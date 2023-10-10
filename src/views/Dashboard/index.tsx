@@ -18,7 +18,6 @@ import {
   ActionIcon,
   Group,
   createStyles,
-  Image,
 } from "@mantine/core";
 import { IconSun, IconMoonStars } from "@tabler/icons-react";
 import gasBackGround from "@/images/gas.jpg";
@@ -191,7 +190,7 @@ const Dashboard: React.FC = () => {
             maxWidth: "100%",
           }}
         >
-          <img src={iranFlag} className="w-[50px] laptop:w-[100px] absolute right-0 mr-8 laptop:mr-16 mt-[25px] laptop:mt-[50px] animate__animated animate__zoomInUp"/>
+          <img src={iranFlag} className="w-[50px] laptop:w-[70px] absolute right-0 mr-8 laptop:mr-8 mt-[10px] laptop:mt-[10px] animate__animated animate__zoomInUp"/>
           <Routes>
             <Route path="/dashboard/subscribers" element={<Subscribers />} />
             <Route path="/dashboard/profile" element={<Profile />} />

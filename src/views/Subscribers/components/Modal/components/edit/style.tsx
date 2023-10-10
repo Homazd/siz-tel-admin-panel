@@ -10,7 +10,7 @@ const StyledInput = styled(TextInput)`
   & .mantine-TextInput-input {
     width: 265px;
     @media (min-width: 1024px) {
-      width: 400px;
+      width: 450px;
     }
     @media (min-width: 1440px) {
       width: 750px;
