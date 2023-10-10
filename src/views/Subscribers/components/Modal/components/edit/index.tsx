@@ -91,7 +91,7 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
   });
 
   useEffect(() => {
-    console.log("added imsi in index is:", addedImsi);
+    // console.log("added imsi in index is:", addedImsi);
     if (searchedSubscriber) {
       let downLinkUnit: string;
       let upLinkUnit: string;
@@ -138,6 +138,7 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
           upLinkUnit = "3";
           break;
       }
+      setImsi(searchedSubscriber.imsi);
       setSubK(searchedSubscriber.security.k);
       setAmf(searchedSubscriber.security.amf);
       // setMsisdn(searchedSubscriber.msisdn[0]);
@@ -186,13 +187,34 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
       setAmbrUpUnit(
         String(searchedSubscriber.slice[0].session[0].ambr.uplink.unit)
       );
-      setUeIpv4(searchedSubscriber.slice[0].session[0].ue.addr);
-      setUeIpv6(searchedSubscriber.slice[0].session[0].ue.addr6);
-      setSmfIpv4(searchedSubscriber.slice[0].session[0].smf.addr);
-      setSmfIpv6(searchedSubscriber.slice[0].session[0].smf.addr6);
+      if (
+        searchedSubscriber.slice[0].session[0].ue &&
+        searchedSubscriber.slice[0].session[0].ue.addr
+      ) {
+        setUeIpv4(String(searchedSubscriber.slice[0].session[0].ue.addr));
+      }
+      // setUeIpv4(searchedSubscriber.slice[0].session[0].ue.addr !== undefined ? String(searchedSubscriber.slice[0].session[0].ue.addr) : "");
+      setUeIpv6(
+        searchedSubscriber.slice[0].session[0].ue &&
+          searchedSubscriber.slice[0].session[0].ue.addr6
+          ? searchedSubscriber.slice[0].session[0].ue.addr6
+          : ""
+      );
+      setSmfIpv4(
+        searchedSubscriber.slice[0].session[0].smf &&
+          searchedSubscriber.slice[0].session[0].smf.addr
+          ? searchedSubscriber.slice[0].session[0].smf.addr
+          : ""
+      );
+      setSmfIpv6(
+        searchedSubscriber.slice[0].session[0].smf &&
+          searchedSubscriber.slice[0].session[0].smf.addr6
+          ? searchedSubscriber.slice[0].session[0].smf.addr6
+          : ""
+      );
     }
     console.log("searchedSubscriber is:", searchedSubscriber);
-  }, [searchedSubscriber, imsi, addedImsi]);
+  }, [searchedSubscriber]);
 
   const handleOnDelete = () => {
     setHiddenSlice(true);
@@ -267,7 +289,7 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
-      console.log("Subscriber is:", searchedSubscriber);
+      console.log("Subscriber is:", searchedSubscriber, isSuccess, error);
     }
   };
 
@@ -293,8 +315,11 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
       deleteSubscriber(searchedSubscriber.imsi);
     }
   };
+
+  const apn = localStorage.getItem("apn");
   const handleSubmitUpdate = () => {
     console.log("submit edit");
+    console.log("imsi in update is:", imsi);
 
     updateSubscriber({
       imsi: imsi,
@@ -304,7 +329,7 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
       security: {
         k: subK,
         op: opType === "OP" ? opKey : null,
-        opc: opType === "OP" ? opKey : null,
+        opc: opType === "OPc" ? opKey : null,
         amf: amf,
       },
       mme_host: [],
@@ -321,7 +346,7 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
           default_indicator: true,
           session: [
             {
-              name: "internet",
+              name: apn ? apn : "internet",
               type: 3,
               ambr: {
                 downlink: {
@@ -341,14 +366,20 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
                   pre_emption_vulnerability: 1,
                 },
               },
-              ue: {
-                addr: "",
-                addr6: "",
-              },
-              smf: {
-                addr: "",
-                addr6: "",
-              },
+              ue:
+                ueIpv4 || ueIpv6
+                  ? {
+                      addr: ueIpv4 || undefined,
+                      addr6: ueIpv6 || undefined,
+                    }
+                  : undefined,
+              smf:
+                smfIpv4 || smfIpv6
+                  ? {
+                      addr: smfIpv4 || undefined,
+                      addr6: smfIpv6 || undefined,
+                    }
+                  : undefined,
               pcc_rule: [],
             },
           ],
@@ -360,6 +391,7 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
       subscribed_rau_tau_timer: 12,
       __v: 0,
     });
+    setEditOpened(false);
   };
   return (
     <>
@@ -535,9 +567,6 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
                       className="bg-gray-300 rounded-lg shadow-lg w-[1200px]"
                     >
                       <Box mx="auto" className="w-[800px]">
-                        <span className="text-[18px] text-blue-600 font-bold">
-                          Homa
-                        </span>
                         <form
                           onSubmit={(e) => {
                             e.preventDefault();
@@ -608,14 +637,31 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
                             setSmfIpv6={setSmfIpv6}
                           />
                           {/* <PccRules /> */}
-
-                          <Button
-                            className="font-bold bg-blue-500 absolute w-36 right-0 mt-6"
-                            type="submit"
-                            // onClick={() => setEditOpened(false)}
-                          >
-                            Save
-                          </Button>
+                          <p className="text-center ml-[300px] mt-6">
+                            <Button className="bg-sky-500 text-white font-semibold w-28">
+                              +
+                            </Button>
+                          </p>
+                          <p className="text-center ml-[600px] mt-6">
+                            <Button className="bg-sky-500 text-white font-semibold w-28">
+                              +
+                            </Button>
+                          </p>
+                          <div className="flex absolute right-0">
+                            <Button
+                              className="font-bold bg-red-600  w-32 mt-6"
+                              onClick={() => setEditOpened(false)}
+                            >
+                              Cancel
+                            </Button>
+                            <Button
+                              className="font-bold bg-blue-600 w-32 mt-6 ml-3"
+                              type="submit"
+                              // onClick={() => setEditOpened(false)}
+                            >
+                              Save
+                            </Button>
+                          </div>
                         </form>
                       </Box>
                     </Modal>

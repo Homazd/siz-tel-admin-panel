@@ -69,13 +69,13 @@ export interface DataType {
             };
           };
           ue: {
-            addr: string;
-            addr6: string;
-          };
+            addr: string | undefined;
+            addr6: string | undefined;
+          } | undefined;
           smf: {
-            addr: string;
-            addr6: string;
-          };
+            addr: string | undefined;
+            addr6: string | undefined;
+          } | undefined;
           pcc_rule: [
             pccRules?,
             pccRules?,
