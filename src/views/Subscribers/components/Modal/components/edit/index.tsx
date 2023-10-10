@@ -37,10 +37,13 @@ import { pccRules } from "@/redux/Types/subscriberTypes";
 
 interface imsiInputProps {
   addedImsi: string;
+  isTyping: boolean;
+  setIsTyping: (data: boolean) => void;
+  handleImsiChange: (data: ChangeEvent<Element>) => void;
+
 }
-const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
+const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi, handleImsiChange, isTyping, setIsTyping }) => {
   const [value, setValue] = useState<string>("");
-  const [isTyping, setIsTyping] = useState(false);
   const [hiddenSession, setHiddenSession] = useState(true);
   const [hiddenSlice, setHiddenSlice] = useState(false);
   const [opened, { open, close }] = useDisclosure();
@@ -108,12 +111,13 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
     isSuccess,
     isError,
     error,
-  } = useGetSubscribersQuery(value, {
+  } = useGetSubscribersQuery(addedImsi, {
     skip: isTyping,
   });
 
   useEffect(() => {
-    // console.log("added imsi in index is:", addedImsi);
+    console.log("added imsi in edit is:", addedImsi);
+    console.log("searchedSubscriber", searchedSubscriber);
     if (searchedSubscriber) {
       let downLinkUnit: string;
       let upLinkUnit: string;
@@ -235,8 +239,7 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
           : ""
       );
     }
-    console.log("searchedSubscriber is:", searchedSubscriber);
-  }, [searchedSubscriber]);
+  }, [searchedSubscriber, addedImsi]);
 
   const handleOnDelete = () => {
     setHiddenSlice(true);
@@ -316,11 +319,6 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
     }
   };
 
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      console.log("Subscriber is:", searchedSubscriber, isSuccess, error);
-    }
-  };
 
   const handleOnInput = (event: ChangeEvent<HTMLInputElement>) => {
     setIsTyping(true);
@@ -376,23 +374,23 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
           session: [
             {
               name: apn ? apn : "internet",
-              type: 3,
+              type: +type,
               ambr: {
                 downlink: {
-                  value: 1,
-                  unit: 3,
+                  value: +ambrDownlink,
+                  unit: +ambrDownUnit,
                 },
                 uplink: {
-                  value: 1,
-                  unit: 3,
+                  value: +ambrUplink,
+                  unit: +ambrUpUnit,
                 },
               },
               qos: {
-                index: 9,
+                index: +qci,
                 arp: {
-                  priority_level: 8,
-                  pre_emption_capability: 1,
-                  pre_emption_vulnerability: 1,
+                  priority_level: +arp,
+                  pre_emption_capability: +capability,
+                  pre_emption_vulnerability: +vulnerability,
                 },
               },
               ue:
@@ -451,9 +449,9 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
             }
             placeholder="IMSI"
             rightSectionWidth={22}
-            value={value}
-            onChange={handleOnInput}
-            onKeyDown={handleKeyPress}
+            value={addedImsi}
+            onChange={handleImsiChange}
+            // onKeyDown={handleKeyPress}
             // {...props}
           />
         </form>
@@ -665,7 +663,10 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
                             smfIpv6={smfIpv6}
                             setSmfIpv6={setSmfIpv6}
                           />
-                          <Pcc inputs={inputs} onInputChange={handleInputChange} />
+                          <Pcc
+                            inputs={inputs}
+                            onInputChange={handleInputChange}
+                          />
                           <p className="text-center ml-[300px] mt-6">
                             <Button className="bg-sky-500 text-white font-semibold w-28">
                               +

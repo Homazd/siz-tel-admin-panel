@@ -1,20 +1,20 @@
-import { useState } from "react";
 import { ModalsProvider } from "@mantine/modals";
 import IMSIInput from "./components/Modal/components/edit";
 import AddSubscriber from "./components/Modal/add";
 import "animate.css";
+import { useState } from "react";
 
 function Subscribers() {
-  // const [addedSub, setAddedSub] = useState(null);
-  // const handleAddedSubChange = (newAddedSub : any) => {
-  //   setAddedSub(newAddedSub);
-  //   console.log("addedSub", addedSub);
-  // }
-  const [addedImsi, setAddedImsi] = useState('');
-  const handleSetImsi = (imsi : string) => {
-    setAddedImsi(imsi);
-    console.log("added imsi is:", addedImsi)
-  }
+  const [isTyping, setIsTyping] = useState(false);
+  const [addedImsi, setAddedImsi] = useState("");
+  const handleNewSubscriber = (addedImsi: string) => {
+    console.log("addedImsi is", addedImsi);
+    setAddedImsi(addedImsi);
+  };
+  const handleImsiChange = (event) => {
+    setIsTyping(true)
+    setAddedImsi(event.target.value)
+  };
   return (
     <>
       <ModalsProvider>
@@ -22,9 +22,9 @@ function Subscribers() {
           <span className="text-[24px] font-bold text-blue-600">
             Search IMSI
           </span>
-          <IMSIInput addedImsi={addedImsi} />
+          <IMSIInput addedImsi={addedImsi}  handleImsiChange={handleImsiChange} isTyping={isTyping} setIsTyping={setIsTyping} />
         </div>
-        <AddSubscriber addedImsi={addedImsi} handleSetImsi={handleSetImsi} />
+        <AddSubscriber onNewSub={handleNewSubscriber} />
       </ModalsProvider>
     </>
   );

@@ -26,13 +26,10 @@ import { FaPencilAlt } from "react-icons/fa";
 import { RiDeleteBinLine } from "react-icons/ri";
 
 interface addSubscriberProps {
-  addedImsi: string;
-  handleSetImsi: (data: string) => void;
+  onNewSub: (data: string) => void;
+  // handleSetImsi: (data: string) => void;
 }
-const AddSubscriber: React.FC<addSubscriberProps> = ({
-  // addedImsi,
-  handleSetImsi,
-}) => {
+const AddSubscriber:React.FC<addSubscriberProps> = ({onNewSub}) => {
   const [opened, { open, close }] = useDisclosure(false);
   const [editOpened, setEditOpened] = useState(false);
   const [deleteOpened, setDeleteOpened] = useState(false);
@@ -267,9 +264,12 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({
       setImsi(imsi);
       addSubscriber(addingSubscriber);
       console.log(addingSubscriber);
-      handleSetImsi(imsi);
+      // handleSetImsi(imsi);
     } catch (error) {
       console.error(error);
+    }
+    if(onNewSub){
+      onNewSub(addingSubscriber.imsi)
     }
     // .then((addingSubscriber) => onStateChange(addingSubscriber))
     // .then(() => getSubscriberAfterPost(imsi))
