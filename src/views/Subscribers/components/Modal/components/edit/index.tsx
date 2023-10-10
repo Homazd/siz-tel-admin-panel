@@ -39,7 +39,7 @@ interface imsiInputProps {
   addedImsi: string;
   isTyping: boolean;
   setIsTyping: (data: boolean) => void;
-  handleImsiChange: (data: ChangeEvent<Element>) => void;
+  handleImsiChange: (data: ChangeEvent<HTMLInputElement>) => void;
 
 }
 const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi, handleImsiChange, isTyping, setIsTyping }) => {

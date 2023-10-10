@@ -3,6 +3,7 @@ import IMSIInput from "./components/Modal/components/edit";
 import AddSubscriber from "./components/Modal/add";
 import "animate.css";
 import { useState } from "react";
+import { ChangeEvent } from "react";
 
 function Subscribers() {
   const [isTyping, setIsTyping] = useState(false);
@@ -11,7 +12,7 @@ function Subscribers() {
     console.log("addedImsi is", addedImsi);
     setAddedImsi(addedImsi);
   };
-  const handleImsiChange = (event) => {
+  const handleImsiChange = (event: ChangeEvent<HTMLInputElement>) => {
     setIsTyping(true)
     setAddedImsi(event.target.value)
   };
