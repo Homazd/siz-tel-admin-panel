@@ -31,6 +31,9 @@ import { useDisclosure } from "@mantine/hooks";
 import EditConfig from "./components/Config";
 import EditSlice from "./components/EditSlice";
 import EditSession from "./components/EditSession";
+import Pcc from "../../global/Pcc";
+// Types
+import { pccRules } from "@/redux/Types/subscriberTypes";
 
 interface imsiInputProps {
   addedImsi: string;
@@ -76,8 +79,27 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
   const [smfIpv4, setSmfIpv4] = useState("");
   const [smfIpv6, setSmfIpv6] = useState("");
   // PCC Rules
-  // const [pcc, setPcc] = useState([]);
-
+  // PCC Rules
+  const [inputs, setInputs] = useState<pccRules[]>([
+    {
+      qos: {
+        index: 1,
+        arp: {
+          priority_level: 2,
+          pre_emption_capability: 2,
+          pre_emption_vulnerability: 2,
+        },
+        gbr: {
+          downlink: { value: 1, unit: 2 },
+          uplink: { value: 1, unit: 2 },
+        },
+        mbr: {
+          downlink: { value: 1, unit: 2 },
+          uplink: { value: 1, unit: 2 },
+        },
+      },
+    },
+  ]);
   // Validation
 
   const {
@@ -229,6 +251,13 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
 
   const onClickAddSession = () => {
     setHiddenSession(true);
+  };
+  const handleInputChange = (index: number, inputData: pccRules) => {
+    setInputs((prevInputs) => {
+      const updatedInputs = [...prevInputs];
+      updatedInputs[index] = inputData;
+      return updatedInputs;
+    });
   };
 
   const contentStyles: Partial<ModalProps["styles"]> = {
@@ -636,7 +665,7 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi }) => {
                             smfIpv6={smfIpv6}
                             setSmfIpv6={setSmfIpv6}
                           />
-                          {/* <PccRules /> */}
+                          <Pcc inputs={inputs} onInputChange={handleInputChange} />
                           <p className="text-center ml-[300px] mt-6">
                             <Button className="bg-sky-500 text-white font-semibold w-28">
                               +
