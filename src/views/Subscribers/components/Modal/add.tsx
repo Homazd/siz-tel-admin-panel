@@ -27,7 +27,6 @@ import { RiDeleteBinLine } from "react-icons/ri";
 
 interface addSubscriberProps {
   onNewSub: (data: string) => void;
-  // handleSetImsi: (data: string) => void;
 }
 const AddSubscriber:React.FC<addSubscriberProps> = ({onNewSub}) => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -62,6 +61,7 @@ const AddSubscriber:React.FC<addSubscriberProps> = ({onNewSub}) => {
   const [ueIpv6, setUeIpv6] = useState("");
   const [smfIpv4, setSmfIpv4] = useState("");
   const [smfIpv6, setSmfIpv6] = useState("");
+  const [isFetching, setIsFetching] = useState(false);
   // PCC Rules
   const [inputs, setInputs] = useState<pccRules[]>([
     {
@@ -85,9 +85,9 @@ const AddSubscriber:React.FC<addSubscriberProps> = ({onNewSub}) => {
   ]);
 
   const [deleteSubscriber] = useDeleteSubscriberMutation();
-  const apn = localStorage.getItem("apn");
 
-  const [isFetching, setIsFetching] = useState(false);
+  const apn = localStorage.getItem("apn");
+  
   const { data: subscriber } = useGetSubscribersQuery(imsi, {
     skip: isFetching,
   });
@@ -99,37 +99,7 @@ const AddSubscriber:React.FC<addSubscriberProps> = ({onNewSub}) => {
       return updatedInputs;
     });
   };
-  // const handleAddInput = () => {
-  //   setInputs((prevInputs) => [
-  //     ...prevInputs,
-  //     {
-  //       flow: [],
-  //       qos: {
-  //         index: 1,
-  //         arp: {
-  //           priority_level: 0,
-  //           pre_emption_capability: 1,
-  //           pre_emption_vulnerability: 1,
-  //         },
-  //         gbr: {
-  //           downlink: { value: 1, unit: 3 },
-  //           uplink: { value: 1, unit: 3 },
-  //         },
-  //         mbr: {
-  //           downlink: { value: 1, unit: 3 },
-  //           uplink: { value: 1, unit: 3 },
-  //         },
-  //       },
-  //     },
-  //   ]);
-  // };
-  // const handleRemoveInput = (index: number) => {
-  //   setInputs((prevInputs) => {
-  //     const updatedInputs = [...prevInputs];
-  //     updatedInputs.splice(index, 1);
-  //     return updatedInputs;
-  //   });
-  // };
+
   const [addSubscriber] = useAddSubscriberMutation();
 
   const handleOnEditModal = () => {
@@ -187,11 +157,11 @@ const AddSubscriber:React.FC<addSubscriberProps> = ({onNewSub}) => {
       k: subK,
       op: opType === "OP" ? opKey : null,
       opc: opType === "OPc" ? opKey : null,
-      amf: amf,
+      amf: amf
     },
     ambr: {
       downlink: { value: +downValue, unit: +downUnit },
-      uplink: { value: +upValue, unit: +upUnit },
+      uplink: { value: +upValue, unit: +upUnit }
     },
     slice: [
       {
@@ -207,28 +177,28 @@ const AddSubscriber:React.FC<addSubscriberProps> = ({onNewSub}) => {
               arp: {
                 priority_level: +arp,
                 pre_emption_capability: +capability,
-                pre_emption_vulnerability: +vulnerability,
+                pre_emption_vulnerability: +vulnerability
               },
             },
             ambr: {
               downlink: {
                 value: +ambrDownlink,
-                unit: +ambrDownUnit,
+                unit: +ambrDownUnit
               },
               uplink: {
                 value: +ambrUplink,
-                unit: +ambrUpUnit,
+                unit: +ambrUpUnit
               },
             },
             ue: {
               addr: ueIpv4,
-              addr6: ueIpv6,
+              addr6: ueIpv6
             },
             smf: {
               addr: smfIpv4,
-              addr6: smfIpv6,
+              addr6: smfIpv6
             },
-            pcc_rule: [],
+            pcc_rule: []
             //  {
             //   qos: {
             //     index: 1,
@@ -255,24 +225,20 @@ const AddSubscriber:React.FC<addSubscriberProps> = ({onNewSub}) => {
     subscriber_status: 0,
     network_access_mode: 0,
     subscribed_rau_tau_timer: 12,
-    __v: 0,
+    __v: 0
   };
 
   const handleSubmit = (addingSubscriber: DataType) => {
     try {
-      console.log("imsi is:", imsi);
       setImsi(imsi);
       addSubscriber(addingSubscriber);
-      console.log(addingSubscriber);
-      // handleSetImsi(imsi);
     } catch (error) {
       console.error(error);
     }
     if(onNewSub){
       onNewSub(addingSubscriber.imsi)
     }
-    // .then((addingSubscriber) => onStateChange(addingSubscriber))
-    // .then(() => getSubscriberAfterPost(imsi))
+  
     close();
   };
   const form = useForm({
@@ -510,11 +476,11 @@ const AddSubscriber:React.FC<addSubscriberProps> = ({onNewSub}) => {
                 // display: 'block',
                 backgroundColor:
                   theme.colorScheme === "dark"
-                    ? theme.colors.dark[6]
+                    ? theme.colors.dark[9]
                     : theme.colors.gray[3],
                 color:
                   theme.colorScheme === "dark"
-                    ? theme.colors.blue[4]
+                    ? theme.colors.blue[2]
                     : theme.colors.blue[8],
                 padding: theme.spacing.xl,
                 borderRadius: theme.radius.md,

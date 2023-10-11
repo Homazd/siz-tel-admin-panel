@@ -41,7 +41,6 @@ interface imsiInputProps {
 
 }
 const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi, handleImsiChange, isTyping, setIsTyping }) => {
-  const [value, setValue] = useState<string>("");
   const [hiddenSession, setHiddenSession] = useState(true);
   const [hiddenSlice, setHiddenSlice] = useState(false);
   const [opened, { open, close }] = useDisclosure();
@@ -317,12 +316,6 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi, handleImsiChange, isTy
     }
   };
 
-
-  const handleOnInput = (event: ChangeEvent<HTMLInputElement>) => {
-    setIsTyping(true);
-    setValue(event.target.value);
-  };
-
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     setIsTyping(false);
     event.preventDefault();
@@ -355,14 +348,14 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi, handleImsiChange, isTy
         k: subK,
         op: opType === "OP" ? opKey : null,
         opc: opType === "OPc" ? opKey : null,
-        amf: amf,
+        amf: amf
       },
       mme_host: [],
       mme_realm: [],
       purge_flag: [],
       ambr: {
         downlink: { value: +downValue, unit: +downUnit },
-        uplink: { value: +upValue, unit: +upUnit },
+        uplink: { value: +upValue, unit: +upUnit }
       },
       slice: [
         {
@@ -376,11 +369,11 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi, handleImsiChange, isTy
               ambr: {
                 downlink: {
                   value: +ambrDownlink,
-                  unit: +ambrDownUnit,
+                  unit: +ambrDownUnit
                 },
                 uplink: {
                   value: +ambrUplink,
-                  unit: +ambrUpUnit,
+                  unit: +ambrUpUnit
                 },
               },
               qos: {
@@ -388,24 +381,24 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi, handleImsiChange, isTy
                 arp: {
                   priority_level: +arp,
                   pre_emption_capability: +capability,
-                  pre_emption_vulnerability: +vulnerability,
+                  pre_emption_vulnerability: +vulnerability
                 },
               },
               ue:
                 ueIpv4 || ueIpv6
                   ? {
                       addr: ueIpv4 || undefined,
-                      addr6: ueIpv6 || undefined,
+                      addr6: ueIpv6 || undefined
                     }
                   : undefined,
               smf:
                 smfIpv4 || smfIpv6
                   ? {
                       addr: smfIpv4 || undefined,
-                      addr6: smfIpv6 || undefined,
+                      addr6: smfIpv6 || undefined
                     }
                   : undefined,
-              pcc_rule: [],
+              pcc_rule: []
             },
           ],
         },
@@ -414,7 +407,7 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi, handleImsiChange, isTy
       subscriber_status: 0,
       network_access_mode: 0,
       subscribed_rau_tau_timer: 12,
-      __v: 0,
+      __v: 0
     });
     setEditOpened(false);
   };
@@ -423,7 +416,7 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi, handleImsiChange, isTy
       <ModalsProvider>
         <form
           onSubmit={handleSubmit}
-          className="w-[300px] laptop:w-[500px] desktop:w-[800px] h-18 border-none"
+          className="w-[300px] laptop:w-[600px] desktop:w-[800px] h-18 border-none outline hover:outline-dashed outline-2"
         >
           <StyledInput
             icon={<IconSearch size="1.1rem" stroke={1.5} />}

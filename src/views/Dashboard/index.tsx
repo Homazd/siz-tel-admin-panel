@@ -3,10 +3,8 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  // UploadOutlined,
   UserOutlined,
   ContactsOutlined,
-  // VideoCameraOutlined,
 } from "@ant-design/icons";
 // Images
 import logoImage from "../../images/logo.png";
@@ -19,7 +17,7 @@ import {
   Group,
   createStyles,
 } from "@mantine/core";
-import { IconSun, IconMoonStars } from "@tabler/icons-react";
+import { IconSun, IconMoonStars, IconLogout } from "@tabler/icons-react";
 import gasBackGround from "@/images/gas.jpg";
 import oilBackGround from "@/images/oil.jpg";
 import iranFlag from "@/images/Iran_flag.png";
@@ -38,6 +36,10 @@ const useStyles = createStyles((theme) => ({
     borderBottom: 0,
   },
 }));
+const logout = () => {
+  localStorage.clear();
+  window.location.href = '/';
+}
 
 const Dashboard: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -65,11 +67,9 @@ const Dashboard: React.FC = () => {
         className={classes.header}
         style={{
           textAlign: "center",
-          // color: "#fff",
           height: 64,
           paddingInline: 50,
           lineHeight: "64px",
-          // backgroundColor: "#144272",
         }}
       >
         <div className="flex justify-center relative">
@@ -131,6 +131,7 @@ const Dashboard: React.FC = () => {
           <div className="grid place-content-center h-24">
             <img className="w-16" src={logoImage} alt="logo" />
           </div>
+          
           <Menu
             style={{ backgroundColor: "#1450A3" }}
             mode="inline"
@@ -175,6 +176,9 @@ const Dashboard: React.FC = () => {
               height: 64,
             }}
           />
+         <button onClick={logout} className="border-none text-white block width-[64px] text-[16px] ml-5">
+         <IconLogout stroke={1.5}/>
+         </button>
         </Sider>
         <Content
           style={{
