@@ -102,6 +102,7 @@ const EditConfig: React.FC<InputChildProps> = ({
                       className="w-[300px]"
                       value={msisdn}
                       onChange={(e) => setMsisdn(e.target.value)}
+                      error={msisdn.length == 0 ? "is required" : null}
                     />
                   </>
                 ) : null}
@@ -136,6 +137,7 @@ const EditConfig: React.FC<InputChildProps> = ({
           required
           value={subK}
           onChange={(e) => setSubK(e.target.value)}
+          error={subK === "" ? "is required" : null}
         />
         <TextInput
           label="Authentication Management Field (AMF)"
@@ -146,6 +148,8 @@ const EditConfig: React.FC<InputChildProps> = ({
           className="w-[300px]"
           value={amf}
           onChange={(e) => setAmf(e.target.value)}
+          required
+          error={amf === "" ? "is required" : null}
         />
       </div>
       <div className="flex  mt-3">
@@ -175,6 +179,8 @@ const EditConfig: React.FC<InputChildProps> = ({
           value={opKey ? opKey : ''}
           onChange={(e) => setOpKey(e.target.value)}
           className="w-[500px]"
+          required
+          error={opKey === "" ? "is required" : null}
         />
       </div>
       <div className="flex mt-3">
@@ -188,6 +194,8 @@ const EditConfig: React.FC<InputChildProps> = ({
           value={downValue}
           onChange={(e) => setDownValue(e.target.value)}
           className="w-[250px]"
+          required
+          error={downValue === "" ? "is required" : null}
         />
         <Select
           label="Unit"
@@ -218,6 +226,9 @@ const EditConfig: React.FC<InputChildProps> = ({
           }}
           placeholder="1"
           className="w-[250px] ml-2"
+          required
+          error={upValue === "" ? "is required" : null} 
+
         />
         <Select
           label="Unit"

@@ -27,7 +27,7 @@ export const initialState: FormState = {
     purge_flag: [],
     slice: [
       {
-        sst: "1",
+        sst: 1,
         sd: "",
         session: [
           {

@@ -36,7 +36,9 @@ const AddSubscriber:React.FC<addSubscriberProps> = ({onNewSub}) => {
   const [hiddenSession, setHiddenSession] = useState(true);
   const [hiddenSlice, setHiddenSlice] = useState(false);
   const [imsi, setImsi] = useState("");
-  const [msisdn, setMsisdn] = useState([""]);
+  const [msisdn, setMsisdn] = useState<string[]>([]);
+  const [msisdn1, setMsisdn1] = useState<string>('');
+  const [msisdn2, setMsisdn2] = useState<string>('');
   const [subK, setSubK] = useState("465B5CE8 B199B49F AA5F0A2E E238A6BC");
   const [opType, setOpType] = useState("OPc");
   const [opKey, setOpKey] = useState<string | null>("E8ED289D EBA952E4 283B54E8 8E6183CA");
@@ -109,6 +111,11 @@ const AddSubscriber:React.FC<addSubscriberProps> = ({onNewSub}) => {
     e.preventDefault();
     setSd(e.currentTarget.value);
   };
+ const handleOnAddMsisdn = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const newValue = String(e.target.value)
+  setMsisdn(prevArray => [...prevArray, newValue])
+  console.log(msisdn)
+ }
 
   const handleOnDelete = () => {
     setHiddenSlice(true);
@@ -227,13 +234,23 @@ const AddSubscriber:React.FC<addSubscriberProps> = ({onNewSub}) => {
     __v: 0
   };
 
-  const handleSubmit = (addingSubscriber: DataType) => {
+  const handleSubmit = async (addingSubscriber: DataType) => {
     try {
       setImsi(imsi);
-      addSubscriber(addingSubscriber);
+         console.log("msisdn1", msisdn1);
+         console.log("msisdn2", msisdn2);
+         console.log("msisdn", msisdn)
+      if(msisdn1.length !== 0 && msisdn.length < 3){
+        setMsisdn(preMsisdn => preMsisdn.concat(msisdn1))
+      }
+      await addSubscriber(addingSubscriber).then(() => {
+        setMsisdn([])
+      })
+      console.log("msisdn", msisdn)
+  
     } catch (error) {
       console.error(error);
-    }
+    } 
     if(onNewSub){
       onNewSub(addingSubscriber.imsi)
     }
@@ -268,8 +285,8 @@ const AddSubscriber:React.FC<addSubscriberProps> = ({onNewSub}) => {
             <SubscriberConfig
               imsi={imsi}
               setImsi={setImsi}
-              msisdn={msisdn}
-              setMsisdn={setMsisdn}
+              msisdn1={msisdn1}
+              setMsisdn1={setMsisdn1}
               subK={subK}
               setSubK={setSubK}
               opType={opType}

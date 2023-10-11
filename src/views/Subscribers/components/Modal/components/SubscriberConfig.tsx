@@ -6,8 +6,8 @@ import { Button, Divider, Select, TextInput } from "@mantine/core";
 interface InputChildProps {
   imsi: string;
   setImsi: (data: string) => void;
-  msisdn: string[];
-  setMsisdn: (data: any) => void;
+  msisdn1: string;
+  setMsisdn1: (data:string) => void;
   subK: string;
   setSubK: (data: string) => void;
   opType: string;
@@ -29,8 +29,8 @@ interface InputChildProps {
 const SubscriberConfig: React.FC<InputChildProps> = ({
   imsi,
   setImsi,
-  msisdn,
-  setMsisdn,
+  msisdn1,
+  setMsisdn1,
   subK,
   setSubK,
   opKey,
@@ -51,20 +51,6 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
   const [isMSIVisible, setIsMSIVisible] = useState(true);
   const [msisdnClicked, setMsisdnClicked] = useState(false);
 
-  const formData = {
-    imsi: "",
-    msisdn: "",
-    security: {
-      opc: "",
-      amf: "",
-      k: "",
-    },
-    ambr: {
-      downlink: { value: 1, unit: 1 },
-      uplink: { value: 1, unit: 1 },
-    },
-  };
-
   const handleOnAdd = () => {
     setMsisdnClicked(true);
     setIsMSIVisible(false);
@@ -84,6 +70,7 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
           label="IMSI"
           name="imsi"
           required
+          error={imsi === "" ? "This field is required" : null}
           placeholder="Enter IMSI"
           classNames={{
             label: "static",
@@ -114,8 +101,9 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
                         label: "static",
                       }}
                       className="w-[300px]"
-                      value={msisdn}
-                      onChange={(e) => setMsisdn(e.target.value)}
+                      value={msisdn1}
+                      onChange={(e) => setMsisdn1(e.target.value)}
+                      error={msisdn1.length == 0 ? "is required" : null}
                     />
                   </>
                 ) : null}
@@ -149,6 +137,7 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
           name="subK"
           value={subK}
           onChange={(e) => setSubK(e.target.value)}
+          error={subK === "" ? "is required" : null}
         />
         <TextInput
           label="Authentication Management Field (AMF)"
@@ -160,6 +149,7 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
             label: "static",
           }}
           className="w-[300px]"
+          error={amf === "" ? "is required" : null}
         />
       </div>
       <div className="flex  mt-3">
@@ -184,9 +174,10 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
             label: "static",
           }}
           required
-          value={opKey ? opKey : ''}
+          value={opKey ? opKey : ""}
           onChange={(e) => setOpKey(e.target.value)}
           className="w-[500px]"
+          error={opKey === "" ? "is required" : null}
         />
       </div>
       <div className="flex mt-3">
@@ -201,6 +192,7 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
           value={downValue}
           onChange={(e) => setDownValue(e.target.value)}
           className="w-[250px]"
+          error={downValue === "" ? "is required" : null}
         />
         <Select
           label="Unit"
@@ -230,6 +222,7 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
           placeholder="1"
           required
           className="w-[250px] ml-2"
+          error={upValue === "" ? "is required" : null} 
         />
         <Select
           label="Unit"
