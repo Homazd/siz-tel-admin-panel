@@ -26,13 +26,14 @@ import iranFlag from "@/images/Iran_flag.png";
 import Subscribers from "../Subscribers";
 import Profile from "../Profile";
 const { Header, Sider, Content } = Layout;
+const apn = localStorage.getItem("apn");
 
 const useStyles = createStyles((theme) => ({
   header: {
-    backgroundColor: theme.fn.variant({
+    backgroundColor: apn === 'GAS' ? (theme.fn.variant({
       variant: "filled",
       color: theme.primaryColor,
-    }).background,
+    }).background) : '#0802A3' ,
     borderBottom: 0,
   },
 }));
@@ -117,7 +118,7 @@ const Dashboard: React.FC = () => {
             width: "500px",
             maxWidth: "500px",
             flex: "0 0 500px",
-            backgroundColor: "#1450A3",
+            backgroundColor: apn === 'GAS' ? "#1450A3" : '#3085C3' ,
           }}
           // style={{
           //   backgroundColor: ${({theme})} =>
@@ -133,7 +134,7 @@ const Dashboard: React.FC = () => {
           </div>
           
           <Menu
-            style={{ backgroundColor: "#1450A3" }}
+            style={{ backgroundColor: "#3085C3" }}
             mode="inline"
             defaultSelectedKeys={["1"]}
             items={[
@@ -143,7 +144,7 @@ const Dashboard: React.FC = () => {
                 label: (
                   <Button
                     onClick={handleOnSubscribers}
-                    className="text-blue-400 text-[18px]"
+                    className="text-[18px]"
                     style={{ color: "#FFC436" }}
                   >
                     Subscribers
@@ -156,7 +157,7 @@ const Dashboard: React.FC = () => {
                 label: (
                   <Button
                     onClick={handleOnProfile}
-                    className="text-[18px] text-custom-yellow hover:text-custom-blue-medium"
+                    className="text-[18px] text-custom-yellow"
                     style={{ color: "#FFC436" }}
                   >
                     Profile

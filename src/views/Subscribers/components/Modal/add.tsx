@@ -24,6 +24,7 @@ import { DataType, pccRules } from "@/redux/Types/subscriberTypes";
 // Icons
 import { FaPencilAlt } from "react-icons/fa";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { apn } from '@/static/static';
 
 interface addSubscriberProps {
   onNewSub: (data: string) => void;
@@ -85,8 +86,6 @@ const AddSubscriber:React.FC<addSubscriberProps> = ({onNewSub}) => {
   ]);
 
   const [deleteSubscriber] = useDeleteSubscriberMutation();
-
-  const apn = localStorage.getItem("apn");
   
   const { data: subscriber } = useGetSubscribersQuery(imsi, {
     skip: isFetching,
@@ -449,7 +448,7 @@ const AddSubscriber:React.FC<addSubscriberProps> = ({onNewSub}) => {
 
       <Group position="center">
         <Button
-          className="bg-blue-500 rounded-full mt-7 w-40 animate__animated animate__swing"
+          className={`${apn == 'GAS' ? 'bg-blue-500' : 'bg-yellow-500'} ${apn === 'GAS' ? 'text-white' : 'text-yellow-950'} rounded-full mt-7 w-40 animate__animated animate__swing"`}
           onClick={open}
         >
           Add Subscriber

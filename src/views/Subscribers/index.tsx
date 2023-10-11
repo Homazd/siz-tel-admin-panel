@@ -7,6 +7,7 @@ import IMSIInput from "./components/Modal/components/edit";
 import AddSubscriber from "./components/Modal/add";
 // Style
 import "animate.css";
+import { apn } from "@/static/static";
 
 function Subscribers() {
   const [isTyping, setIsTyping] = useState(false);
@@ -23,7 +24,7 @@ function Subscribers() {
       <ModalsProvider>
         <div className="flex justify-center animate__animated animate__backInUp mt-10">
           <div>
-            <span className="text-[24px] font-bold text-blue-600 pb-3">
+            <span className={`text-[24px] font-bold ${apn === 'GAS' ? 'text-blue-600' : 'text-yellow-400' }`}>
               Search IMSI
             </span>
             <IMSIInput
