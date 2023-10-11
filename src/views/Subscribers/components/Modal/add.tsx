@@ -111,11 +111,6 @@ const AddSubscriber:React.FC<addSubscriberProps> = ({onNewSub}) => {
     e.preventDefault();
     setSd(e.currentTarget.value);
   };
- const handleOnAddMsisdn = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const newValue = String(e.target.value)
-  setMsisdn(prevArray => [...prevArray, newValue])
-  console.log(msisdn)
- }
 
   const handleOnDelete = () => {
     setHiddenSlice(true);
