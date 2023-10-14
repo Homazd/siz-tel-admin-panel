@@ -160,11 +160,11 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
       k: subK,
       op: opType === "OP" ? opKey : null,
       opc: opType === "OPc" ? opKey : null,
-      amf: amf
+      amf: amf,
     },
     ambr: {
       downlink: { value: +downValue, unit: +downUnit },
-      uplink: { value: +upValue, unit: +upUnit }
+      uplink: { value: +upValue, unit: +upUnit },
     },
     slice: [
       {
@@ -180,30 +180,30 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
               arp: {
                 priority_level: +arp,
                 pre_emption_capability: +capability,
-                pre_emption_vulnerability: +vulnerability
-              }
+                pre_emption_vulnerability: +vulnerability,
+              },
             },
             ambr: {
               downlink: {
                 value: +ambrDownlink,
-                unit: +ambrDownUnit
+                unit: +ambrDownUnit,
               },
               uplink: {
                 value: +ambrUplink,
-                unit: +ambrUpUnit
-              }
+                unit: +ambrUpUnit,
+              },
             },
             ue:
               {
                 addr: ueIpv4 || undefined,
-                addr6: ueIpv6 || undefined
+                addr6: ueIpv6 || undefined,
               } || undefined,
             smf:
               {
                 addr: smfIpv4 || undefined,
-                addr6: smfIpv6 || undefined
+                addr6: smfIpv6 || undefined,
               } || undefined,
-            pcc_rule: []
+            pcc_rule: [],
             //  {
             //   qos: {
             //     index: 1,
@@ -230,47 +230,131 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
     subscriber_status: 0,
     network_access_mode: 0,
     subscribed_rau_tau_timer: 12,
-    __v: 0
+    __v: 0,
   };
   const handleInputChangeMsisdn = (event: ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     const value = event.target.value;
     setMsisdn1(value);
-    if (msisdn.length < 2) {
-      setMsisdn((current) => current.concat(msisdn1));
-    }
-    console.log("msisdn", msisdn);
+    // if (msisdn.length < 2) {
+    //   setMsisdn((current) => current.concat(msisdn1));
+    // }
+    // console.log("msisdn", msisdn);
   };
 
-  const handleSubmit = (addingSubscriber: DataType) => {
-    event?.preventDefault();
+  const handleSubmit = async(addingSubscriber: DataType) => {
     console.log("msisdn1", msisdn1);
-    // (msisdn1.length !== 0 && msisdn.length <= 2) ?   setMsisdn((current) => current.concat(msisdn1)) : null;
-    // (msisdn2.length !== 0 && msisdn.length <= 2) ?   setMsisdn((current) => current.concat(msisdn2)) : null;
-    console.log("msisdn", msisdn);
-    try {
-      setImsi(imsi);
+    const updatedMsisdn = [...msisdn, msisdn1];
+    await addSubscriber({
+      schema_version: 1,
+      imsi: imsi,
+      msisdn: updatedMsisdn,
+      imeisv: [],
+      mme_host: [],
+      mme_realm: [],
+      purge_flag: [],
+      security: {
+        k: subK,
+        op: opType === "OP" ? opKey : null,
+        opc: opType === "OPc" ? opKey : null,
+        amf: amf,
+      },
+      ambr: {
+        downlink: { value: +downValue, unit: +downUnit },
+        uplink: { value: +upValue, unit: +upUnit },
+      },
+      slice: [
+        {
+          sst: +sst,
+          sd: sd || undefined,
+          default_indicator: true,
+          session: [
+            {
+              name: apn ? apn : "GAS",
+              type: +type,
+              qos: {
+                index: +qci,
+                arp: {
+                  priority_level: +arp,
+                  pre_emption_capability: +capability,
+                  pre_emption_vulnerability: +vulnerability,
+                },
+              },
+              ambr: {
+                downlink: {
+                  value: +ambrDownlink,
+                  unit: +ambrDownUnit,
+                },
+                uplink: {
+                  value: +ambrUplink,
+                  unit: +ambrUpUnit,
+                },
+              },
+              ue:
+                {
+                  addr: ueIpv4 || undefined,
+                  addr6: ueIpv6 || undefined,
+                } || undefined,
+              smf:
+                {
+                  addr: smfIpv4 || undefined,
+                  addr6: smfIpv6 || undefined,
+                } || undefined,
+              pcc_rule: [],
+              //  {
+              //   qos: {
+              //     index: 1,
+              //     arp: {
+              //       priority_level: 1,
+              //       pre_emption_capability: 1,
+              //       pre_emption_vulnerability: 1,
+              //     },
+              //     gbr: {
+              //       downlink: { value: 1, unit: 1 },
+              //       uplink: { value: 1, unit: 1 },
+              //     },
+              //     mbr: {
+              //       downlink: { value: 1, unit: 1 },
+              //       uplink: { value: 1, unit: 1 },
+              //     },
+              //   },
+              // },
+            },
+          ],
+        },
+      ],
+      access_restriction_data: 32,
+      subscriber_status: 0,
+      network_access_mode: 0,
+      subscribed_rau_tau_timer: 12,
+      __v: 0,
+    });
+    setMsisdn1("");
+    setMsisdn([])
 
-      // console.log("msisdn2", msisdn2);
-      // if (msisdn1.length != 0 && msisdn.length <= 2) {
-      // setMsisdn(current => current.concat(['homa']));
-      // }
+    // try {
+    //   setImsi(imsi);
 
-      // (msisdn2.length !== 0 && msisdn.length <= 2) ? setMsisdn(current => [...current, msisdn2]) : null;
+    //   // console.log("msisdn2", msisdn2);
+    //   // if (msisdn1.length != 0 && msisdn.length <= 2) {
+    //   // setMsisdn(current => current.concat(['homa']));
+    //   // }
 
-      addSubscriber(addingSubscriber)
-        .unwrap()
-        .then(() => {
-          setMsisdn([]);
-        });
-      console.log("addingSubscriber", addingSubscriber);
-      // console.log("msisdn is:", msisdn);
-      // setMsisdn([])
-      // setMsisdn1('');
-      // console.log('msisdn1', msisdn1)
-    } catch (error) {
-      console.error(error);
-    }
+    //   // (msisdn2.length !== 0 && msisdn.length <= 2) ? setMsisdn(current => [...current, msisdn2]) : null;
+
+    //   addSubscriber(addingSubscriber)
+    //     .unwrap()
+    //     .then(() => {
+    //       setMsisdn([]);
+    //     });
+    //   console.log("addingSubscriber", addingSubscriber);
+    //   // console.log("msisdn is:", msisdn);
+    //   // setMsisdn([])
+    //   // setMsisdn1('');
+    //   // console.log('msisdn1', msisdn1)
+    // } catch (error) {
+    //   console.error(error);
+    // }
     if (onNewSub) {
       onNewSub(addingSubscriber.imsi);
     }
