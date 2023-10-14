@@ -7,7 +7,7 @@ interface InputChildProps {
   imsi: string;
   setImsi: (data: string) => void;
   msisdn1: string;
-  handleInputChangeMsisdn: (data:any) => void;
+  handleInputChangeMsisdn: (data: any) => void;
   subK: string;
   setSubK: (data: string) => void;
   opType: string;
@@ -50,17 +50,21 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
 }) => {
   const [isMSIVisible, setIsMSIVisible] = useState(true);
   const [msisdnClicked, setMsisdnClicked] = useState(false);
+  const [secondMsisdn, setSecondMsisdn] = useState(false);
 
   const handleOnAdd = () => {
     setMsisdnClicked(true);
     setIsMSIVisible(false);
   };
 
-  const handleOnMulti = () => {
+  const handleOnDeleteMsisdn = () => {
     setIsMSIVisible(true);
     setMsisdnClicked(false);
   };
 
+  const handleOnAddSecondMSisdn = () => {
+    setSecondMsisdn(true);
+  };
   return (
     <>
       <div className="relative">
@@ -111,13 +115,13 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
               <div className="col-span-1">
                 <Button
                   className="font-bold bg-red-500 w-28 mb-2 block"
-                  onClick={handleOnMulti}
+                  onClick={handleOnDeleteMsisdn}
                 >
                   ×
                 </Button>
                 <Button
                   className="font-bold bg-sky-500 w-28 justify-items-center "
-                  onClick={handleOnAdd}
+                  onClick={handleOnAddSecondMSisdn}
                 >
                   +
                 </Button>
@@ -222,7 +226,7 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
           placeholder="1"
           required
           className="w-[250px] ml-2"
-          error={upValue === "" ? "is required" : null} 
+          error={upValue === "" ? "is required" : null}
         />
         <Select
           label="Unit"

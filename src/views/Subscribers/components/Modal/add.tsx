@@ -242,7 +242,7 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
     // console.log("msisdn", msisdn);
   };
 
-  const handleSubmit = async(addingSubscriber: DataType) => {
+  const handleSubmit = async (addingSubscriber: DataType) => {
     console.log("msisdn1", msisdn1);
     const updatedMsisdn = [...msisdn, msisdn1];
     await addSubscriber({
@@ -250,9 +250,6 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
       imsi: imsi,
       msisdn: updatedMsisdn,
       imeisv: [],
-      mme_host: [],
-      mme_realm: [],
-      purge_flag: [],
       security: {
         k: subK,
         op: opType === "OP" ? opKey : null,
@@ -263,6 +260,9 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
         downlink: { value: +downValue, unit: +downUnit },
         uplink: { value: +upValue, unit: +upUnit },
       },
+      mme_host: [],
+      mme_realm: [],
+      purge_flag: [],
       slice: [
         {
           sst: +sst,
@@ -330,7 +330,7 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
       __v: 0,
     });
     setMsisdn1("");
-    setMsisdn([])
+    setMsisdn([]);
 
     // try {
     //   setImsi(imsi);
@@ -361,13 +361,6 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
 
     close();
   };
-  const form = useForm({
-    initialValues: {
-      imsi: "55",
-      msisdn: "",
-      subK: "",
-    },
-  });
 
   return (
     <>
@@ -577,180 +570,6 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
           Add Subscriber
         </Button>
       </Group>
-      {subscriber !== undefined && (
-        <div>
-          <Modal
-            opened={opened}
-            onClose={close}
-            className="w-[600px]"
-            withCloseButton={false}
-            classNames={{ body: "pt-0 pl-0" }}
-            size="75%"
-          >
-            <Detail searchedSubscriber={subscriber} />
-          </Modal>
-          <Group position="center">
-            <Box
-              component="a"
-              target="_blank"
-              className="w-[400px] h-6 grid content-center relative mt-6"
-              sx={(theme) => ({
-                // display: 'block',
-                backgroundColor:
-                  theme.colorScheme === "dark"
-                    ? theme.colors.dark[9]
-                    : theme.colors.gray[3],
-                color:
-                  theme.colorScheme === "dark"
-                    ? theme.colors.blue[2]
-                    : theme.colors.blue[8],
-                padding: theme.spacing.xl,
-                borderRadius: theme.radius.md,
-                cursor: "pointer",
-
-                "&:hover": {
-                  backgroundColor:
-                    theme.colorScheme === "dark"
-                      ? theme.colors.dark[5]
-                      : theme.colors.gray[5],
-                },
-              })}
-            >
-              <div className="" onClick={open}>
-                IMSI: {subscriber.imsi}
-              </div>
-              <div className="right-0 justify-center absolute grid grid-cols-2 w-16">
-                <div className="col-span-1">
-                  <Modal
-                    opened={editOpened}
-                    onClose={() => setEditOpened(false)}
-                    styles={contentStyles}
-                    className="bg-gray-300 rounded-lg shadow-lg w-[1200px]"
-                  >
-                    <Box mx="auto" className="w-[800px]">
-                      <form
-                        onSubmit={form.onSubmit(handleSubmit)}
-                        className="block relative"
-                      >
-                        <EditConfig
-                          searchedSubscriber={subscriber}
-                          imsi={imsi}
-                          subK={subK}
-                          setSubK={setSubK}
-                          msisdn={msisdn}
-                          setMsisdn={setMsisdn}
-                          opType={opType}
-                          setOpType={setOpType}
-                          opKey={opKey}
-                          setOpKey={setOpKey}
-                          amf={amf}
-                          setAmf={setAmf}
-                          downValue={downValue}
-                          setDownValue={setDownValue}
-                          downUnit={downUnit}
-                          setDownUnit={setDownUnit}
-                          upValue={upValue}
-                          setUpValue={setUpValue}
-                          upUnit={upUnit}
-                          setUpUnit={setUpUnit}
-                        />
-                        <Slice
-                          hiddenSlice={hiddenSlice}
-                          onClickDelete={handleOnDelete}
-                          onClickAdd={handleOnAdd}
-                          sst={sst}
-                          setSst={setSst}
-                          sd={sd}
-                          handleSD={handleSD}
-                        />
-                        <Session
-                          hiddenSession={hiddenSession}
-                          onClickDeleteSession={onClickDeleteSession}
-                          onClickAddSession={onClickAddSession}
-                          type={type}
-                          setType={setType}
-                          qci={qci}
-                          setQci={setQci}
-                          arp={arp}
-                          setArp={setArp}
-                          capability={capability}
-                          setCapability={setCapability}
-                          vulnerability={vulnerability}
-                          setVulnerability={setVulnerability}
-                          ambrUplink={ambrUplink}
-                          setAmbrUplink={setAmbrUplink}
-                          ambrDownlink={ambrDownlink}
-                          setAmbrDownlink={setAmbrDownlink}
-                          ambrDownUnit={ambrDownUnit}
-                          setAmbrDownUnit={setAmbrDownUnit}
-                          ambrUpUnit={ambrUpUnit}
-                          setAmbrUpUnit={setAmbrUpUnit}
-                          ueIpv4={ueIpv4}
-                          setUeIpv4={setUeIpv4}
-                          ueIpv6={ueIpv6}
-                          setUeIpv6={setUeIpv6}
-                          smfIpv4={smfIpv4}
-                          setSmfIpv4={setSmfIpv4}
-                          smfIpv6={smfIpv6}
-                          setSmfIpv6={setSmfIpv6}
-                        />
-                        {/* {subscriber.slice[0].session[0].pcc_rule !== undefined
-                          ? subscriber.slice[0].session[0].pcc_rule.map(
-                              (item: pccRules) => <PccRules item={item} />
-                            )
-                          : null} */}
-
-                        <Button
-                          className="font-bold bg-blue-500 absolute w-36 right-0 mt-6"
-                          type="submit"
-                        >
-                          Save
-                        </Button>
-                      </form>
-                    </Box>
-                  </Modal>
-                  <Button
-                    className="text-sky-500 p-0 m-0 min-w-0 hover:bg-inherit"
-                    onClick={handleOnEditModal}
-                  >
-                    <FaPencilAlt />
-                  </Button>
-                </div>
-                <div className="col-span-1">
-                  <Modal
-                    opened={deleteOpened}
-                    onClose={() => setDeleteOpened(false)}
-                    centered
-                    // styles={contentStyles}
-                    className="bg-gray-300 rounded-lg shadow-lg w-[200px]"
-                  >
-                    <Text className="text-center">
-                      Are you sure to delete this subscriber?
-                    </Text>
-                    <div className="flex mt-5 justify-center">
-                      <Button className="text-black hover:bg-slate-300">
-                        Cancel
-                      </Button>
-                      <Button
-                        className="text-red-400 ml-5"
-                        onClick={handleDelete}
-                      >
-                        Delete
-                      </Button>
-                    </div>
-                  </Modal>
-                  <Button
-                    className="text-sky-500 p-0 m-0 min-w-0 hover:bg-inherit"
-                    onClick={handleOnDeleteModal}
-                  >
-                    <RiDeleteBinLine />
-                  </Button>
-                </div>
-              </div>
-            </Box>
-          </Group>
-        </div>
-      )}
     </>
   );
 };
