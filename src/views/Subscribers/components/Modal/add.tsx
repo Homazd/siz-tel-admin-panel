@@ -1,5 +1,5 @@
 // Hooks
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 // Mantine Hooks
 import { useDisclosure } from "@mantine/hooks";
 // Mantine Form
@@ -11,25 +11,24 @@ import {
   useGetSubscribersQuery,
 } from "@/services/subscribers";
 // Mantine Components
-import { Modal, Button, Group, ModalProps, Box, Text } from "@mantine/core";
+import { Box, Button, Group, Modal, ModalProps, Text } from "@mantine/core";
 // Components
-import SubscriberConfig from "./components/SubscriberConfig";
-import Slice from "./components/Slice";
 import PccRules from "./components/PccRules";
-import Detail from "./components/edit/components/Detail";
-import EditConfig from "./components/edit/components/Config";
 import Session from "./components/Session";
+import Slice from "./components/Slice";
+import SubscriberConfig from "./components/SubscriberConfig";
+import EditConfig from "./components/edit/components/Config";
+import Detail from "./components/edit/components/Detail";
 // Types
 import { DataType, pccRules } from "@/redux/Types/subscriberTypes";
 // Icons
 import { FaPencilAlt } from "react-icons/fa";
 import { RiDeleteBinLine } from "react-icons/ri";
-import { apn } from '@/static/static';
 
 interface addSubscriberProps {
   onNewSub: (data: string) => void;
 }
-const AddSubscriber:React.FC<addSubscriberProps> = ({onNewSub}) => {
+const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const [editOpened, setEditOpened] = useState(false);
   const [deleteOpened, setDeleteOpened] = useState(false);
@@ -37,11 +36,13 @@ const AddSubscriber:React.FC<addSubscriberProps> = ({onNewSub}) => {
   const [hiddenSlice, setHiddenSlice] = useState(false);
   const [imsi, setImsi] = useState("");
   const [msisdn, setMsisdn] = useState<string[]>([]);
-  const [msisdn1, setMsisdn1] = useState<string>('');
-  const [msisdn2, setMsisdn2] = useState<string>('');
+  const [msisdn1, setMsisdn1] = useState<string>("");
+  const [msisdn2, setMsisdn2] = useState<string>("");
   const [subK, setSubK] = useState("465B5CE8 B199B49F AA5F0A2E E238A6BC");
   const [opType, setOpType] = useState("OPc");
-  const [opKey, setOpKey] = useState<string | null>("E8ED289D EBA952E4 283B54E8 8E6183CA");
+  const [opKey, setOpKey] = useState<string | null>(
+    "E8ED289D EBA952E4 283B54E8 8E6183CA"
+  );
   const [amf, setAmf] = useState("8000");
   const [downValue, setDownValue] = useState("1");
   const [downUnit, setDownUnit] = useState("3");
@@ -88,7 +89,7 @@ const AddSubscriber:React.FC<addSubscriberProps> = ({onNewSub}) => {
   ]);
 
   const [deleteSubscriber] = useDeleteSubscriberMutation();
-  
+
   const { data: subscriber } = useGetSubscribersQuery(imsi, {
     skip: isFetching,
   });
@@ -146,10 +147,11 @@ const AddSubscriber:React.FC<addSubscriberProps> = ({onNewSub}) => {
     setIsFetching(true);
   }, [subscriber, isFetching, imsi]);
 
+  const apn = localStorage.getItem("apn");
   const addingSubscriber = {
     schema_version: 1,
     imsi: imsi,
-    msisdn: msisdn,
+    msisdn: [],
     imeisv: [],
     mme_host: [],
     mme_realm: [],
@@ -179,7 +181,7 @@ const AddSubscriber:React.FC<addSubscriberProps> = ({onNewSub}) => {
                 priority_level: +arp,
                 pre_emption_capability: +capability,
                 pre_emption_vulnerability: +vulnerability
-              },
+              }
             },
             ambr: {
               downlink: {
@@ -189,16 +191,18 @@ const AddSubscriber:React.FC<addSubscriberProps> = ({onNewSub}) => {
               uplink: {
                 value: +ambrUplink,
                 unit: +ambrUpUnit
-              },
+              }
             },
-            ue: {
-              addr: ueIpv4,
-              addr6: ueIpv6
-            },
-            smf: {
-              addr: smfIpv4,
-              addr6: smfIpv6
-            },
+            ue:
+              {
+                addr: ueIpv4 || undefined,
+                addr6: ueIpv6 || undefined
+              } || undefined,
+            smf:
+              {
+                addr: smfIpv4 || undefined,
+                addr6: smfIpv6 || undefined
+              } || undefined,
             pcc_rule: []
             //  {
             //   qos: {
@@ -228,28 +232,49 @@ const AddSubscriber:React.FC<addSubscriberProps> = ({onNewSub}) => {
     subscribed_rau_tau_timer: 12,
     __v: 0
   };
+  const handleInputChangeMsisdn = (event: ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    const value = event.target.value;
+    setMsisdn1(value);
+    if (msisdn.length < 2) {
+      setMsisdn((current) => current.concat(msisdn1));
+    }
+    console.log("msisdn", msisdn);
+  };
 
-  const handleSubmit = async (addingSubscriber: DataType) => {
+  const handleSubmit = (addingSubscriber: DataType) => {
+    event?.preventDefault();
+    console.log("msisdn1", msisdn1);
+    // (msisdn1.length !== 0 && msisdn.length <= 2) ?   setMsisdn((current) => current.concat(msisdn1)) : null;
+    // (msisdn2.length !== 0 && msisdn.length <= 2) ?   setMsisdn((current) => current.concat(msisdn2)) : null;
+    console.log("msisdn", msisdn);
     try {
       setImsi(imsi);
-         console.log("msisdn1", msisdn1);
-         console.log("msisdn2", msisdn2);
-         console.log("msisdn", msisdn)
-      if(msisdn1.length !== 0 && msisdn.length < 3){
-        setMsisdn(preMsisdn => preMsisdn.concat(msisdn1))
-      }
-      await addSubscriber(addingSubscriber).then(() => {
-        setMsisdn([])
-      })
-      console.log("msisdn", msisdn)
-  
+
+      // console.log("msisdn2", msisdn2);
+      // if (msisdn1.length != 0 && msisdn.length <= 2) {
+      // setMsisdn(current => current.concat(['homa']));
+      // }
+
+      // (msisdn2.length !== 0 && msisdn.length <= 2) ? setMsisdn(current => [...current, msisdn2]) : null;
+
+      addSubscriber(addingSubscriber)
+        .unwrap()
+        .then(() => {
+          setMsisdn([]);
+        });
+      console.log("addingSubscriber", addingSubscriber);
+      // console.log("msisdn is:", msisdn);
+      // setMsisdn([])
+      // setMsisdn1('');
+      // console.log('msisdn1', msisdn1)
     } catch (error) {
       console.error(error);
-    } 
-    if(onNewSub){
-      onNewSub(addingSubscriber.imsi)
     }
-  
+    if (onNewSub) {
+      onNewSub(addingSubscriber.imsi);
+    }
+
     close();
   };
   const form = useForm({
@@ -281,7 +306,7 @@ const AddSubscriber:React.FC<addSubscriberProps> = ({onNewSub}) => {
               imsi={imsi}
               setImsi={setImsi}
               msisdn1={msisdn1}
-              setMsisdn1={setMsisdn1}
+              handleInputChangeMsisdn={handleInputChangeMsisdn}
               subK={subK}
               setSubK={setSubK}
               opType={opType}
@@ -460,7 +485,9 @@ const AddSubscriber:React.FC<addSubscriberProps> = ({onNewSub}) => {
 
       <Group position="center">
         <Button
-          className={`${apn == 'GAS' ? 'bg-blue-500' : 'bg-yellow-500'} ${apn === 'GAS' ? 'text-white' : 'text-yellow-950'} rounded-full mt-7 w-40 animate__animated animate__swing"`}
+          className={`${apn == "GAS" ? "bg-blue-500" : "bg-yellow-500"} ${
+            apn === "GAS" ? "text-white" : "text-yellow-950"
+          } rounded-full mt-7 w-40 animate__animated animate__swing"`}
           onClick={open}
         >
           Add Subscriber

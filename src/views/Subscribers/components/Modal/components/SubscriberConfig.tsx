@@ -7,7 +7,7 @@ interface InputChildProps {
   imsi: string;
   setImsi: (data: string) => void;
   msisdn1: string;
-  setMsisdn1: (data:string) => void;
+  handleInputChangeMsisdn: (data:any) => void;
   subK: string;
   setSubK: (data: string) => void;
   opType: string;
@@ -30,7 +30,7 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
   imsi,
   setImsi,
   msisdn1,
-  setMsisdn1,
+  handleInputChangeMsisdn,
   subK,
   setSubK,
   opKey,
@@ -102,7 +102,7 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
                       }}
                       className="w-[300px]"
                       value={msisdn1}
-                      onChange={(e) => setMsisdn1(e.target.value)}
+                      onChange={handleInputChangeMsisdn}
                       error={msisdn1.length == 0 ? "is required" : null}
                     />
                   </>
