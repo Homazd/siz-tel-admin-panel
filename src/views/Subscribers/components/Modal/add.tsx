@@ -1,37 +1,27 @@
 // Hooks
-import { ChangeEvent, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 // Mantine Hooks
 import { useDisclosure } from "@mantine/hooks";
-// Mantine Form
-import { useForm } from "@mantine/form";
 // Services
 import {
   useAddSubscriberMutation,
-  useDeleteSubscriberMutation,
   useGetSubscribersQuery,
 } from "@/services/subscribers";
 // Mantine Components
-import { Box, Button, Group, Modal, ModalProps, Text } from "@mantine/core";
+import { Box, Button, Group, Modal, ModalProps } from "@mantine/core";
 // Components
 import PccRules from "./components/PccRules";
 import Session from "./components/Session";
 import Slice from "./components/Slice";
 import SubscriberConfig from "./components/SubscriberConfig";
-import EditConfig from "./components/edit/components/Config";
-import Detail from "./components/edit/components/Detail";
 // Types
-import { DataType, pccRules } from "@/redux/Types/subscriberTypes";
-// Icons
-import { FaPencilAlt } from "react-icons/fa";
-import { RiDeleteBinLine } from "react-icons/ri";
+import { pccRules } from "@/redux/Types/subscriberTypes";
 
 interface addSubscriberProps {
   onNewSub: (data: string) => void;
 }
 const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
   const [opened, { open, close }] = useDisclosure(false);
-  const [editOpened, setEditOpened] = useState(false);
-  const [deleteOpened, setDeleteOpened] = useState(false);
   const [hiddenSession, setHiddenSession] = useState(true);
   const [hiddenSlice, setHiddenSlice] = useState(false);
   const [imsi, setImsi] = useState("");
@@ -88,8 +78,6 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
     },
   ]);
 
-  const [deleteSubscriber] = useDeleteSubscriberMutation();
-
   const { data: subscriber } = useGetSubscribersQuery(imsi, {
     skip: isFetching,
   });
@@ -104,10 +92,6 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
 
   const [addSubscriber] = useAddSubscriberMutation();
 
-  const handleOnEditModal = () => {
-    close();
-    setEditOpened(true);
-  };
   const handleSD = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setSd(e.currentTarget.value);
@@ -117,15 +101,7 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
     setHiddenSlice(true);
     setHiddenSession(false);
   };
-  const handleDelete = () => {
-    if (subscriber) {
-      deleteSubscriber(subscriber.imsi);
-    }
-  };
-  const handleOnDeleteModal = () => {
-    close();
-    setDeleteOpened(true);
-  };
+
   const handleOnAdd = () => {
     setHiddenSlice(false);
   };
@@ -232,18 +208,10 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
     subscribed_rau_tau_timer: 12,
     __v: 0,
   };
-  const handleInputChangeMsisdn = (event: ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
-    const value = event.target.value;
-    setMsisdn1(value);
-    // if (msisdn.length < 2) {
-    //   setMsisdn((current) => current.concat(msisdn1));
-    // }
-    // console.log("msisdn", msisdn);
-  };
 
-  const handleSubmit = async (addingSubscriber: DataType) => {
+  const handleSubmit = async () => {
     console.log("msisdn1", msisdn1);
+    console.log("msisdn2", msisdn2)
     const updatedMsisdn = [...msisdn, msisdn1];
     await addSubscriber({
       schema_version: 1,
@@ -331,30 +299,6 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
     });
     setMsisdn1("");
     setMsisdn([]);
-
-    // try {
-    //   setImsi(imsi);
-
-    //   // console.log("msisdn2", msisdn2);
-    //   // if (msisdn1.length != 0 && msisdn.length <= 2) {
-    //   // setMsisdn(current => current.concat(['homa']));
-    //   // }
-
-    //   // (msisdn2.length !== 0 && msisdn.length <= 2) ? setMsisdn(current => [...current, msisdn2]) : null;
-
-    //   addSubscriber(addingSubscriber)
-    //     .unwrap()
-    //     .then(() => {
-    //       setMsisdn([]);
-    //     });
-    //   console.log("addingSubscriber", addingSubscriber);
-    //   // console.log("msisdn is:", msisdn);
-    //   // setMsisdn([])
-    //   // setMsisdn1('');
-    //   // console.log('msisdn1', msisdn1)
-    // } catch (error) {
-    //   console.error(error);
-    // }
     if (onNewSub) {
       onNewSub(addingSubscriber.imsi);
     }
@@ -375,7 +319,7 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              handleSubmit(addingSubscriber);
+              handleSubmit()
             }}
             className="block relative"
           >
@@ -383,7 +327,9 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
               imsi={imsi}
               setImsi={setImsi}
               msisdn1={msisdn1}
-              handleInputChangeMsisdn={handleInputChangeMsisdn}
+              setMsisdn1={setMsisdn1}
+              msisdn2={msisdn2}
+              setMsisdn2={setMsisdn2}
               subK={subK}
               setSubK={setSubK}
               opType={opType}
@@ -447,50 +393,6 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
                 <PccRules inputs={inputs} onInputChange={handleInputChange} />
               )}
             </>
-
-            {/* <Slice
-              hiddenSlice={hiddenSlice}
-              onClickDelete={handleOnDelete}
-              onClickAdd={handleOnAdd}
-              sst={sst}
-              setSst={setSst}
-              sd={sd}
-              handleSD={handleSD}
-            />
-            <Session
-              hiddenSession={hiddenSession}
-              onClickDeleteSession={onClickDeleteSession}
-              onClickAddSession={onClickAddSession}
-              type={type}
-              setType={setType}
-              qci={qci}
-              setQci={setQci}
-              arp={arp}
-              setArp={setArp}
-              capability={capability}
-              setCapability={setCapability}
-              vulnerability={vulnerability}
-              setVulnerability={setVulnerability}
-              ambrUplink={ambrUplink}
-              setAmbrUplink={setAmbrUplink}
-              ambrDownlink={ambrDownlink}
-              setAmbrDownlink={setAmbrDownlink}
-              ambrDownUnit={ambrDownUnit}
-              setAmbrDownUnit={setAmbrDownUnit}
-              ambrUpUnit={ambrUpUnit}
-              setAmbrUpUnit={setAmbrUpUnit}
-              ueIpv4={ueIpv4}
-              setUeIpv4={setUeIpv4}
-              ueIpv6={ueIpv6}
-              setUeIpv6={setUeIpv6}
-              smfIpv4={smfIpv4}
-              setSmfIpv4={setSmfIpv4}
-              smfIpv6={smfIpv6}
-              setSmfIpv6={setSmfIpv6}
-            />
-            {hiddenSession && (
-              <PccRules inputs={inputs} onInputChange={handleInputChange} />
-            )} */}
             <p className="text-center ml-[300px] mt-6">
               <Button className="bg-sky-500 text-white font-semibold w-28">
                 +

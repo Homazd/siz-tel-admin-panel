@@ -79,7 +79,6 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi, handleImsiChange, isTy
   const [smfIpv4, setSmfIpv4] = useState("");
   const [smfIpv6, setSmfIpv6] = useState("");
   // PCC Rules
-  // PCC Rules
   const [inputs, setInputs] = useState<pccRules[]>([
     {
       qos: {
@@ -446,9 +445,9 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi, handleImsiChange, isTy
           />
         </form>
         {isLoading && <div>Loading...</div>}
-        {isError && error && (
-          <p className="text-16px font-bold text-blue-600">
-            Error Fetching Subscriber data
+        {addedImsi && isError && error && (
+          <p className="text-16px font-bold text-red-500 text-center">
+            The Subscriber doesn't Exist!
           </p>
         )}
         {isSuccess && (

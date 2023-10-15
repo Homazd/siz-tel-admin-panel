@@ -50,6 +50,7 @@ export default function LoginPage() {
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("access_token", response.data.access_token);
       localStorage.setItem("apn", response.data.apn);
+      localStorage.setItem("username", credentials.username);
       setLoggedIn(true);
       alert("شما با موفقیت وارد شدید.");
     } catch (error) {

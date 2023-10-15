@@ -134,7 +134,7 @@ const Dashboard: React.FC = () => {
           </div>
           
           <Menu
-            style={{ backgroundColor: "#3085C3" }}
+            style={{ backgroundColor: "#1450A3" }}
             mode="inline"
             defaultSelectedKeys={["1"]}
             items={[
@@ -160,7 +160,7 @@ const Dashboard: React.FC = () => {
                     className="text-[18px] text-custom-yellow"
                     style={{ color: "#FFC436" }}
                   >
-                    Profile
+                    Account
                   </Button>
                 ),
               },

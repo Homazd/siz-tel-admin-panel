@@ -2,12 +2,15 @@
 import React, { useState } from "react";
 // Mantine Components
 import { Button, Divider, Select, TextInput } from "@mantine/core";
+import Msisdn from "./Msisdn";
 
 interface InputChildProps {
   imsi: string;
   setImsi: (data: string) => void;
   msisdn1: string;
-  handleInputChangeMsisdn: (data: any) => void;
+  setMsisdn1: (data: string) => void;
+  msisdn2: string;
+  setMsisdn2: (data: string) => void;
   subK: string;
   setSubK: (data: string) => void;
   opType: string;
@@ -30,7 +33,9 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
   imsi,
   setImsi,
   msisdn1,
-  handleInputChangeMsisdn,
+  setMsisdn1,
+  msisdn2,
+  setMsisdn2,
   subK,
   setSubK,
   opKey,
@@ -51,6 +56,7 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
   const [isMSIVisible, setIsMSIVisible] = useState(true);
   const [msisdnClicked, setMsisdnClicked] = useState(false);
   const [secondMsisdn, setSecondMsisdn] = useState(false);
+  // States related to Msisdn
 
   const handleOnAdd = () => {
     setMsisdnClicked(true);
@@ -65,6 +71,12 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
   const handleOnAddSecondMSisdn = () => {
     setSecondMsisdn(true);
   };
+
+  // Function to change state related to Msisdn component
+  const handleChildStateChange = () => {
+    setSecondMsisdn(false);
+  };
+
   return (
     <>
       <div className="relative">
@@ -83,52 +95,59 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
           value={imsi}
           onChange={(e) => setImsi(e.target.value)}
         />
-        <div className="grid place-content-center">
-          {isMSIVisible && (
-            <Button
-              className="font-bold bg-sky-500 w-28 m-12"
-              onClick={handleOnAdd}
-            >
-              +
-            </Button>
-          )}
-          {!isMSIVisible && (
-            <div className="grid grid-cols-2 gap-10 mt-6">
-              <div className="col-span-1">
-                {msisdnClicked ? (
-                  <>
-                    <TextInput
-                      label="MSISDN"
-                      name="msisdn"
-                      placeholder="MSISDN"
-                      classNames={{
-                        label: "static",
-                      }}
-                      className="w-[300px]"
-                      value={msisdn1}
-                      onChange={handleInputChangeMsisdn}
-                      error={msisdn1.length == 0 ? "is required" : null}
-                    />
-                  </>
-                ) : null}
+        {secondMsisdn ? (
+          <div>
+            <Msisdn msisdn={msisdn1} setMsisdn={setMsisdn1} onStateChange={handleChildStateChange} />
+            <Msisdn msisdn={msisdn2} setMsisdn={setMsisdn2} onStateChange={handleChildStateChange} />
+          </div>
+        ) : (
+          <div className="grid place-content-center">
+            {isMSIVisible && (
+              <Button
+                className="font-bold bg-sky-500 w-28 m-12"
+                onClick={handleOnAdd}
+              >
+                +
+              </Button>
+            )}
+            {!isMSIVisible && (
+              <div className="grid grid-cols-2 gap-10 mt-6">
+                <div className="col-span-1">
+                  {msisdnClicked ? (
+                    <>
+                      <TextInput
+                        label="MSISDN"
+                        name="msisdn"
+                        placeholder="MSISDN"
+                        classNames={{
+                          label: "static",
+                        }}
+                        className="w-[300px]"
+                        value={msisdn1}
+                        onChange={(e) => setMsisdn1(e.target.value)}
+                        error={msisdn1.length == 0 ? "is required" : null}
+                      />
+                    </>
+                  ) : null}
+                </div>
+                <div className="col-span-1">
+                  <Button
+                    className="font-bold bg-red-500 w-28 mb-2 block"
+                    onClick={handleOnDeleteMsisdn}
+                  >
+                    ×
+                  </Button>
+                  <Button
+                    className="font-bold bg-sky-500 w-28 justify-items-center "
+                    onClick={handleOnAddSecondMSisdn}
+                  >
+                    +
+                  </Button>
+                </div>
               </div>
-              <div className="col-span-1">
-                <Button
-                  className="font-bold bg-red-500 w-28 mb-2 block"
-                  onClick={handleOnDeleteMsisdn}
-                >
-                  ×
-                </Button>
-                <Button
-                  className="font-bold bg-sky-500 w-28 justify-items-center "
-                  onClick={handleOnAddSecondMSisdn}
-                >
-                  +
-                </Button>
-              </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        )}
       </div>
       <div className="flex mt-6">
         <TextInput
