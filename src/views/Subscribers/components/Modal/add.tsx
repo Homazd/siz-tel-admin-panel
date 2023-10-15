@@ -212,7 +212,10 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
   const handleSubmit = async () => {
     console.log("msisdn1", msisdn1);
     console.log("msisdn2", msisdn2)
-    const updatedMsisdn = [...msisdn, msisdn1];
+    const updatedMsisdn = [...msisdn];
+    if(updatedMsisdn.length < 2 && msisdn1) {
+      updatedMsisdn.concat(msisdn1)
+    }
     await addSubscriber({
       schema_version: 1,
       imsi: imsi,
