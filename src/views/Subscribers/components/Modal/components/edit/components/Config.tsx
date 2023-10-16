@@ -11,7 +11,7 @@ interface InputChildProps {
   opKey: string | null;
   setOpKey: (data: string | null) => void;
   msisdn: string[];
-  setMsisdn: (data: any) => void;
+  setMsisdn: (data: string) => void;
   amf: string;
   setAmf: (data: string) => void;
   opType: string;

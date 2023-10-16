@@ -23,7 +23,7 @@ export const subscriberApi = createApi({
         url: `/mon/${imsi}`,
         method: "GET",
       }),
-      providesTags: (result, error, imsi) => [{ type: "Subscriber", imsi }],
+      providesTags: (imsi) => [{ type: "Subscriber", imsi }],
     }),
     addSubscriber: builder.mutation<DataType, Partial<DataType>>({
       query: (Subscriber) => ({
@@ -32,9 +32,14 @@ export const subscriberApi = createApi({
         body: Subscriber,
         headers: { "Content-Type": "application/json" },
       }),
-      invalidatesTags: (Subscriber, error, data) => [
-        { type: "Subscriber", imsi: Subscriber.imsi },
-      ],
+      invalidatesTags: (Subscriber) => {
+        if (Subscriber) {
+          return [{ type: "Subscriber", imsi: Subscriber.imsi }];
+        } else {
+          // Handle the case when Subscriber is undefined
+          return [];
+        }
+      },
     }),
     //
 
