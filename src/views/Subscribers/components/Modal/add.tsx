@@ -1,5 +1,5 @@
 // Hooks
-import {  useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 // Mantine Hooks
 import { useDisclosure } from "@mantine/hooks";
 // Services
@@ -210,16 +210,10 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
   };
 
   const handleSubmit = async () => {
-    console.log("msisdn1", msisdn1);
-    console.log("msisdn2", msisdn2)
-    const updatedMsisdn = [...msisdn];
-    if(updatedMsisdn.length < 2 && msisdn1) {
-      updatedMsisdn.concat(msisdn1)
-    }
     await addSubscriber({
       schema_version: 1,
       imsi: imsi,
-      msisdn: updatedMsisdn,
+      msisdn: msisdn,
       imeisv: [],
       security: {
         k: subK,
@@ -301,12 +295,21 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
       __v: 0,
     });
     setMsisdn1("");
+    setMsisdn2("");
     setMsisdn([]);
     if (onNewSub) {
       onNewSub(addingSubscriber.imsi);
     }
 
     close();
+  };
+
+  const handleMsisdnChange = (event: ChangeEvent<HTMLInputElement>) => {
+    console.log("msisdn1", event.target.value);
+    setMsisdn1(event.target.value);
+    // if (msisdn.length < 3 && msisdn1 != "") {
+    setMsisdn((prevState) => [...prevState, event.target.value]);
+    console.log("msisdn is:", msisdn);
   };
 
   return (
@@ -322,7 +325,7 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              handleSubmit()
+              handleSubmit();
             }}
             className="block relative"
           >
@@ -330,7 +333,7 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
               imsi={imsi}
               setImsi={setImsi}
               msisdn1={msisdn1}
-              setMsisdn1={setMsisdn1}
+              handleMsisdnChange={handleMsisdnChange}
               msisdn2={msisdn2}
               setMsisdn2={setMsisdn2}
               subK={subK}

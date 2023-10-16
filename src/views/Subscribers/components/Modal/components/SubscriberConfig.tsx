@@ -1,5 +1,5 @@
 // Hooks
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 // Mantine Components
 import { Button, Divider, Select, TextInput } from "@mantine/core";
 import Msisdn from "./Msisdn";
@@ -9,6 +9,7 @@ interface InputChildProps {
   setImsi: (data: string) => void;
   msisdn1: string;
   setMsisdn1: (data: string) => void;
+  handleMsisdnChange: (data: ChangeEvent<HTMLInputElement>) => void;
   msisdn2: string;
   setMsisdn2: (data: string) => void;
   subK: string;
@@ -34,6 +35,7 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
   setImsi,
   msisdn1,
   setMsisdn1,
+  handleMsisdnChange,
   msisdn2,
   setMsisdn2,
   subK,
@@ -97,8 +99,16 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
         />
         {secondMsisdn ? (
           <div>
-            <Msisdn msisdn={msisdn1} setMsisdn={setMsisdn1} onStateChange={handleChildStateChange} />
-            <Msisdn msisdn={msisdn2} setMsisdn={setMsisdn2} onStateChange={handleChildStateChange} />
+            <Msisdn
+              msisdn={msisdn1}
+              setMsisdn={setMsisdn1}
+              onStateChange={handleChildStateChange}
+            />
+            <Msisdn
+              msisdn={msisdn2}
+              setMsisdn={setMsisdn2}
+              onStateChange={handleChildStateChange}
+            />
           </div>
         ) : (
           <div className="grid place-content-center">
@@ -123,8 +133,8 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
                           label: "static",
                         }}
                         className="w-[300px]"
-                        value={msisdn1}
-                        onChange={(e) => setMsisdn1(e.target.value)}
+                        defaultValue={msisdn1}
+                        onBlur={handleMsisdnChange}
                         error={msisdn1.length == 0 ? "is required" : null}
                       />
                     </>

@@ -120,12 +120,6 @@ const Dashboard: React.FC = () => {
             flex: "0 0 500px",
             backgroundColor: apn === 'GAS' ? "#1450A3" : '#3085C3' ,
           }}
-          // style={{
-          //   backgroundColor: ${({theme})} =>
-          //     theme.colorScheme === "dark"
-          //       ? theme.colors.dark[8]
-          //       : theme.colorScheme.gray[0];
-          // }}
           onCollapse={(value) => setCollapsed(value)}
           reverseArrow={false}
         >
