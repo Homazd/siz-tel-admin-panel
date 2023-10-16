@@ -7,6 +7,7 @@ import { Paper, TextInput, PasswordInput, Button, Title } from "@mantine/core";
 import backImage from "../../images/5g-login.jpeg";
 // Styles
 import { labelStyles, toggleStyles, inputStyles } from "./style.module";
+const loginUrl = import.meta.env.VITE_APP_LOGIN_URL;
 
 interface Credentials {
   username: string;
@@ -37,7 +38,7 @@ export default function LoginPage() {
     event.preventDefault();
     try {
       const response = await axios.post(
-        "http://192.168.0.203:8008/token",
+        `${loginUrl}`,
         // "http://127.0.0.1:8008/token",
         formData,
         {

@@ -1,11 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { DataType } from "@/redux/Types/subscriberTypes";
+const apiUrl = import.meta.env.VITE_APP_API_URL;
 
 export const subscriberApi = createApi({
   reducerPath: "subscriberApi",
   tagTypes: ["Subscriber"],
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://192.168.0.203:8008",
+    baseUrl: apiUrl,
     prepareHeaders: (headers) => {
       const token = localStorage.getItem("access_token");
       // const username = localStorage.getItem("username");
