@@ -38,9 +38,13 @@ interface imsiInputProps {
   isTyping: boolean;
   setIsTyping: (data: boolean) => void;
   handleImsiChange: (data: ChangeEvent<HTMLInputElement>) => void;
-
 }
-const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi, handleImsiChange, isTyping, setIsTyping }) => {
+const IMSIInput: React.FC<imsiInputProps> = ({
+  addedImsi,
+  handleImsiChange,
+  isTyping,
+  setIsTyping,
+}) => {
   const [hiddenSession, setHiddenSession] = useState(true);
   const [hiddenSlice, setHiddenSlice] = useState(false);
   const [opened, { open, close }] = useDisclosure();
@@ -49,8 +53,7 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi, handleImsiChange, isTy
   const theme = useMantineTheme();
   // Config States
   const [imsi, setImsi] = useState("");
-  const [msisdn, setMsisdn] = useState([""]);
-  const [imeisv, setImeisv] = useState([""]);
+  // const [msisdn, setMsisdn] = useState([""]);
   const [subK, setSubK] = useState("");
   const [opType, setOpType] = useState("OPc");
   const [opKey, setOpKey] = useState<string | null>("");
@@ -99,8 +102,9 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi, handleImsiChange, isTy
       },
     },
   ]);
+  const msisdn = [""];
   // Validation
-
+  const imeisv = [""];
   const {
     data: searchedSubscriber,
     isLoading,
@@ -347,14 +351,14 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi, handleImsiChange, isTy
         k: subK,
         op: opType === "OP" ? opKey : null,
         opc: opType === "OPc" ? opKey : null,
-        amf: amf
+        amf: amf,
       },
       mme_host: [],
       mme_realm: [],
       purge_flag: [],
       ambr: {
         downlink: { value: +downValue, unit: +downUnit },
-        uplink: { value: +upValue, unit: +upUnit }
+        uplink: { value: +upValue, unit: +upUnit },
       },
       slice: [
         {
@@ -368,11 +372,11 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi, handleImsiChange, isTy
               ambr: {
                 downlink: {
                   value: +ambrDownlink,
-                  unit: +ambrDownUnit
+                  unit: +ambrDownUnit,
                 },
                 uplink: {
                   value: +ambrUplink,
-                  unit: +ambrUpUnit
+                  unit: +ambrUpUnit,
                 },
               },
               qos: {
@@ -380,24 +384,24 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi, handleImsiChange, isTy
                 arp: {
                   priority_level: +arp,
                   pre_emption_capability: +capability,
-                  pre_emption_vulnerability: +vulnerability
+                  pre_emption_vulnerability: +vulnerability,
                 },
               },
               ue:
                 ueIpv4 || ueIpv6
                   ? {
                       addr: ueIpv4 || undefined,
-                      addr6: ueIpv6 || undefined
+                      addr6: ueIpv6 || undefined,
                     }
                   : undefined,
               smf:
                 smfIpv4 || smfIpv6
                   ? {
                       addr: smfIpv4 || undefined,
-                      addr6: smfIpv6 || undefined
+                      addr6: smfIpv6 || undefined,
                     }
                   : undefined,
-              pcc_rule: []
+              pcc_rule: [],
             },
           ],
         },
@@ -406,7 +410,7 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi, handleImsiChange, isTy
       subscriber_status: 0,
       network_access_mode: 0,
       subscribed_rau_tau_timer: 12,
-      __v: 0
+      __v: 0,
     });
     setEditOpened(false);
   };
@@ -593,8 +597,8 @@ const IMSIInput: React.FC<imsiInputProps> = ({ addedImsi, handleImsiChange, isTy
                           <EditConfig
                             searchedSubscriber={searchedSubscriber}
                             imsi={imsi}
-                            msisdn={msisdn}
-                            setMsisdn={setMsisdn}
+                            // msisdn={msisdn}
+                            // setMsisdn={setMsisdn}
                             subK={subK}
                             setSubK={setSubK}
                             opType={opType}

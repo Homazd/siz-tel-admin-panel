@@ -10,8 +10,8 @@ interface InputChildProps {
   imsi: string;
   opKey: string | null;
   setOpKey: (data: string | null) => void;
-  msisdn: string[];
-  setMsisdn: (data: string) => void;
+  // msisdn: string[];
+  // setMsisdn: (data: string[]) => void;
   amf: string;
   setAmf: (data: string) => void;
   opType: string;
@@ -30,8 +30,8 @@ interface InputChildProps {
 
 const EditConfig: React.FC<InputChildProps> = ({
   searchedSubscriber,
-  msisdn,
-  setMsisdn,
+  // msisdn,
+  // setMsisdn,
   subK,
   amf,
   setAmf,
@@ -91,7 +91,7 @@ const EditConfig: React.FC<InputChildProps> = ({
               <div className="col-span-1">
                 {msisdnClicked ? (
                   <>
-                    <TextInput
+                    {/* <TextInput
                       label="MSISDN"
                       name="msisdn"
                       placeholder="MSISDN"
@@ -103,7 +103,7 @@ const EditConfig: React.FC<InputChildProps> = ({
                       value={msisdn}
                       onChange={(e) => setMsisdn(e.target.value)}
                       error={msisdn.length == 0 ? "is required" : null}
-                    />
+                    /> */}
                   </>
                 ) : null}
               </div>

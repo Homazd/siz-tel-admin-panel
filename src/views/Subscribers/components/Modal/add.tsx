@@ -306,9 +306,15 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
 
   const handleMsisdnChange = (event: ChangeEvent<HTMLInputElement>) => {
     console.log("msisdn1", event.target.value);
-    setMsisdn1(event.target.value);
+    // setMsisdn1(event.target.value);
     // if (msisdn.length < 3 && msisdn1 != "") {
-    setMsisdn((prevState) => [...prevState, event.target.value]);
+    setMsisdn((prevState) => {
+      if (msisdn.length < 3) {
+        return [...prevState, event.target.value];
+      } else {
+        return [...prevState];
+      }
+    });
     console.log("msisdn is:", msisdn);
   };
 
@@ -333,6 +339,7 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
               imsi={imsi}
               setImsi={setImsi}
               msisdn1={msisdn1}
+              setMsisdn1={setMsisdn1}
               handleMsisdnChange={handleMsisdnChange}
               msisdn2={msisdn2}
               setMsisdn2={setMsisdn2}
