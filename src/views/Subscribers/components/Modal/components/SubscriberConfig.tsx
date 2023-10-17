@@ -101,12 +101,12 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
           <div>
             <Msisdn
               msisdn={msisdn1}
-              setMsisdn={setMsisdn1}
+              handleMsisdnChange={handleMsisdnChange}
               onStateChange={handleChildStateChange}
             />
             <Msisdn
               msisdn={msisdn2}
-              setMsisdn={setMsisdn2}
+              handleMsisdnChange={handleMsisdnChange}
               onStateChange={handleChildStateChange}
             />
           </div>

@@ -1,5 +1,5 @@
 // Hooks
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 // Mantine Components
 import { Button, Divider, Select, TextInput } from "@mantine/core";
 // Types
@@ -10,8 +10,12 @@ interface InputChildProps {
   imsi: string;
   opKey: string | null;
   setOpKey: (data: string | null) => void;
-  // msisdn: string[];
-  // setMsisdn: (data: string[]) => void;
+  msisdn1: string;
+  msisdn: string[];
+  handleMsisdnChange: (data: ChangeEvent<HTMLInputElement>) => void;
+  setMsisdn1: (data: string) => void;
+  msisdn2: string;
+  setMsisdn2: (data: string) => void;
   amf: string;
   setAmf: (data: string) => void;
   opType: string;
@@ -30,9 +34,13 @@ interface InputChildProps {
 
 const EditConfig: React.FC<InputChildProps> = ({
   searchedSubscriber,
-  // msisdn,
-  // setMsisdn,
+  msisdn,
+ setMsisdn1,
+ msisdn2,
+ handleMsisdnChange,
+ setMsisdn2,
   subK,
+  msisdn1,
   amf,
   setAmf,
   opType,
@@ -91,7 +99,10 @@ const EditConfig: React.FC<InputChildProps> = ({
               <div className="col-span-1">
                 {msisdnClicked ? (
                   <>
-                    {/* <TextInput
+                  {
+                    msisdn.map((item) => console.log("msisdn",item))
+                  }
+                    <TextInput
                       label="MSISDN"
                       name="msisdn"
                       placeholder="MSISDN"
@@ -100,10 +111,10 @@ const EditConfig: React.FC<InputChildProps> = ({
                         label: "static",
                       }}
                       className="w-[300px]"
-                      value={msisdn}
-                      onChange={(e) => setMsisdn(e.target.value)}
-                      error={msisdn.length == 0 ? "is required" : null}
-                    /> */}
+                      defaultValue={msisdn1}
+                      onBlur={(e) => setMsisdn(e.target.value)}
+                      error={msisdn1.length == 0 ? "is required" : null}
+                    />
                   </>
                 ) : null}
               </div>

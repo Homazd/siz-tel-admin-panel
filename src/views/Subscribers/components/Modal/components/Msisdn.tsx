@@ -2,17 +2,17 @@ import { TextInput } from "@mantine/core";
 // Icons
 import { IconArrowDown } from "@tabler/icons-react";
 import { IconArrowUp } from "@tabler/icons-react";
-import React from "react";
+import React, { ChangeEvent } from "react";
 import { IconX } from "@tabler/icons-react";
 
 interface msisdnProps {
   msisdn: string;
-  setMsisdn: (data: string) => void;
+  handleMsisdnChange: (data: ChangeEvent<HTMLInputElement>) => void;
   onStateChange: () => void;
 }
 const Msisdn: React.FC<msisdnProps> = ({
   msisdn,
-  setMsisdn,
+  handleMsisdnChange,
   onStateChange,
 }) => {
   return (
@@ -26,8 +26,8 @@ const Msisdn: React.FC<msisdnProps> = ({
           }}
           className="w-[300px]"
           required
-          value={msisdn}
-          onChange={(e) => setMsisdn(e.target.value)}
+          defaultValue={msisdn}
+          onBlur={handleMsisdnChange}
           error={msisdn === "" ? "This field is required" : null}
         />
 

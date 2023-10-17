@@ -53,7 +53,9 @@ const IMSIInput: React.FC<imsiInputProps> = ({
   const theme = useMantineTheme();
   // Config States
   const [imsi, setImsi] = useState("");
-  // const [msisdn, setMsisdn] = useState([""]);
+  const [msisdn, setMsisdn] = useState<string[]>([]);
+  const [msisdn1, setMsisdn1] = useState<string>("");
+  const [msisdn2, setMsisdn2] = useState<string>("");
   const [subK, setSubK] = useState("");
   const [opType, setOpType] = useState("OPc");
   const [opKey, setOpKey] = useState<string | null>("");
@@ -102,7 +104,6 @@ const IMSIInput: React.FC<imsiInputProps> = ({
       },
     },
   ]);
-  const msisdn = [""];
   // Validation
   const imeisv = [""];
   const {
@@ -167,6 +168,9 @@ const IMSIInput: React.FC<imsiInputProps> = ({
       setImsi(searchedSubscriber.imsi);
       setSubK(searchedSubscriber.security.k);
       setAmf(searchedSubscriber.security.amf);
+      setMsisdn(searchedSubscriber.msisdn);
+      setMsisdn1(searchedSubscriber.msisdn[0]);
+
       // setMsisdn(searchedSubscriber.msisdn[0]);
       setOpType(searchedSubscriber.security.opc ? "OPc" : "OP");
       setOpKey(
@@ -335,6 +339,20 @@ const IMSIInput: React.FC<imsiInputProps> = ({
     if (searchedSubscriber) {
       deleteSubscriber(searchedSubscriber.imsi);
     }
+  };
+
+  const handleMsisdnChange = (event: ChangeEvent<HTMLInputElement>) => {
+    console.log("msisdn1", event.target.value);
+    // setMsisdn1(event.target.value);
+    // if (msisdn.length < 3 && msisdn1 != "") {
+    setMsisdn((prevState) => {
+      if (msisdn.length < 3) {
+        return [...prevState, event.target.value];
+      } else {
+        return [...prevState];
+      }
+    });
+    console.log("msisdn is:", msisdn);
   };
 
   const apn = localStorage.getItem("apn");
@@ -597,8 +615,12 @@ const IMSIInput: React.FC<imsiInputProps> = ({
                           <EditConfig
                             searchedSubscriber={searchedSubscriber}
                             imsi={imsi}
-                            // msisdn={msisdn}
-                            // setMsisdn={setMsisdn}
+                            msisdn={msisdn}
+                            msisdn1={msisdn1}
+                            setMsisdn1={setMsisdn1}
+                            handleMsisdnChange={handleMsisdnChange}
+                            msisdn2={msisdn2}
+                            setMsisdn2={setMsisdn2}
                             subK={subK}
                             setSubK={setSubK}
                             opType={opType}

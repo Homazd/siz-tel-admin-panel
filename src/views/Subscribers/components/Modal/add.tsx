@@ -77,7 +77,6 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
       },
     },
   ]);
-
   const { data: subscriber } = useGetSubscribersQuery(imsi, {
     skip: isFetching,
   });
@@ -306,11 +305,12 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
 
   const handleMsisdnChange = (event: ChangeEvent<HTMLInputElement>) => {
     console.log("msisdn1", event.target.value);
+    const newMsisdn = event.target.value;
     // setMsisdn1(event.target.value);
     // if (msisdn.length < 3 && msisdn1 != "") {
     setMsisdn((prevState) => {
-      if (msisdn.length < 3) {
-        return [...prevState, event.target.value];
+      if (msisdn.length < 3 && newMsisdn.length != 0) {
+        return [...prevState, newMsisdn];
       } else {
         return [...prevState];
       }
