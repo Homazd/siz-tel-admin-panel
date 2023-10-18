@@ -309,7 +309,7 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
     // setMsisdn1(event.target.value);
     // if (msisdn.length < 3 && msisdn1 != "") {
     setMsisdn((prevState) => {
-      if (msisdn.length < 3 && newMsisdn.length != 0) {
+      if (msisdn.length <= 2 && newMsisdn.length != 0) {
         return [...prevState, newMsisdn];
       } else {
         return [...prevState];

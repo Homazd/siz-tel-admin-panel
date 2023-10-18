@@ -68,6 +68,7 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
   const handleOnDeleteMsisdn = () => {
     setIsMSIVisible(true);
     setMsisdnClicked(false);
+    setMsisdn1('');
   };
 
   const handleOnAddSecondMSisdn = () => {
@@ -77,6 +78,8 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
   // Function to change state related to Msisdn component
   const handleChildStateChange = () => {
     setSecondMsisdn(false);
+    setMsisdn1('');
+    setMsisdn2('');
   };
 
   return (
@@ -133,9 +136,10 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
                           label: "static",
                         }}
                         className="w-[300px]"
-                        defaultValue={msisdn1}
-                        onBlur={handleMsisdnChange}
-                        error={msisdn1.length == 0 ? "is required" : null}
+                        required
+                        type="text"
+                        value={msisdn1}
+                        onChange={(e) => setMsisdn1(e.target.value)}
                       />
                     </>
                   ) : null}

@@ -28,7 +28,6 @@ const Msisdn: React.FC<msisdnProps> = ({
           required
           defaultValue={msisdn}
           onBlur={handleMsisdnChange}
-          error={msisdn === "" ? "This field is required" : null}
         />
 
         <div className="w-[90px] h-[30px] flex  border-solid border-2 border-indigo-200 mt-6">

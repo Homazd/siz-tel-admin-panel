@@ -1,9 +1,10 @@
 // Hooks
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 // Mantine Components
 import { Button, Divider, Select, TextInput } from "@mantine/core";
 // Types
 import { DataType } from "@/redux/Types/subscriberTypes";
+import Msisdn from "../../Msisdn";
 
 interface InputChildProps {
   searchedSubscriber: DataType;
@@ -35,10 +36,10 @@ interface InputChildProps {
 const EditConfig: React.FC<InputChildProps> = ({
   searchedSubscriber,
   msisdn,
- setMsisdn1,
- msisdn2,
- handleMsisdnChange,
- setMsisdn2,
+  setMsisdn1,
+  msisdn2,
+  handleMsisdnChange,
+  setMsisdn2,
   subK,
   msisdn1,
   amf,
@@ -57,17 +58,43 @@ const EditConfig: React.FC<InputChildProps> = ({
   upValue,
   setUpValue,
 }) => {
-  const [isMSIVisible, setIsMSIVisible] = useState(true);
   const [msisdnClicked, setMsisdnClicked] = useState(false);
+  const [secondMsisdn, setSecondMsisdn] = useState(false);
+  const [firstMsisdn, setFirstMsisdn] = useState(false);
+  const lengthOne = msisdn.length === 1;
+  const [isMSIVisible, setIsMSIVisible] = useState(true);
+
+  useEffect(() => {
+
+    if (msisdn.length === 2) {
+      setSecondMsisdn(true);
+    }
+    if (msisdn.length === 1) {
+      setIsMSIVisible(false);
+      setFirstMsisdn(true);
+    }
+  }, [msisdn]);
 
   const handleOnAdd = () => {
-    setMsisdnClicked(true);
+    setFirstMsisdn(true);
     setIsMSIVisible(false);
   };
 
-  const handleOnMulti = () => {
+  const handleOnDeleteMsisdn = () => {
+    setFirstMsisdn(false);
     setIsMSIVisible(true);
-    setMsisdnClicked(false);
+  };
+
+  const handleOnAddSecondMSisdn = () => {
+    setSecondMsisdn(true);
+    setFirstMsisdn(false);
+  };
+
+  // Function to change state related to Msisdn component
+  const handleChildStateChange = () => {
+    setSecondMsisdn(false);
+    setFirstMsisdn(true);
+    setIsMSIVisible(false);
   };
 
   return (
@@ -85,56 +112,219 @@ const EditConfig: React.FC<InputChildProps> = ({
           className="mt-3"
           value={searchedSubscriber.imsi}
         />
-        <div className="grid place-content-center">
-          {isMSIVisible && (
-            <Button
-              className="font-bold bg-sky-500 w-28 m-12"
-              onClick={handleOnAdd}
-            >
-              +
-            </Button>
-          )}
-          {!isMSIVisible && (
-            <div className="grid grid-cols-2 gap-10 mt-6">
-              <div className="col-span-1">
-                {msisdnClicked ? (
-                  <>
-                  {
-                    msisdn.map((item) => console.log("msisdn",item))
-                  }
-                    <TextInput
-                      label="MSISDN"
-                      name="msisdn"
-                      placeholder="MSISDN"
-                      // onKeyDown={handleKey}
-                      classNames={{
-                        label: "static",
-                      }}
-                      className="w-[300px]"
-                      defaultValue={msisdn1}
-                      onBlur={(e) => setMsisdn(e.target.value)}
-                      error={msisdn1.length == 0 ? "is required" : null}
+        {msisdn.length === 0 && (
+          <>
+            {secondMsisdn ? (
+              <div>
+                <Msisdn
+                  msisdn={msisdn1}
+                  handleMsisdnChange={handleMsisdnChange}
+                  onStateChange={handleChildStateChange}
+                />
+                <Msisdn
+                  msisdn={msisdn2}
+                  handleMsisdnChange={handleMsisdnChange}
+                  onStateChange={handleChildStateChange}
+                />
+              </div>
+            ) : (
+              <div className="grid place-content-center">
+                {isMSIVisible && (
+                  <Button
+                    className="font-bold bg-sky-500 w-28 m-12"
+                    onClick={handleOnAdd}
+                  >
+                    +
+                  </Button>
+                )}
+                {!isMSIVisible && (
+                  <div className="grid grid-cols-2 gap-10 mt-6">
+                    <div className="col-span-1">
+                      {firstMsisdn ? (
+                        <>
+                          <TextInput
+                            label="MSISDN"
+                            name="msisdn"
+                            placeholder="MSISDN"
+                            classNames={{
+                              label: "static",
+                            }}
+                            className="w-[300px]"
+                            defaultValue={msisdn1}
+                            onBlur={handleMsisdnChange}
+                            // error={msisdn1.length == 0 ? "is required" : null}f
+                          />
+                        </>
+                      ) : null}
+                    </div>
+                    <div className="col-span-1">
+                      <Button
+                        className="font-bold bg-red-500 w-28 mb-2 block"
+                        onClick={handleOnDeleteMsisdn}
+                      >
+                        ×
+                      </Button>
+                      <Button
+                        className="font-bold bg-sky-500 w-28 justify-items-center "
+                        onClick={handleOnAddSecondMSisdn}
+                      >
+                        +
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </>
+        )}
+
+        {msisdn.length === 2 && (
+          <>
+            {!secondMsisdn ? (
+              <div className="grid place-content-center">
+                {isMSIVisible && (
+                  <Button
+                    className="font-bold bg-sky-500 w-28 m-12"
+                    onClick={handleOnAdd}
+                  >
+                    +
+                  </Button>
+                )}
+                {!isMSIVisible && (
+                  <div className="grid grid-cols-2 gap-10 mt-6">
+                    <div className="col-span-1">
+                      {firstMsisdn ? (
+                        <>
+                          <TextInput
+                            label="MSISDN"
+                            name="msisdn"
+                            placeholder="MSISDN"
+                            classNames={{
+                              label: "static",
+                            }}
+                            className="w-[300px]"
+                            defaultValue={msisdn1}
+                            onBlur={handleMsisdnChange}
+                            error={msisdn1.length == 0 ? "is required" : null}
+                          />
+                        </>
+                      ) : null}
+                    </div>
+                    <div className="col-span-1">
+                      <Button
+                        className="font-bold bg-red-500 w-28 mb-2 block"
+                        onClick={handleOnDeleteMsisdn}
+                      >
+                        ×
+                      </Button>
+                      <Button
+                        className="font-bold bg-sky-500 w-28 justify-items-center "
+                        onClick={handleOnAddSecondMSisdn}
+                      >
+                        +
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div>
+                <Msisdn
+                  msisdn={msisdn1}
+                  handleMsisdnChange={handleMsisdnChange}
+                  onStateChange={handleChildStateChange}
+                />
+                <Msisdn
+                  msisdn={msisdn2}
+                  handleMsisdnChange={handleMsisdnChange}
+                  onStateChange={handleChildStateChange}
+                />
+              </div>
+            )}
+          </>
+        )}
+        {msisdn.length === 1 && (
+          <div className="grid place-content-center">
+            {isMSIVisible && (
+              <Button
+                className="font-bold bg-sky-500 w-28 m-12"
+                onClick={handleOnAdd}
+              >
+                +
+              </Button>
+            )}
+            {!isMSIVisible && (
+              <>
+                {!secondMsisdn ? (
+                  <div className="grid grid-cols-2 gap-10 mt-6">
+                    <div className="col-span-1">
+                      {firstMsisdn ? (
+                        <>
+                          <TextInput
+                            label="MSISDN"
+                            name="msisdn"
+                            placeholder="MSISDN"
+                            classNames={{
+                              label: "static",
+                            }}
+                            className="w-[300px]"
+                            defaultValue={msisdn1}
+                            onBlur={handleMsisdnChange}
+                            // error={msisdn1.length == 0 ? "is required" : null}
+                          />
+                        </>
+                      ) : null}
+                    </div>
+                    <div className="col-span-1">
+                      <Button
+                        className="font-bold bg-red-500 w-28 mb-2 block"
+                        onClick={handleOnDeleteMsisdn}
+                      >
+                        ×
+                      </Button>
+                      <Button
+                        className="font-bold bg-sky-500 w-28 justify-items-center "
+                        onClick={handleOnAddSecondMSisdn}
+                      >
+                        +
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <Msisdn
+                      msisdn={msisdn1}
+                      handleMsisdnChange={handleMsisdnChange}
+                      onStateChange={handleChildStateChange}
                     />
-                  </>
-                ) : null}
-              </div>
-              <div className="col-span-1">
-                <Button
-                  className="font-bold bg-red-500 w-28 mb-2 block"
-                  onClick={handleOnMulti}
-                >
-                  ×
-                </Button>
-                <Button
-                  className="font-bold bg-sky-500 w-28 justify-items-center "
-                  onClick={handleOnAdd}
-                >
-                  +
-                </Button>
-              </div>
-            </div>
-          )}
+                    <Msisdn
+                      msisdn={msisdn2}
+                      handleMsisdnChange={handleMsisdnChange}
+                      onStateChange={handleChildStateChange}
+                    />
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        )}
+
+        {/* {msisdn.length === 2 && (
+          <div>
+          <Msisdn
+            msisdn={msisdn1}
+            handleMsisdnChange={handleMsisdnChange}
+            onStateChange={handleChildStateChange}
+          />
+          <Msisdn
+            msisdn={msisdn2}
+            handleMsisdnChange={handleMsisdnChange}
+            onStateChange={handleChildStateChange}
+          />
         </div>
+        ) ? msisdn[0] != '' ? (
+          <></>
+        ) : null} */}
       </div>
       <div className="flex mt-6">
         <TextInput
@@ -187,7 +377,7 @@ const EditConfig: React.FC<InputChildProps> = ({
           classNames={{
             label: "static",
           }}
-          value={opKey ? opKey : ''}
+          value={opKey ? opKey : ""}
           onChange={(e) => setOpKey(e.target.value)}
           className="w-[500px]"
           required
@@ -238,8 +428,7 @@ const EditConfig: React.FC<InputChildProps> = ({
           placeholder="1"
           className="w-[250px] ml-2"
           required
-          error={upValue === "" ? "is required" : null} 
-
+          error={upValue === "" ? "is required" : null}
         />
         <Select
           label="Unit"

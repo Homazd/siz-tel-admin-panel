@@ -170,6 +170,7 @@ const IMSIInput: React.FC<imsiInputProps> = ({
       setAmf(searchedSubscriber.security.amf);
       setMsisdn(searchedSubscriber.msisdn);
       setMsisdn1(searchedSubscriber.msisdn[0]);
+      setMsisdn2(searchedSubscriber.msisdn[1]);
 
       // setMsisdn(searchedSubscriber.msisdn[0]);
       setOpType(searchedSubscriber.security.opc ? "OPc" : "OP");
@@ -354,6 +355,8 @@ const IMSIInput: React.FC<imsiInputProps> = ({
     });
     console.log("msisdn is:", msisdn);
   };
+
+  
 
   const apn = localStorage.getItem("apn");
   const handleSubmitUpdate = () => {
