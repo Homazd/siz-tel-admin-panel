@@ -211,9 +211,6 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
   let Msisdn: string[] = [];
 
   const handleSubmit = async () => {
-    console.log(msisdnArray);
-    console.log("msisdn1", msisdn1)
-    console.log("msisdn2", msisdn2)
     msisdnArray[0] != '' ? Msisdn = [...Msisdn, ...msisdnArray] : null;
     msisdn1[0] != '' ? Msisdn = [...Msisdn, ...msisdn1] : null;
     msisdn2[0] != '' ? Msisdn = [...Msisdn, ...msisdn2] : null;
@@ -226,11 +223,11 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
         k: subK,
         op: opType === "OP" ? opKey : null,
         opc: opType === "OPc" ? opKey : null,
-        amf: amf,
+        amf: amf
       },
       ambr: {
         downlink: { value: +downValue, unit: +downUnit },
-        uplink: { value: +upValue, unit: +upUnit },
+        uplink: { value: +upValue, unit: +upUnit }
       },
       mme_host: [],
       mme_realm: [],
@@ -249,30 +246,30 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
                 arp: {
                   priority_level: +arp,
                   pre_emption_capability: +capability,
-                  pre_emption_vulnerability: +vulnerability,
-                },
+                  pre_emption_vulnerability: +vulnerability
+                }
               },
               ambr: {
                 downlink: {
                   value: +ambrDownlink,
-                  unit: +ambrDownUnit,
+                  unit: +ambrDownUnit
                 },
                 uplink: {
                   value: +ambrUplink,
-                  unit: +ambrUpUnit,
-                },
+                  unit: +ambrUpUnit
+                }
               },
               ue:
                 {
                   addr: ueIpv4 || undefined,
-                  addr6: ueIpv6 || undefined,
+                  addr6: ueIpv6 || undefined
                 } || undefined,
               smf:
                 {
                   addr: smfIpv4 || undefined,
-                  addr6: smfIpv6 || undefined,
+                  addr6: smfIpv6 || undefined
                 } || undefined,
-              pcc_rule: [],
+              pcc_rule: []
               //  {
               //   qos: {
               //     index: 1,
@@ -299,7 +296,7 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
       subscriber_status: 0,
       network_access_mode: 0,
       subscribed_rau_tau_timer: 12,
-      __v: 0,
+      __v: 0
     });
     setMsisdn1([]);
     setMsisdn2([]);
