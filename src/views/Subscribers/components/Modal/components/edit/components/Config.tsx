@@ -150,8 +150,8 @@ console.log("msisdn", msisdn)
                               label: "static",
                             }}
                             className="w-[300px]"
-                            defaultValue={msisdnArray[0]}
-                            onBlur={(e) => {
+                            value={msisdnArray[0]}
+                            onChange={(e) => {
                               setMsisdnArray([e.target.value])
                             }}
                             // error={msisdn1.length == 0 ? "is required" : null}f
@@ -232,12 +232,12 @@ console.log("msisdn", msisdn)
             ) : (
               <div>
                 <Msisdn
-                  msisdn={[msisdn[0]]}
+                  msisdn={msisdn1}
                   setmsisdn={setMsisdn1}
                   onStateChange={handleChildStateChange}
                 />
                 <Msisdn
-                  msisdn={[msisdn[1]]}
+                  msisdn={msisdn2}
                   setmsisdn={setMsisdn2}
                   onStateChange={handleChildStateChange}
                 />

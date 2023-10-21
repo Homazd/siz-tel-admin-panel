@@ -177,6 +177,11 @@ const IMSIInput: React.FC<imsiInputProps> = ({
         ? setMsisdn(searchedSubscriber.msisdn)
         : null;
 
+      if(searchedSubscriber.msisdn.length === 2){
+        setMsisdn1([searchedSubscriber.msisdn[0]])
+        setMsisdn2([searchedSubscriber.msisdn[1]])
+      }
+
       // setMsisdn(searchedSubscriber.msisdn[0]);
       setOpType(searchedSubscriber.security.opc ? "OPc" : "OP");
       setOpKey(
@@ -353,15 +358,15 @@ const IMSIInput: React.FC<imsiInputProps> = ({
   const handleSubmitUpdate = () => {
     console.log("submit edit");
     console.log("imsi in update is:", imsi);
-    console.log(msisdnArray);
-    console.log("msisdn1", msisdn1)
-    console.log("msisdn2", msisdn2)
-    msisdnArray[0] != '' ? Msisdn = [...Msisdn, ...msisdnArray] : null;
-    msisdn1[0] != '' ? Msisdn = [...Msisdn, ...msisdn1] : null;
-    msisdn2[0] != '' ? Msisdn = [...Msisdn, ...msisdn2] : null;
+    console.log("msisdnArray", msisdnArray);
+    console.log("msisdn1 in index", msisdn1);
+    console.log("msisdn2 in index", msisdn2);
+    msisdnArray[0] != "" ? (Msisdn = [...msisdnArray]) : null;
+    msisdn1[0] != "" ? (Msisdn = [...Msisdn, ...msisdn1]) : null;
+    msisdn2[0] != "" ? (Msisdn = [...Msisdn, ...msisdn2]) : null;
     updateSubscriber({
       imsi: imsi,
-      msisdn: msisdn,
+      msisdn: Msisdn,
       imeisv: imeisv,
       schema_version: 1,
       security: {
@@ -429,11 +434,8 @@ const IMSIInput: React.FC<imsiInputProps> = ({
       subscribed_rau_tau_timer: 12,
       __v: 0,
     });
+    setMsisdnArray([]);
     setEditOpened(false);
-    setMsisdn1([]);
-    setMsisdn2([]);
-    setMsisdnArray([])
-    Msisdn.length = 0;
     // setMsisdn([]);
   };
   return (
