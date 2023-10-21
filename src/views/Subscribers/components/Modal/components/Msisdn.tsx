@@ -37,7 +37,10 @@ const Msisdn: React.FC<msisdnProps> = ({
           <div className="w-[30px] border-solid border-r-2 border-indigo-200 flex justify-center items-center">
             <IconArrowUp size="1.3rem" stroke={1.5} />
           </div>
-          <div className="w-[30px] bg-red-500 flex justify-center items-center" onClick={onStateChange}>
+          <div
+            className="w-[30px] bg-red-500 flex justify-center items-center"
+            onClick={onStateChange}
+          >
             <IconX className="" color="white" size="1.3rem" stroke={1.5} />
           </div>
         </div>

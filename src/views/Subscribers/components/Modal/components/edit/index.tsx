@@ -118,8 +118,6 @@ const IMSIInput: React.FC<imsiInputProps> = ({
   });
 
   useEffect(() => {
-    console.log("added imsi in edit is:", addedImsi);
-    console.log("searchedSubscriber", searchedSubscriber);
     if (searchedSubscriber) {
       let downLinkUnit: string;
       let upLinkUnit: string;
@@ -362,8 +360,8 @@ const IMSIInput: React.FC<imsiInputProps> = ({
     console.log("msisdn1 in index", msisdn1);
     console.log("msisdn2 in index", msisdn2);
     msisdnArray[0] != "" ? (Msisdn = [...msisdnArray]) : null;
-    msisdn1[0] != "" ? (Msisdn = [...Msisdn, ...msisdn1]) : null;
-    msisdn2[0] != "" ? (Msisdn = [...Msisdn, ...msisdn2]) : null;
+    msisdnArray.length == 0 && msisdn1[0] != "" ? (Msisdn = [...Msisdn, ...msisdn1]) : null;
+    msisdnArray.length == 0 && msisdn2[0] != "" ? (Msisdn = [...Msisdn, ...msisdn2]) : null;
     updateSubscriber({
       imsi: imsi,
       msisdn: Msisdn,

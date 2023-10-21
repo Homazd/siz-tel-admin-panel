@@ -61,11 +61,10 @@ const EditConfig: React.FC<InputChildProps> = ({
   setUpValue,
 }) => {
   const [secondMsisdn, setSecondMsisdn] = useState(false);
-  const [firstMsisdn, setFirstMsisdn] = useState(false)
+  const [firstMsisdn, setFirstMsisdn] = useState(false);
   const [isMSIVisible, setIsMSIVisible] = useState(true);
 
   useEffect(() => {
-console.log("msisdn", msisdn)
     if (msisdn.length === 2) {
       setSecondMsisdn(true);
     }
@@ -83,11 +82,15 @@ console.log("msisdn", msisdn)
   const handleOnDeleteMsisdn = () => {
     setFirstMsisdn(false);
     setIsMSIVisible(true);
+    setMsisdn1([]);
+    setMsisdn2([]);
+    setMsisdnArray([])
   };
 
   const handleOnAddSecondMSisdn = () => {
     setSecondMsisdn(true);
     setFirstMsisdn(false);
+    setMsisdnArray([]);
   };
 
   // Function to change state related to Msisdn component
@@ -95,6 +98,15 @@ console.log("msisdn", msisdn)
     setSecondMsisdn(false);
     setFirstMsisdn(true);
     setIsMSIVisible(false);
+    console.log(msisdn1);
+    console.log(msisdn2);
+    console.log("msisdn", msisdn)
+    if (msisdn1.length == 0) {
+      setMsisdnArray([...msisdn2]);
+    } else {
+      setMsisdnArray([...msisdn1]);
+    }
+    console.log("msisdnArray", msisdnArray);
   };
 
   return (
@@ -152,7 +164,7 @@ console.log("msisdn", msisdn)
                             className="w-[300px]"
                             value={msisdnArray[0]}
                             onChange={(e) => {
-                              setMsisdnArray([e.target.value])
+                              setMsisdnArray([e.target.value]);
                             }}
                             // error={msisdn1.length == 0 ? "is required" : null}f
                           />
@@ -205,7 +217,7 @@ console.log("msisdn", msisdn)
                               label: "static",
                             }}
                             className="w-[300px]"
-                            value={msisdn[0]}
+                            value={msisdnArray[0]}
                             onChange={(e) => setMsisdnArray([e.target.value])}
                             error={msisdn1.length == 0 ? "is required" : null}
                           />
@@ -246,14 +258,16 @@ console.log("msisdn", msisdn)
           </>
         )}
         {msisdn.length === 1 && (
-          <div className="grid place-content-center">
-            {isMSIVisible && (
+          <div>
+          {isMSIVisible && (
+              <div className="grid place-content-center">
               <Button
                 className="font-bold bg-sky-500 w-28 m-12"
                 onClick={handleOnAdd}
               >
                 +
               </Button>
+              </div>
             )}
             {!isMSIVisible && (
               <>
@@ -272,7 +286,6 @@ console.log("msisdn", msisdn)
                             className="w-[300px]"
                             value={msisdnArray[0]}
                             onChange={(e) => setMsisdnArray([e.target.value])}
-                            // error={msisdn1.length == 0 ? "is required" : null}
                           />
                         </>
                       ) : null}
