@@ -7,11 +7,12 @@ import Msisdn from "./Msisdn";
 interface InputChildProps {
   imsi: string;
   setImsi: (data: string) => void;
-  msisdn1: string;
-  setMsisdn1: (data: string) => void;
-  handleMsisdnChange: (data: ChangeEvent<HTMLInputElement>) => void;
-  msisdn2: string;
-  setMsisdn2: (data: string) => void;
+  msisdnArray: string[]
+  setMsisdnArray:(data: string[]) => void;
+  msisdn1: string[];
+  setMsisdn1: (data: string[]) => void;
+  msisdn2: string[];
+  setMsisdn2: (data: string[]) => void;
   subK: string;
   setSubK: (data: string) => void;
   opType: string;
@@ -35,7 +36,8 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
   setImsi,
   msisdn1,
   setMsisdn1,
-  handleMsisdnChange,
+  msisdnArray,
+  setMsisdnArray,
   msisdn2,
   setMsisdn2,
   subK,
@@ -68,7 +70,7 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
   const handleOnDeleteMsisdn = () => {
     setIsMSIVisible(true);
     setMsisdnClicked(false);
-    setMsisdn1('');
+    setMsisdn1([]);
   };
 
   const handleOnAddSecondMSisdn = () => {
@@ -78,8 +80,8 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
   // Function to change state related to Msisdn component
   const handleChildStateChange = () => {
     setSecondMsisdn(false);
-    setMsisdn1('');
-    setMsisdn2('');
+    setMsisdn1([]);
+    setMsisdn2([]);
   };
 
   return (
@@ -104,12 +106,12 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
           <div>
             <Msisdn
               msisdn={msisdn1}
-              handleMsisdnChange={handleMsisdnChange}
+              setmsisdn={setMsisdn1}
               onStateChange={handleChildStateChange}
             />
             <Msisdn
               msisdn={msisdn2}
-              handleMsisdnChange={handleMsisdnChange}
+              setmsisdn={setMsisdn2}
               onStateChange={handleChildStateChange}
             />
           </div>
@@ -138,8 +140,10 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
                         className="w-[300px]"
                         required
                         type="text"
-                        value={msisdn1}
-                        onChange={(e) => setMsisdn1(e.target.value)}
+                        value={msisdnArray[0]}
+                        onChange={(e) => {
+                          setMsisdnArray([e.target.value])
+                        }}
                       />
                     </>
                   ) : null}

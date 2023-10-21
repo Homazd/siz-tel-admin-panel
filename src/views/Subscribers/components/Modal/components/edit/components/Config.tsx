@@ -1,5 +1,5 @@
 // Hooks
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 // Mantine Components
 import { Button, Divider, Select, TextInput } from "@mantine/core";
 // Types
@@ -11,12 +11,13 @@ interface InputChildProps {
   imsi: string;
   opKey: string | null;
   setOpKey: (data: string | null) => void;
-  msisdn1: string;
+  msisdn1: string[];
   msisdn: string[];
-  handleMsisdnChange: (data: ChangeEvent<HTMLInputElement>) => void;
-  setMsisdn1: (data: string) => void;
-  msisdn2: string;
-  setMsisdn2: (data: string) => void;
+  msisdnArray: string[];
+  setMsisdnArray: (data: string[]) => void;
+  setMsisdn1: (data: string[]) => void;
+  msisdn2: string[];
+  setMsisdn2: (data: string[]) => void;
   amf: string;
   setAmf: (data: string) => void;
   opType: string;
@@ -38,10 +39,11 @@ const EditConfig: React.FC<InputChildProps> = ({
   msisdn,
   setMsisdn1,
   msisdn2,
-  handleMsisdnChange,
   setMsisdn2,
   subK,
   msisdn1,
+  msisdnArray,
+  setMsisdnArray,
   amf,
   setAmf,
   opType,
@@ -58,14 +60,12 @@ const EditConfig: React.FC<InputChildProps> = ({
   upValue,
   setUpValue,
 }) => {
-  const [msisdnClicked, setMsisdnClicked] = useState(false);
   const [secondMsisdn, setSecondMsisdn] = useState(false);
-  const [firstMsisdn, setFirstMsisdn] = useState(false);
-  const lengthOne = msisdn.length === 1;
+  const [firstMsisdn, setFirstMsisdn] = useState(false)
   const [isMSIVisible, setIsMSIVisible] = useState(true);
 
   useEffect(() => {
-
+console.log("msisdn", msisdn)
     if (msisdn.length === 2) {
       setSecondMsisdn(true);
     }
@@ -118,12 +118,12 @@ const EditConfig: React.FC<InputChildProps> = ({
               <div>
                 <Msisdn
                   msisdn={msisdn1}
-                  handleMsisdnChange={handleMsisdnChange}
+                  setmsisdn={setMsisdn1}
                   onStateChange={handleChildStateChange}
                 />
                 <Msisdn
                   msisdn={msisdn2}
-                  handleMsisdnChange={handleMsisdnChange}
+                  setmsisdn={setMsisdn2}
                   onStateChange={handleChildStateChange}
                 />
               </div>
@@ -150,8 +150,10 @@ const EditConfig: React.FC<InputChildProps> = ({
                               label: "static",
                             }}
                             className="w-[300px]"
-                            defaultValue={msisdn1}
-                            onBlur={handleMsisdnChange}
+                            defaultValue={msisdnArray[0]}
+                            onBlur={(e) => {
+                              setMsisdnArray([e.target.value])
+                            }}
                             // error={msisdn1.length == 0 ? "is required" : null}f
                           />
                         </>
@@ -203,8 +205,8 @@ const EditConfig: React.FC<InputChildProps> = ({
                               label: "static",
                             }}
                             className="w-[300px]"
-                            defaultValue={msisdn1}
-                            onBlur={handleMsisdnChange}
+                            value={msisdn[0]}
+                            onChange={(e) => setMsisdnArray([e.target.value])}
                             error={msisdn1.length == 0 ? "is required" : null}
                           />
                         </>
@@ -230,13 +232,13 @@ const EditConfig: React.FC<InputChildProps> = ({
             ) : (
               <div>
                 <Msisdn
-                  msisdn={msisdn1}
-                  handleMsisdnChange={handleMsisdnChange}
+                  msisdn={[msisdn[0]]}
+                  setmsisdn={setMsisdn1}
                   onStateChange={handleChildStateChange}
                 />
                 <Msisdn
-                  msisdn={msisdn2}
-                  handleMsisdnChange={handleMsisdnChange}
+                  msisdn={[msisdn[1]]}
+                  setmsisdn={setMsisdn2}
                   onStateChange={handleChildStateChange}
                 />
               </div>
@@ -268,8 +270,8 @@ const EditConfig: React.FC<InputChildProps> = ({
                               label: "static",
                             }}
                             className="w-[300px]"
-                            defaultValue={msisdn1}
-                            onBlur={handleMsisdnChange}
+                            value={msisdnArray[0]}
+                            onChange={(e) => setMsisdnArray([e.target.value])}
                             // error={msisdn1.length == 0 ? "is required" : null}
                           />
                         </>
@@ -294,12 +296,12 @@ const EditConfig: React.FC<InputChildProps> = ({
                   <div>
                     <Msisdn
                       msisdn={msisdn1}
-                      handleMsisdnChange={handleMsisdnChange}
+                      setmsisdn={setMsisdn1}
                       onStateChange={handleChildStateChange}
                     />
                     <Msisdn
                       msisdn={msisdn2}
-                      handleMsisdnChange={handleMsisdnChange}
+                      setmsisdn={setMsisdn2}
                       onStateChange={handleChildStateChange}
                     />
                   </div>

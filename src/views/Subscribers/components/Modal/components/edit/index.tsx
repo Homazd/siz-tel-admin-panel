@@ -54,8 +54,9 @@ const IMSIInput: React.FC<imsiInputProps> = ({
   // Config States
   const [imsi, setImsi] = useState("");
   const [msisdn, setMsisdn] = useState<string[]>([]);
-  const [msisdn1, setMsisdn1] = useState<string>("");
-  const [msisdn2, setMsisdn2] = useState<string>("");
+  const [msisdnArray, setMsisdnArray] = useState<string[]>([]);
+  const [msisdn1, setMsisdn1] = useState<string[]>([]);
+  const [msisdn2, setMsisdn2] = useState<string[]>([]);
   const [subK, setSubK] = useState("");
   const [opType, setOpType] = useState("OPc");
   const [opKey, setOpKey] = useState<string | null>("");
@@ -169,8 +170,12 @@ const IMSIInput: React.FC<imsiInputProps> = ({
       setSubK(searchedSubscriber.security.k);
       setAmf(searchedSubscriber.security.amf);
       setMsisdn(searchedSubscriber.msisdn);
-      setMsisdn1(searchedSubscriber.msisdn[0]);
-      setMsisdn2(searchedSubscriber.msisdn[1]);
+      searchedSubscriber.msisdn.length === 1
+        ? setMsisdnArray(searchedSubscriber.msisdn)
+        : null;
+      searchedSubscriber.msisdn.length === 2
+        ? setMsisdn(searchedSubscriber.msisdn)
+        : null;
 
       // setMsisdn(searchedSubscriber.msisdn[0]);
       setOpType(searchedSubscriber.security.opc ? "OPc" : "OP");
@@ -342,27 +347,18 @@ const IMSIInput: React.FC<imsiInputProps> = ({
     }
   };
 
-  const handleMsisdnChange = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log("msisdn1", event.target.value);
-    // setMsisdn1(event.target.value);
-    // if (msisdn.length < 3 && msisdn1 != "") {
-    setMsisdn((prevState) => {
-      if (msisdn.length < 3) {
-        return [...prevState, event.target.value];
-      } else {
-        return [...prevState];
-      }
-    });
-    console.log("msisdn is:", msisdn);
-  };
-
-  
+  let Msisdn: string[] = [];
 
   const apn = localStorage.getItem("apn");
   const handleSubmitUpdate = () => {
     console.log("submit edit");
     console.log("imsi in update is:", imsi);
-
+    console.log(msisdnArray);
+    console.log("msisdn1", msisdn1)
+    console.log("msisdn2", msisdn2)
+    msisdnArray[0] != '' ? Msisdn = [...Msisdn, ...msisdnArray] : null;
+    msisdn1[0] != '' ? Msisdn = [...Msisdn, ...msisdn1] : null;
+    msisdn2[0] != '' ? Msisdn = [...Msisdn, ...msisdn2] : null;
     updateSubscriber({
       imsi: imsi,
       msisdn: msisdn,
@@ -434,6 +430,11 @@ const IMSIInput: React.FC<imsiInputProps> = ({
       __v: 0,
     });
     setEditOpened(false);
+    setMsisdn1([]);
+    setMsisdn2([]);
+    setMsisdnArray([])
+    Msisdn.length = 0;
+    // setMsisdn([]);
   };
   return (
     <>
@@ -621,8 +622,9 @@ const IMSIInput: React.FC<imsiInputProps> = ({
                             msisdn={msisdn}
                             msisdn1={msisdn1}
                             setMsisdn1={setMsisdn1}
-                            handleMsisdnChange={handleMsisdnChange}
                             msisdn2={msisdn2}
+                            msisdnArray={msisdnArray}
+                            setMsisdnArray={setMsisdnArray}
                             setMsisdn2={setMsisdn2}
                             subK={subK}
                             setSubK={setSubK}

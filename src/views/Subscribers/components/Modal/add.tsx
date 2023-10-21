@@ -1,5 +1,5 @@
 // Hooks
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 // Mantine Hooks
 import { useDisclosure } from "@mantine/hooks";
 // Services
@@ -25,9 +25,10 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
   const [hiddenSession, setHiddenSession] = useState(true);
   const [hiddenSlice, setHiddenSlice] = useState(false);
   const [imsi, setImsi] = useState("");
-  const [msisdn, setMsisdn] = useState<string[]>([]);
-  const [msisdn1, setMsisdn1] = useState<string>("");
-  const [msisdn2, setMsisdn2] = useState<string>("");
+  // const [msisdn, setMsisdn] = useState<string[]>([]);
+  const [msisdnArray, setMsisdnArray] = useState<string[]>([]);
+  const [msisdn1, setMsisdn1] = useState<string[]>([]);
+  const [msisdn2, setMsisdn2] = useState<string[]>([]);
   const [subK, setSubK] = useState("465B5CE8 B199B49F AA5F0A2E E238A6BC");
   const [opType, setOpType] = useState("OPc");
   const [opKey, setOpKey] = useState<string | null>(
@@ -207,12 +208,19 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
     subscribed_rau_tau_timer: 12,
     __v: 0,
   };
+  let Msisdn: string[] = [];
 
   const handleSubmit = async () => {
+    console.log(msisdnArray);
+    console.log("msisdn1", msisdn1)
+    console.log("msisdn2", msisdn2)
+    msisdnArray[0] != '' ? Msisdn = [...Msisdn, ...msisdnArray] : null;
+    msisdn1[0] != '' ? Msisdn = [...Msisdn, ...msisdn1] : null;
+    msisdn2[0] != '' ? Msisdn = [...Msisdn, ...msisdn2] : null;
     await addSubscriber({
       schema_version: 1,
       imsi: imsi,
-      msisdn: msisdn,
+      msisdn: Msisdn,
       imeisv: [],
       security: {
         k: subK,
@@ -293,29 +301,17 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
       subscribed_rau_tau_timer: 12,
       __v: 0,
     });
-    setMsisdn1("");
-    setMsisdn2("");
-    setMsisdn([]);
+    setMsisdn1([]);
+    setMsisdn2([]);
+    
+    // setMsisdn([]);
+  
+    Msisdn.length = 0;
     if (onNewSub) {
       onNewSub(addingSubscriber.imsi);
     }
 
     close();
-  };
-
-  const handleMsisdnChange = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log("msisdn1", event.target.value);
-    const newMsisdn = event.target.value;
-    // setMsisdn1(event.target.value);
-    // if (msisdn.length < 3 && msisdn1 != "") {
-    setMsisdn((prevState) => {
-      if (msisdn.length <= 2 && newMsisdn.length != 0) {
-        return [...prevState, newMsisdn];
-      } else {
-        return [...prevState];
-      }
-    });
-    console.log("msisdn is:", msisdn);
   };
 
   return (
@@ -338,9 +334,10 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
             <SubscriberConfig
               imsi={imsi}
               setImsi={setImsi}
+              msisdnArray={msisdnArray}
+              setMsisdnArray={setMsisdnArray}
               msisdn1={msisdn1}
               setMsisdn1={setMsisdn1}
-              handleMsisdnChange={handleMsisdnChange}
               msisdn2={msisdn2}
               setMsisdn2={setMsisdn2}
               subK={subK}

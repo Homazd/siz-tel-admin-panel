@@ -2,17 +2,17 @@ import { TextInput } from "@mantine/core";
 // Icons
 import { IconArrowDown } from "@tabler/icons-react";
 import { IconArrowUp } from "@tabler/icons-react";
-import React, { ChangeEvent } from "react";
+import React from "react";
 import { IconX } from "@tabler/icons-react";
 
 interface msisdnProps {
-  msisdn: string;
-  handleMsisdnChange: (data: ChangeEvent<HTMLInputElement>) => void;
+  msisdn: string[];
+  setmsisdn: (data: string[]) => void;
   onStateChange: () => void;
 }
 const Msisdn: React.FC<msisdnProps> = ({
   msisdn,
-  handleMsisdnChange,
+  setmsisdn,
   onStateChange,
 }) => {
   return (
@@ -20,14 +20,14 @@ const Msisdn: React.FC<msisdnProps> = ({
       <div className="grid grid-cols-2 my-4">
         <TextInput
           label="MSISDN"
-          name="msisdn1"
+          name="msisdn"
           classNames={{
             label: "static",
           }}
           className="w-[300px]"
           required
-          defaultValue={msisdn}
-          onBlur={handleMsisdnChange}
+          value={msisdn[0]}
+          onChange={(e) => setmsisdn([e.target.value])}
         />
 
         <div className="w-[90px] h-[30px] flex  border-solid border-2 border-indigo-200 mt-6">
