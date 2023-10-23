@@ -9,65 +9,39 @@ interface SessionProps {
   hiddenSession: boolean;
   onClickDeleteSession: () => void;
   onClickAddSession: () => void;
-  qci: string;
-  setQci: (data: string) => void;
-  arp: string;
-  setArp: (data: string) => void;
-  type: string;
-  setType: (data: string) => void;
-  capability: string;
-  setCapability: (data: string) => void;
-  vulnerability: string;
-  setVulnerability: (data: string) => void;
-  ambrDownlink: string;
-  setAmbrDownlink: (data: string) => void;
-  ambrUplink: string;
-  setAmbrUplink: (data: string) => void;
-  ambrDownUnit: string;
-  setAmbrDownUnit: (data: string) => void;
-  ambrUpUnit: string;
-  setAmbrUpUnit: (data: string) => void;
-  ueIpv4: string;
-  setUeIpv4: (data: string) => void;
-  ueIpv6: string;
-  setUeIpv6: (data: string) => void;
-  smfIpv4: string;
-  setSmfIpv4: (data: string) => void;
-  smfIpv6: string;
-  setSmfIpv6: (data: string) => void;
+  subscriberData: {
+    qci: string;
+    arp: string;
+    type: string;
+    capability: string;
+    vulnerability: string;
+    ambrDownlink: string;
+
+    ambrUplink: string;
+
+    ambrDownUnit: string;
+
+    ambrUpUnit: string;
+
+    ueIpv4: string;
+    ueIpv6: string;
+    smfIpv4: string;
+    smfIpv6: string;
+  };
+  updateSubscriberData: (field: string, value: string) => void;
 }
 const Session: React.FC<SessionProps> = ({
   hiddenSession,
   onClickAddSession,
   onClickDeleteSession,
-  type,
-  setType,
-  qci,
-  setQci,
-  arp,
-  setArp,
-  capability,
-  setCapability,
-  vulnerability,
-  setVulnerability,
-  ambrDownUnit,
-  setAmbrDownUnit,
-  ambrDownlink,
-  setAmbrDownlink,
-  ambrUplink,
-  setAmbrUplink,
-  ambrUpUnit,
-  setAmbrUpUnit,
-  ueIpv4,
-  ueIpv6,
-  setSmfIpv4,
-  setUeIpv4,
-  setSmfIpv6,
-  setUeIpv6,
-  smfIpv4,
-  smfIpv6,
+  updateSubscriberData,
+  subscriberData,
 }) => {
   const apn = localStorage.getItem("apn");
+  const handleUnitChange = (field: string) => (value: string) => {
+    updateSubscriberData(field, value);
+  };
+  
   return (
     <div>
       {hiddenSession ? (
@@ -102,8 +76,8 @@ const Session: React.FC<SessionProps> = ({
                   className="ml-6 w-[100px]"
                   required
                   defaultValue={"3"}
-                  value={type}
-                  onChange={setType}
+                  value={subscriberData.type}
+                  onChange={handleUnitChange('type')}
                 />
                 <Button
                   className="font-bold bg-red-500 w-28 ml-6 mt-6"
@@ -125,8 +99,8 @@ const Session: React.FC<SessionProps> = ({
                   value: option.title,
                   label: option.title,
                 }))}
-                value={qci}
-                onChange={setQci}
+                value={subscriberData.qci}
+                onChange={handleUnitChange('qci')}
               />
               <Select
                 label="ARP Priority Level (1-15)"
@@ -140,8 +114,8 @@ const Session: React.FC<SessionProps> = ({
                   value: num.toString(),
                   label: num.toString(),
                 }))}
-                value={arp}
-                onChange={setArp}
+                value={subscriberData.arp}
+                onChange={handleUnitChange('type')}
               />
               <div className="flex">
                 <Select
@@ -157,8 +131,8 @@ const Session: React.FC<SessionProps> = ({
                   ]}
                   required
                   placeholder="Disabled"
-                  value={capability}
-                  onChange={setCapability}
+                  value={subscriberData.capability}
+                  onChange={handleUnitChange('capability')}
                 />
                 <Select
                   label="Vulnerability"
@@ -173,8 +147,8 @@ const Session: React.FC<SessionProps> = ({
                     { value: "1", label: "Disabled" },
                     { value: "2", label: "Enabled" },
                   ]}
-                  value={vulnerability}
-                  onChange={setVulnerability}
+                  value={subscriberData.vulnerability}
+                  onChange={handleUnitChange('vulnerability')}
                 />
               </div>
               <div className="flex mt-3">
@@ -185,9 +159,8 @@ const Session: React.FC<SessionProps> = ({
                   label="Session-AMBR Downlink"
                   placeholder="1"
                   className="w-[250px]"
-                  value={ambrDownlink}
-                  onChange={(e) => setAmbrDownlink(e.target.value)}
-
+                  value={subscriberData.ambrDownlink}
+                  onChange={(e) => updateSubscriberData('ambrDownlink',e.target.value)}
                 />
                 <Select
                   label="downUnit"
@@ -204,8 +177,8 @@ const Session: React.FC<SessionProps> = ({
                     { value: "3", label: "Gbps" },
                     { value: "4", label: "Tbps" },
                   ]}
-                  value={ambrDownUnit}
-                  onChange={setAmbrDownUnit}
+                  value={subscriberData.ambrDownUnit}
+                  onChange={handleUnitChange('ambrDownUnit')}
                 />
               </div>
               <div className="flex mt-3">
@@ -216,8 +189,8 @@ const Session: React.FC<SessionProps> = ({
                   label="Session-AMBR Uplink"
                   placeholder="1"
                   className="w-[250px]"
-                  value={ambrUplink}
-                  onChange={(e) => setAmbrUplink(e.target.value)}
+                  value={subscriberData.ambrUplink}
+                  onChange={(e) => updateSubscriberData('ambrUplink',e.target.value)}
                 />
                 <Select
                   label="upUnit"
@@ -234,8 +207,8 @@ const Session: React.FC<SessionProps> = ({
                     { value: "3", label: "Gbps" },
                     { value: "4", label: "Tbps" },
                   ]}
-                  value={ambrUpUnit}
-                  onChange={setAmbrUpUnit}
+                  value={subscriberData.ambrUpUnit}
+                  onChange={handleUnitChange('ambrUpUnit')}
                 />
               </div>
               <div className="flex mt-3">
@@ -245,8 +218,8 @@ const Session: React.FC<SessionProps> = ({
                   }}
                   label="UE IPv4 Address"
                   className="w-[200px]"
-                  value={ueIpv4}
-                  onChange={(e) => setUeIpv4(e.target.value)}
+                  value={subscriberData.ueIpv4}
+                  onChange={(e) => updateSubscriberData('ueIpv4',e.target.value)}
                 />
                 <TextInput
                   classNames={{
@@ -254,8 +227,8 @@ const Session: React.FC<SessionProps> = ({
                   }}
                   label="UE IPv6 Address"
                   className="w-[200px] ml-6"
-                  value={ueIpv6}
-                  onChange={(e) => setUeIpv6(e.target.value)}
+                  value={subscriberData.ueIpv6}
+                  onChange={(e) => updateSubscriberData('ueIpv6',e.target.value)}
                 />
               </div>
               <div className="flex mt-3">
@@ -265,8 +238,8 @@ const Session: React.FC<SessionProps> = ({
                   }}
                   label="SMF IPv4 Address"
                   className="w-[200px]"
-                  value={smfIpv4}
-                  onChange={(e) => setSmfIpv4(e.target.value)}
+                  value={subscriberData.smfIpv4}
+                  onChange={(e) => updateSubscriberData('smfIpv4',e.target.value)}
                 />
                 <TextInput
                   classNames={{
@@ -274,8 +247,8 @@ const Session: React.FC<SessionProps> = ({
                   }}
                   label="SMF IPv6 Address"
                   className="w-[200px] ml-6"
-                  value={smfIpv6}
-                  onChange={(e) => setSmfIpv6(e.target.value)}
+                  value={subscriberData.smfIpv6}
+                  onChange={(e) => updateSubscriberData('smfIpv6',e.target.value)}
                 />
               </div>
             </div>

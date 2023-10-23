@@ -16,26 +16,26 @@ interface SlicePropsTypes {
   hiddenSlice: boolean;
   onClickDelete: () => void;
   onClickAdd: () => void;
-  sst: string;
-  sd: string | undefined;
-  setSst: (data: string) => void;
+  subscriberData: {
+    sst: string;
+    sd: string | undefined;
+  };
   handleSD: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  updateSubscriberData: (data: string, value: string | string[]) => void;
 }
-
 
 const Slice: React.FC<SlicePropsTypes> = ({
   hiddenSlice,
   onClickDelete,
   onClickAdd,
-  sst,
-  sd,
-  handleSD,
-  setSst,
-  
+  subscriberData,
+  updateSubscriberData,
 }) => {
   const [checked, setChecked] = useState(true);
 
-
+  const handleUnitChange = (field: string) => (value: string) => {
+    updateSubscriberData(field, value);
+  };
   return (
     <div className="mt-10">
       <h3>Slice Configuration</h3>
@@ -47,8 +47,8 @@ const Slice: React.FC<SlicePropsTypes> = ({
             label="SST"
             required
             withAsterisk
-            value={sst}
-            onChange={setSst}
+            value={subscriberData.sst}
+            onChange={handleUnitChange("sst")}
           >
             <Group mt="xs">
               <Radio
@@ -87,8 +87,8 @@ const Slice: React.FC<SlicePropsTypes> = ({
             }}
             label="SD"
             className="ml-6 w-[300px]"
-            value={sd}
-            onChange={handleSD}
+            value={subscriberData.sd}
+            onChange={(e) => updateSubscriberData("sd", e.target.value)}
             // onKeyDown={handleKeyPress}
           />
           {checked ? (

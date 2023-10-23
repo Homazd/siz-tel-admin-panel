@@ -24,39 +24,36 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const [hiddenSession, setHiddenSession] = useState(true);
   const [hiddenSlice, setHiddenSlice] = useState(false);
-  const [imsi, setImsi] = useState("");
-  // const [msisdn, setMsisdn] = useState<string[]>([]);
-  const [msisdnArray, setMsisdnArray] = useState<string[]>([]);
-  const [msisdn1, setMsisdn1] = useState<string[]>([]);
-  const [msisdn2, setMsisdn2] = useState<string[]>([]);
-  const [subK, setSubK] = useState("465B5CE8 B199B49F AA5F0A2E E238A6BC");
-  const [opType, setOpType] = useState("OPc");
-  const [opKey, setOpKey] = useState<string | null>(
-    "E8ED289D EBA952E4 283B54E8 8E6183CA"
-  );
-  const [amf, setAmf] = useState("8000");
-  const [downValue, setDownValue] = useState("1");
-  const [downUnit, setDownUnit] = useState("3");
-  const [upValue, setUpValue] = useState("1");
-  const [upUnit, setUpUnit] = useState("3");
-  // Slice States
-  const [sst, setSst] = useState("1");
-  const [sd, setSd] = useState("");
-  // Session States
-  const [type, setType] = useState("3");
-  const [qci, setQci] = useState("9");
-  const [arp, setArp] = useState("8");
-  const [capability, setCapability] = useState("1");
-  const [vulnerability, setVulnerability] = useState("1");
-  const [ambrDownlink, setAmbrDownlink] = useState("1");
-  const [ambrUplink, setAmbrUplink] = useState("1");
-  const [ambrDownUnit, setAmbrDownUnit] = useState("3");
-  const [ambrUpUnit, setAmbrUpUnit] = useState("3");
-  const [ueIpv4, setUeIpv4] = useState("");
-  const [ueIpv6, setUeIpv6] = useState("");
-  const [smfIpv4, setSmfIpv4] = useState("");
-  const [smfIpv6, setSmfIpv6] = useState("");
-  const [isFetching, setIsFetching] = useState(false);
+  const [subscriberData, setSubscriberData] = useState({
+    imsi: "",
+    msisdnArray: [],
+    msisdn1: [],
+    msisdn2: [],
+    subK: "465B5CE8 B199B49F AA5F0A2E E238A6BC",
+    opType: "OPc",
+    opKey: "E8ED289D EBA952E4 283B54E8 8E6183CA",
+    amf: "8000",
+    downValue: "1",
+    downUnit: "3",
+    upValue: "1",
+    upUnit: "3",
+    sst: "1",
+    sd: "",
+    type: "3",
+    qci: "9",
+    arp: "8",
+    capability: "1",
+    vulnerability: "1",
+    ambrDownlink: "1",
+    ambrUplink: "1",
+    ambrDownUnit: "3",
+    ambrUpUnit: "3",
+    ueIpv4: "",
+    ueIpv6: "",
+    smfIpv4: "",
+    smfIpv6: "",
+    isFetching: false,
+  });
   // PCC Rules
   const [inputs, setInputs] = useState<pccRules[]>([
     {
@@ -78,9 +75,10 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
       },
     },
   ]);
-  const { data: subscriber } = useGetSubscribersQuery(imsi, {
-    skip: isFetching,
+  const { data: subscriber } = useGetSubscribersQuery(subscriberData.imsi, {
+    skip: subscriberData.isFetching,
   });
+  const [addSubscriber] = useAddSubscriberMutation();
 
   const handleInputChange = (index: number, inputData: pccRules) => {
     setInputs((prevInputs) => {
@@ -90,11 +88,12 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
     });
   };
 
-  const [addSubscriber] = useAddSubscriberMutation();
-
   const handleSD = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    setSd(e.currentTarget.value);
+    setSubscriberData((prevData) => ({
+      ...prevData,
+      sd: e.target.value,
+    }));
   };
 
   const handleOnDelete = () => {
@@ -120,156 +119,82 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
     },
   };
   useEffect(() => {
-    setIsFetching(true);
-  }, [subscriber, isFetching, imsi]);
+    setSubscriberData((prevData) => ({ ...prevData, isFetching: true }));
+  }, [subscriber, subscriberData.isFetching, subscriberData.imsi]);
 
   const apn = localStorage.getItem("apn");
-  const addingSubscriber = {
-    schema_version: 1,
-    imsi: imsi,
-    msisdn: [],
-    imeisv: [],
-    mme_host: [],
-    mme_realm: [],
-    purge_flag: [],
-    security: {
-      k: subK,
-      op: opType === "OP" ? opKey : null,
-      opc: opType === "OPc" ? opKey : null,
-      amf: amf,
-    },
-    ambr: {
-      downlink: { value: +downValue, unit: +downUnit },
-      uplink: { value: +upValue, unit: +upUnit },
-    },
-    slice: [
-      {
-        sst: +sst,
-        sd: sd || undefined,
-        default_indicator: true,
-        session: [
-          {
-            name: apn ? apn : "GAS",
-            type: +type,
-            qos: {
-              index: +qci,
-              arp: {
-                priority_level: +arp,
-                pre_emption_capability: +capability,
-                pre_emption_vulnerability: +vulnerability,
-              },
-            },
-            ambr: {
-              downlink: {
-                value: +ambrDownlink,
-                unit: +ambrDownUnit,
-              },
-              uplink: {
-                value: +ambrUplink,
-                unit: +ambrUpUnit,
-              },
-            },
-            ue:
-              {
-                addr: ueIpv4 || undefined,
-                addr6: ueIpv6 || undefined,
-              } || undefined,
-            smf:
-              {
-                addr: smfIpv4 || undefined,
-                addr6: smfIpv6 || undefined,
-              } || undefined,
-            pcc_rule: [],
-            //  {
-            //   qos: {
-            //     index: 1,
-            //     arp: {
-            //       priority_level: 1,
-            //       pre_emption_capability: 1,
-            //       pre_emption_vulnerability: 1,
-            //     },
-            //     gbr: {
-            //       downlink: { value: 1, unit: 1 },
-            //       uplink: { value: 1, unit: 1 },
-            //     },
-            //     mbr: {
-            //       downlink: { value: 1, unit: 1 },
-            //       uplink: { value: 1, unit: 1 },
-            //     },
-            //   },
-            // },
-          },
-        ],
-      },
-    ],
-    access_restriction_data: 32,
-    subscriber_status: 0,
-    network_access_mode: 0,
-    subscribed_rau_tau_timer: 12,
-    __v: 0,
-  };
-  let Msisdn: string[] = [];
 
   const handleSubmit = async () => {
-    msisdnArray[0] != '' ? Msisdn = [...Msisdn, ...msisdnArray] : null;
-    msisdn1[0] != '' ? Msisdn = [...Msisdn, ...msisdn1] : null;
-    msisdn2[0] != '' ? Msisdn = [...Msisdn, ...msisdn2] : null;
+    let Msisdn: string[] = [];
+    Msisdn = [
+      ...Msisdn,
+      ...subscriberData.msisdnArray,
+      ...subscriberData.msisdn1,
+      ...subscriberData.msisdn2,
+    ].filter((msisdn) => msisdn !== "");
     await addSubscriber({
       schema_version: 1,
-      imsi: imsi,
+      imsi: subscriberData.imsi,
       msisdn: Msisdn,
       imeisv: [],
       security: {
-        k: subK,
-        op: opType === "OP" ? opKey : null,
-        opc: opType === "OPc" ? opKey : null,
-        amf: amf
+        k: subscriberData.subK,
+        op: subscriberData.opType === "OP" ? subscriberData.opKey : null,
+        opc: subscriberData.opType === "OPc" ? subscriberData.opKey : null,
+        amf: subscriberData.amf,
       },
       ambr: {
-        downlink: { value: +downValue, unit: +downUnit },
-        uplink: { value: +upValue, unit: +upUnit }
+        downlink: {
+          value: +subscriberData.downValue,
+          unit: +subscriberData.downUnit,
+        },
+        uplink: {
+          value: +subscriberData.upValue,
+          unit: +subscriberData.upUnit,
+        },
       },
       mme_host: [],
       mme_realm: [],
       purge_flag: [],
       slice: [
         {
-          sst: +sst,
-          sd: sd || undefined,
+          sst: +subscriberData.sst,
+          sd: subscriberData.sd || undefined,
           default_indicator: true,
           session: [
             {
               name: apn ? apn : "GAS",
-              type: +type,
+              type: +subscriberData.type,
               qos: {
-                index: +qci,
+                index: +subscriberData.qci,
                 arp: {
-                  priority_level: +arp,
-                  pre_emption_capability: +capability,
-                  pre_emption_vulnerability: +vulnerability
-                }
+                  priority_level: +subscriberData.arp,
+                  pre_emption_capability: +subscriberData.capability,
+                  pre_emption_vulnerability:
+                    +subscriberData.vulnerability,
+                },
               },
               ambr: {
                 downlink: {
-                  value: +ambrDownlink,
-                  unit: +ambrDownUnit
+                  value: +subscriberData.ambrDownlink,
+                  unit: +subscriberData.ambrDownUnit,
                 },
                 uplink: {
-                  value: +ambrUplink,
-                  unit: +ambrUpUnit
-                }
+                  value: +subscriberData.ambrUplink,
+                  unit: +subscriberData.ambrUpUnit,
+                },
               },
               ue:
                 {
-                  addr: ueIpv4 || undefined,
-                  addr6: ueIpv6 || undefined
+                  addr: subscriberData.ueIpv4 || undefined,
+                  addr6: subscriberData.ueIpv6 || undefined,
                 } || undefined,
               smf:
                 {
-                  addr: smfIpv4 || undefined,
-                  addr6: smfIpv6 || undefined
+                  addr: subscriberData.smfIpv4 || undefined,
+                  addr6: subscriberData.smfIpv6 || undefined,
                 } || undefined,
-              pcc_rule: []
+              pcc_rule: [],
               //  {
               //   qos: {
               //     index: 1,
@@ -296,19 +221,19 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
       subscriber_status: 0,
       network_access_mode: 0,
       subscribed_rau_tau_timer: 12,
-      __v: 0
+      __v: 0,
     });
-    setMsisdn1([]);
-    setMsisdn2([]);
-    
-    // setMsisdn([]);
-  
-    Msisdn.length = 0;
-    if (onNewSub) {
-      onNewSub(addingSubscriber.imsi);
-    }
-
+    setSubscriberData((prevData) => ({
+      ...prevData,
+      msisdn1: [],
+      msisdn2: [],
+    }));
+    if (onNewSub) onNewSub(subscriberData.imsi);
     close();
+  };
+
+  const updateSubscriberData = (field: string, value: string | string[]) => {
+    setSubscriberData((prevData) => ({ ...prevData, [field]: value }));
   };
 
   return (
@@ -329,39 +254,16 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
             className="block relative"
           >
             <SubscriberConfig
-              imsi={imsi}
-              setImsi={setImsi}
-              msisdnArray={msisdnArray}
-              setMsisdnArray={setMsisdnArray}
-              msisdn1={msisdn1}
-              setMsisdn1={setMsisdn1}
-              msisdn2={msisdn2}
-              setMsisdn2={setMsisdn2}
-              subK={subK}
-              setSubK={setSubK}
-              opType={opType}
-              setOpType={setOpType}
-              opKey={opKey}
-              setOpKey={setOpKey}
-              amf={amf}
-              setAmf={setAmf}
-              downValue={downValue}
-              setDownValue={setDownValue}
-              downUnit={downUnit}
-              setDownUnit={setDownUnit}
-              upValue={upValue}
-              setUpValue={setUpValue}
-              upUnit={upUnit}
-              setUpUnit={setUpUnit}
+              subscriberData={subscriberData}
+              updateSubscriberData={updateSubscriberData}
             />
             <>
               <Slice
                 hiddenSlice={hiddenSlice}
                 onClickDelete={handleOnDelete}
                 onClickAdd={handleOnAdd}
-                sst={sst}
-                setSst={setSst}
-                sd={sd}
+                subscriberData={subscriberData}
+                updateSubscriberData={updateSubscriberData}
                 handleSD={handleSD}
               />
 
@@ -369,32 +271,8 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
                 hiddenSession={hiddenSession}
                 onClickDeleteSession={onClickDeleteSession}
                 onClickAddSession={onClickAddSession}
-                type={type}
-                setType={setType}
-                qci={qci}
-                setQci={setQci}
-                arp={arp}
-                setArp={setArp}
-                capability={capability}
-                setCapability={setCapability}
-                vulnerability={vulnerability}
-                setVulnerability={setVulnerability}
-                ambrUplink={ambrUplink}
-                setAmbrUplink={setAmbrUplink}
-                ambrDownlink={ambrDownlink}
-                setAmbrDownlink={setAmbrDownlink}
-                ambrDownUnit={ambrDownUnit}
-                setAmbrDownUnit={setAmbrDownUnit}
-                ambrUpUnit={ambrUpUnit}
-                setAmbrUpUnit={setAmbrUpUnit}
-                ueIpv4={ueIpv4}
-                setUeIpv4={setUeIpv4}
-                ueIpv6={ueIpv6}
-                setUeIpv6={setUeIpv6}
-                smfIpv4={smfIpv4}
-                setSmfIpv4={setSmfIpv4}
-                smfIpv6={smfIpv6}
-                setSmfIpv6={setSmfIpv6}
+                subscriberData={subscriberData}
+                updateSubscriberData={updateSubscriberData}
               />
               {hiddenSession && (
                 <PccRules inputs={inputs} onInputChange={handleInputChange} />

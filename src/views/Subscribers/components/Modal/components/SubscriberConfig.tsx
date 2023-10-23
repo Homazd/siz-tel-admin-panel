@@ -5,57 +5,26 @@ import { Button, Divider, Select, TextInput } from "@mantine/core";
 import Msisdn from "./Msisdn";
 
 interface InputChildProps {
-  imsi: string;
-  setImsi: (data: string) => void;
-  msisdnArray: string[]
-  setMsisdnArray:(data: string[]) => void;
-  msisdn1: string[];
-  setMsisdn1: (data: string[]) => void;
-  msisdn2: string[];
-  setMsisdn2: (data: string[]) => void;
-  subK: string;
-  setSubK: (data: string) => void;
-  opType: string;
-  setOpType: (data: string) => void;
-  opKey: string | null;
-  setOpKey: (data: string | null) => void;
-  amf: string;
-  setAmf: (data: string) => void;
-  downValue: string;
-  setDownValue: (data: string) => void;
-  upValue: string;
-  setUpValue: (data: string) => void;
-  upUnit: string;
-  setUpUnit: (data: string) => void;
-  downUnit: string;
-  setDownUnit: (data: string) => void;
+  subscriberData: {
+    imsi: string;
+    msisdnArray: string[];
+    msisdn1: string[];
+    msisdn2: string[];
+    subK: string;
+    opType: string;
+    opKey: string | null;
+    amf: string;
+    downValue: string;
+    downUnit: string;
+    upValue: string;
+    upUnit: string;
+  };
+  updateSubscriberData: (data: string, value: string | string[]) => void;
 }
 
 const SubscriberConfig: React.FC<InputChildProps> = ({
-  imsi,
-  setImsi,
-  msisdn1,
-  setMsisdn1,
-  msisdnArray,
-  setMsisdnArray,
-  msisdn2,
-  setMsisdn2,
-  subK,
-  setSubK,
-  opKey,
-  setOpKey,
-  amf,
-  setAmf,
-  downValue,
-  setDownValue,
-  opType,
-  setOpType,
-  downUnit,
-  setDownUnit,
-  upValue,
-  setUpValue,
-  upUnit,
-  setUpUnit,
+  subscriberData,
+  updateSubscriberData,
 }) => {
   const [isMSIVisible, setIsMSIVisible] = useState(true);
   const [msisdnClicked, setMsisdnClicked] = useState(false);
@@ -70,18 +39,23 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
   const handleOnDeleteMsisdn = () => {
     setIsMSIVisible(true);
     setMsisdnClicked(false);
-    setMsisdn1([]);
+    updateSubscriberData("msisdn1", []);
   };
 
   const handleOnAddSecondMSisdn = () => {
     setSecondMsisdn(true);
   };
-
+  const handleUnitChange = (field: string) => (value: string) => {
+    updateSubscriberData(field, value);
+  };
   // Function to change state related to Msisdn component
   const handleChildStateChange = () => {
     setSecondMsisdn(false);
-    setMsisdn1([]);
-    setMsisdn2([]);
+    updateSubscriberData("msisdn1", []);
+    updateSubscriberData("msisdn2", []);
+  };
+  const handleMsisdnChange = (field: string) => (value: string[]) => {
+    updateSubscriberData(field, value);
   };
 
   return (
@@ -93,25 +67,25 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
           label="IMSI"
           name="imsi"
           required
-          error={imsi === "" ? "This field is required" : null}
+          error={subscriberData.imsi === "" ? "This field is required" : null}
           placeholder="Enter IMSI"
           classNames={{
             label: "static",
           }}
           className="mt-3"
-          value={imsi}
-          onChange={(e) => setImsi(e.target.value)}
+          value={subscriberData.imsi}
+          onChange={(e) => updateSubscriberData("imsi", e.target.value)}
         />
         {secondMsisdn ? (
           <div>
             <Msisdn
-              msisdn={msisdn1}
-              setmsisdn={setMsisdn1}
+              msisdn={subscriberData.msisdn1}
+              setmsisdn={handleMsisdnChange("msisdn1")}
               onStateChange={handleChildStateChange}
             />
             <Msisdn
-              msisdn={msisdn2}
-              setmsisdn={setMsisdn2}
+              msisdn={subscriberData.msisdn2}
+              setmsisdn={handleMsisdnChange("msisdn2")}
               onStateChange={handleChildStateChange}
             />
           </div>
@@ -140,9 +114,9 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
                         className="w-[300px]"
                         required
                         type="text"
-                        value={msisdnArray[0]}
+                        value={subscriberData.msisdnArray[0]}
                         onChange={(e) => {
-                          setMsisdnArray([e.target.value])
+                          updateSubscriberData("msisdnArray", [e.target.value]);
                         }}
                       />
                     </>
@@ -176,21 +150,21 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
           required
           className="w-[400px] mr-6"
           name="subK"
-          value={subK}
-          onChange={(e) => setSubK(e.target.value)}
-          error={subK === "" ? "is required" : null}
+          value={subscriberData.subK}
+          onChange={(e) => updateSubscriberData('subK',e.target.value)}
+          error={subscriberData.subK === "" ? "is required" : null}
         />
         <TextInput
           label="Authentication Management Field (AMF)"
           name="amf"
-          value={amf}
+          value={subscriberData.amf}
           required
-          onChange={(e) => setAmf(e.target.value)}
+          onChange={(e) => updateSubscriberData('amf',e.target.value)}
           classNames={{
             label: "static",
           }}
           className="w-[300px]"
-          error={amf === "" ? "is required" : null}
+          error={subscriberData.amf === "" ? "is required" : null}
         />
       </div>
       <div className="flex  mt-3">
@@ -205,8 +179,8 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
             { value: "OPc", label: "OPc" },
           ]}
           className="mr-6 w-[300px]"
-          value={opType}
-          onChange={setOpType}
+          value={subscriberData.opType}
+          onChange={handleUnitChange(`opType`)}
         />
         <TextInput
           label="Operator Key (OPc/OP)"
@@ -215,10 +189,10 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
             label: "static",
           }}
           required
-          value={opKey ? opKey : ""}
-          onChange={(e) => setOpKey(e.target.value)}
+          value={subscriberData.opKey ? subscriberData.opKey : ""}
+          onChange={(e) => updateSubscriberData('opKey',e.target.value)}
           className="w-[500px]"
-          error={opKey === "" ? "is required" : null}
+          error={subscriberData.opKey === "" ? "is required" : null}
         />
       </div>
       <div className="flex mt-3">
@@ -230,10 +204,10 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
           }}
           placeholder="1"
           required
-          value={downValue}
-          onChange={(e) => setDownValue(e.target.value)}
+          value={subscriberData.downValue}
+          onChange={(e) => updateSubscriberData('downValue',e.target.value)}
           className="w-[250px]"
-          error={downValue === "" ? "is required" : null}
+          error={subscriberData.downValue === "" ? "is required" : null}
         />
         <Select
           label="Unit"
@@ -249,13 +223,13 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
             { value: "4", label: "Tbps" },
           ]}
           className="ml-3 w-[100px]"
-          value={downUnit}
-          onChange={setDownUnit}
+          value={subscriberData.downUnit}
+          onChange={handleUnitChange('downUnit')}
         />
         <TextInput
           label="UE-AMBR Uplink"
-          value={upValue}
-          onChange={(e) => setUpValue(e.target.value)}
+          value={subscriberData.upValue}
+          onChange={(e) => updateSubscriberData('upValue',e.target.value)}
           name="ueUplink"
           classNames={{
             label: "static",
@@ -263,15 +237,15 @@ const SubscriberConfig: React.FC<InputChildProps> = ({
           placeholder="1"
           required
           className="w-[250px] ml-2"
-          error={upValue === "" ? "is required" : null}
+          error={subscriberData.upValue === "" ? "is required" : null}
         />
         <Select
           label="Unit"
           classNames={{
             label: "static",
           }}
-          value={upUnit}
-          onChange={setUpUnit}
+          value={subscriberData.upUnit}
+          onChange={handleUnitChange('upUnit')}
           data={[
             { value: "0", label: "bps" },
             { value: "1", label: "Kbps" },
