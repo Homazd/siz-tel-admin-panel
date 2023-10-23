@@ -137,8 +137,10 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
     //   },
     // ]);
     console.log("pcc rule is", inputs);
-    const id = pccRules.length;
-    setPccRules([...pccRules, { id, inputs: {} }]);
+    const id = pccRules.length + 1;
+    if (id < 9) {
+      setPccRules([...pccRules, { id, inputs: {} }]);
+    }
   };
   const handleOnDeletePcc = (index: number) => {
     setPccVisible(false);
