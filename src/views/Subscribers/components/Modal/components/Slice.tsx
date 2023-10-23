@@ -20,7 +20,6 @@ interface SlicePropsTypes {
     sst: string;
     sd: string | undefined;
   };
-  handleSD: (e: React.ChangeEvent<HTMLInputElement>) => void;
   updateSubscriberData: (data: string, value: string | string[]) => void;
 }
 
@@ -89,7 +88,6 @@ const Slice: React.FC<SlicePropsTypes> = ({
             className="ml-6 w-[300px]"
             value={subscriberData.sd}
             onChange={(e) => updateSubscriberData("sd", e.target.value)}
-            // onKeyDown={handleKeyPress}
           />
           {checked ? (
             <Checkbox

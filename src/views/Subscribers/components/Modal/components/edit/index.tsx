@@ -727,7 +727,6 @@ const IMSIInput: React.FC<imsiInputProps> = ({
                       opened={deleteOpened}
                       onClose={() => setDeleteOpened(false)}
                       centered
-                      // styles={contentStyles}
                       className="bg-gray-300 rounded-lg shadow-lg w-[200px]"
                     >
                       <Text className="text-center">

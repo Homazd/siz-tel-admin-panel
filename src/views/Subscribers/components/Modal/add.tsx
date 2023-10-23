@@ -15,7 +15,6 @@ import Session from "./components/Session";
 import Slice from "./components/Slice";
 import SubscriberConfig from "./components/SubscriberConfig";
 // Types
-import { pccRules } from "@/redux/Types/subscriberTypes";
 
 interface addSubscriberProps {
   onNewSub: (data: string) => void;
@@ -24,6 +23,7 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const [hiddenSession, setHiddenSession] = useState(true);
   const [hiddenSlice, setHiddenSlice] = useState(false);
+  const [pccVisible, setPccVisible] = useState(false);
   const [subscriberData, setSubscriberData] = useState({
     imsi: "",
     msisdnArray: [],
@@ -55,46 +55,33 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
     isFetching: false,
   });
   // PCC Rules
-  const [inputs, setInputs] = useState<pccRules[]>([
-    {
-      qos: {
-        index: 1,
-        arp: {
-          priority_level: 2,
-          pre_emption_capability: 2,
-          pre_emption_vulnerability: 2,
-        },
-        gbr: {
-          downlink: { value: 1, unit: 2 },
-          uplink: { value: 1, unit: 2 },
-        },
-        mbr: {
-          downlink: { value: 1, unit: 2 },
-          uplink: { value: 1, unit: 2 },
-        },
-      },
-    },
-  ]);
+  const [pccRules, setPccRules] = useState([{ id: 0, inputs: {} }]);
+  const [inputs, setInputs] = useState({
+    index: "1",
+    priority_level: "2",
+    pre_emption_capability: "2",
+    pre_emption_vulnerability: "2",
+    gbrDownValue: "1",
+    gbrDownUnit: "2",
+    gbrUpValue: "1",
+    gbrUpUnit: "2",
+    mbrDownValue: "1",
+    mbrDownUnit: "2",
+    mbrUpValue: "1",
+    mbrUpUnit: "2",
+  });
   const { data: subscriber } = useGetSubscribersQuery(subscriberData.imsi, {
     skip: subscriberData.isFetching,
   });
   const [addSubscriber] = useAddSubscriberMutation();
 
-  const handleInputChange = (index: number, inputData: pccRules) => {
-    setInputs((prevInputs) => {
-      const updatedInputs = [...prevInputs];
-      updatedInputs[index] = inputData;
-      return updatedInputs;
-    });
-  };
-
-  const handleSD = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setSubscriberData((prevData) => ({
-      ...prevData,
-      sd: e.target.value,
-    }));
-  };
+  // const handleInputChange = (index: number, inputData: pccRules) => {
+  //   setInputs((prevInputs) => {
+  //     const updatedInputs = [...prevInputs];
+  //     updatedInputs[index] = inputData;
+  //     return updatedInputs;
+  //   });
+  // };
 
   const handleOnDelete = () => {
     setHiddenSlice(true);
@@ -120,9 +107,43 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
   };
   useEffect(() => {
     setSubscriberData((prevData) => ({ ...prevData, isFetching: true }));
-  }, [subscriber, subscriberData.isFetching, subscriberData.imsi]);
+    if (pccRules[0].inputs !== undefined) {
+      console.log("pcc rule", pccRules);
+    }
+  }, [subscriber, subscriberData.isFetching, subscriberData.imsi, pccRules]);
 
   const apn = localStorage.getItem("apn");
+  const handleOnAddPcc = () => {
+    setPccVisible(true);
+    // setInputs((preInputs) => [
+    //   ...preInputs,
+    //   {
+    //     qos: {
+    //       index: 1,
+    //       arp: {
+    //         priority_level: 2,
+    //         pre_emption_capability: 2,
+    //         pre_emption_vulnerability: 2,
+    //       },
+    //       gbr: {
+    //         downlink: { value: 1, unit: 2 },
+    //         uplink: { value: 1, unit: 2 },
+    //       },
+    //       mbr: {
+    //         downlink: { value: 1, unit: 2 },
+    //         uplink: { value: 1, unit: 2 },
+    //       },
+    //     },
+    //   },
+    // ]);
+    console.log("pcc rule is", inputs);
+    const id = pccRules.length;
+    setPccRules([...pccRules, { id, inputs: {} }]);
+  };
+  const handleOnDeletePcc = (index: number) => {
+    setPccVisible(false);
+    setPccRules(pccRules.filter((_, i) => i !== index));
+  };
 
   const handleSubmit = async () => {
     let Msisdn: string[] = [];
@@ -170,8 +191,7 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
                 arp: {
                   priority_level: +subscriberData.arp,
                   pre_emption_capability: +subscriberData.capability,
-                  pre_emption_vulnerability:
-                    +subscriberData.vulnerability,
+                  pre_emption_vulnerability: +subscriberData.vulnerability,
                 },
               },
               ambr: {
@@ -235,6 +255,9 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
   const updateSubscriberData = (field: string, value: string | string[]) => {
     setSubscriberData((prevData) => ({ ...prevData, [field]: value }));
   };
+  const updatePccInput = (field: string, value: string | string[]) => {
+    setInputs((prevData) => ({ ...prevData, [field]: value }));
+  };
 
   return (
     <>
@@ -264,7 +287,6 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
                 onClickAdd={handleOnAdd}
                 subscriberData={subscriberData}
                 updateSubscriberData={updateSubscriberData}
-                handleSD={handleSD}
               />
 
               <Session
@@ -274,10 +296,33 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
                 subscriberData={subscriberData}
                 updateSubscriberData={updateSubscriberData}
               />
-              {hiddenSession && (
-                <PccRules inputs={inputs} onInputChange={handleInputChange} />
-              )}
+              {pccRules.map((pccRule, index) => (
+                <PccRules
+                  inputs={inputs}
+                  pccVisible={pccVisible}
+                  updatePccInput={updatePccInput}
+                  handleOnDelete={() => handleOnDeletePcc(index)}
+                  id={pccRule.id}
+                />
+              ))}
+              {/* {hiddenSession && (
+                <PccRules
+                  inputs={inputs}
+                  onInputChange={handleInputChange}
+                  pccVisible={pccVisible}
+                  handleOnDelete={handleOnDeletePcc}
+                />
+              )} */}
             </>
+            <p className="text-center">
+              <Button
+                className="bg-sky-500 text-white font-semibold w-28 mt-6"
+                onClick={handleOnAddPcc}
+              >
+                +
+              </Button>
+            </p>
+
             <p className="text-center ml-[300px] mt-6">
               <Button className="bg-sky-500 text-white font-semibold w-28">
                 +
