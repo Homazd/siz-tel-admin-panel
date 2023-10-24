@@ -76,16 +76,7 @@ export interface DataType {
             addr: string | undefined;
             addr6: string | undefined
           } | undefined;
-          pcc_rule: [
-            pccRules?,
-            pccRules?,
-            pccRules?,
-            pccRules?,
-            pccRules?,
-            pccRules?,
-            pccRules?,
-            pccRules?
-          ]
+          pcc_rule: pccRules[]
         }
       ];
     }

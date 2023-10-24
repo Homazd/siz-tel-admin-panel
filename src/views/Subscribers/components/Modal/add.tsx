@@ -1,5 +1,5 @@
 // Hooks
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 // Mantine Hooks
 import { useDisclosure } from "@mantine/hooks";
 // Services
@@ -14,6 +14,7 @@ import PccRules from "./components/PccRules";
 import Session from "./components/Session";
 import Slice from "./components/Slice";
 import SubscriberConfig from "./components/SubscriberConfig";
+import { pccRules } from "@/redux/Types/subscriberTypes";
 // Types
 
 interface addSubscriberProps {
@@ -55,7 +56,7 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
     isFetching: false,
   });
   // PCC Rules
-  const [pccRules, setPccRules] = useState([{ id: 0, inputs: {} }]);
+  const [pccRules, setPccRules] = useState<pccRules[]>([]);
   const [inputs, setInputs] = useState({
     index: "1",
     priority_level: "2",
@@ -107,10 +108,14 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
   };
   useEffect(() => {
     setSubscriberData((prevData) => ({ ...prevData, isFetching: true }));
-    if (pccRules[0].inputs !== undefined) {
+    if (pccRules[0] !== undefined) {
       console.log("pcc rule", pccRules);
     }
   }, [subscriber, subscriberData.isFetching, subscriberData.imsi, pccRules]);
+
+  const handlePccRuleData = useCallback((pccData: pccRules) => {
+    setPccRules((prevPccArray) => [...prevPccArray, pccData]);
+  }, []);
 
   const apn = localStorage.getItem("apn");
   const handleOnAddPcc = () => {
@@ -136,10 +141,36 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
     //     },
     //   },
     // ]);
-    console.log("pcc rule is", inputs);
+    console.log("inputs in add component is", inputs);
     const id = pccRules.length + 1;
     if (id < 9) {
-      setPccRules([...pccRules, { id, inputs: {} }]);
+      setPccRules([
+        ...pccRules,
+        {
+          qos: {
+            index: +inputs.index,
+            arp: {
+              priority_level: +inputs.priority_level,
+              pre_emption_capability: +inputs.pre_emption_capability,
+              pre_emption_vulnerability: +inputs.pre_emption_vulnerability,
+            },
+            gbr: {
+              downlink: {
+                value: +inputs.gbrDownValue,
+                unit: +inputs.gbrDownUnit,
+              },
+              uplink: { value: +inputs.gbrUpValue, unit: +inputs.gbrDownUnit },
+            },
+            mbr: {
+              downlink: {
+                value: +inputs.mbrDownValue,
+                unit: +inputs.mbrDownUnit,
+              },
+              uplink: { value: +inputs.mbrUpValue, unit: +inputs.mbrUpUnit },
+            },
+          },
+        },
+      ]);
     }
   };
   const handleOnDeletePcc = (index: number) => {
@@ -216,7 +247,7 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
                   addr: subscriberData.smfIpv4 || undefined,
                   addr6: subscriberData.smfIpv6 || undefined,
                 } || undefined,
-              pcc_rule: [],
+              pcc_rule: pccRules,
               //  {
               //   qos: {
               //     index: 1,
@@ -304,7 +335,7 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
                   pccVisible={pccVisible}
                   updatePccInput={updatePccInput}
                   handleOnDelete={() => handleOnDeletePcc(index)}
-                  id={pccRule.id}
+                  handlePccRuleData={handlePccRuleData}
                 />
               ))}
               {/* {hiddenSession && (

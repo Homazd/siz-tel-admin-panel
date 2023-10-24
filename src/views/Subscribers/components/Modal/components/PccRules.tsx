@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 // Mantine Components
 import { Button, Divider, Select, TextInput } from "@mantine/core";
 // Static data
-import ReusableInput from "@/components/Input";
 import qciItems from "@/data/qci.json";
 // Components
 import FlowContent from "./Flow";
+import { pccRules } from "@/redux/Types/subscriberTypes";
 
 const apr = Array.from({ length: 15 }, (_, index) => index + 1);
 
@@ -28,6 +28,7 @@ interface PccProps {
   pccVisible: boolean;
   handleOnDelete: (id: number) => void;
   updatePccInput: (field: string, value: string | string[]) => void;
+  handlePccRuleData: (data: pccRules) => void;
 }
 
 const PccRules: React.FC<PccProps> = ({
@@ -36,6 +37,7 @@ const PccRules: React.FC<PccProps> = ({
   pccVisible,
   handleOnDelete,
   id,
+  handlePccRuleData,
 }) => {
   const [flowVisible, setFlowVisible] = useState(false);
   const [flowComponent, setFlowComponent] = useState([<div>Homa</div>]);
@@ -53,9 +55,43 @@ const PccRules: React.FC<PccProps> = ({
     updatePccInput(field, value);
   };
 
+  function usePrevious(inputs : any) {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = inputs;
+    });
+    return ref.current;
+  }
+  const prevPccData = usePrevious(inputs)
+
   useEffect(() => {
     console.log("inputs in pcc rule is:", inputs);
-    console.log("hey homa!");
+    // if (inputs !== prevPccData) {
+    //   handlePccRuleData({
+    //     qos: {
+    //       index: +inputs.index,
+    //       arp: {
+    //         priority_level: +inputs.priority_level,
+    //         pre_emption_capability: +inputs.pre_emption_capability,
+    //         pre_emption_vulnerability: +inputs.pre_emption_vulnerability,
+    //       },
+    //       gbr: {
+    //         downlink: {
+    //           value: +inputs.gbrDownValue,
+    //           unit: +inputs.gbrDownUnit,
+    //         },
+    //         uplink: { value: +inputs.gbrUpValue, unit: +inputs.gbrDownUnit },
+    //       },
+    //       mbr: {
+    //         downlink: {
+    //           value: +inputs.mbrDownValue,
+    //           unit: +inputs.mbrDownUnit,
+    //         },
+    //         uplink: { value: +inputs.mbrUpValue, unit: +inputs.mbrUpUnit },
+    //       },
+    //     },
+    //   });
+    // }
   }, [inputs]);
 
   return (
@@ -116,6 +152,9 @@ const PccRules: React.FC<PccProps> = ({
                   <Select
                     label="5QI/QCI"
                     className="mt-3 w-[425px]"
+                    classNames={{
+                      label: "static",
+                    }}
                     required
                     clearable
                     data={qciItems.map((option) => ({
@@ -123,10 +162,15 @@ const PccRules: React.FC<PccProps> = ({
                       label: option.title,
                     }))}
                     placeholder="1"
+                    value={inputs.index}
+                    onChange={handleUnitChange("index")}
                   />
                   <Select
                     label="ARP Priority Level (1-15)"
                     className="mt-3 w-[425px]"
+                    classNames={{
+                      label: "static",
+                    }}
                     required
                     clearable
                     placeholder="2"
@@ -134,12 +178,17 @@ const PccRules: React.FC<PccProps> = ({
                       value: num.toString(),
                       label: num.toString(),
                     }))}
+                    value={inputs.priority_level}
+                    onChange={handleUnitChange("priority_level")}
                   />
 
                   <div className="flex">
                     <Select
                       label="Capability"
                       className="mt-3 w-[200px]"
+                      classNames={{
+                        label: "static",
+                      }}
                       required
                       defaultValue={"Enabeled"}
                       clearable
@@ -147,10 +196,15 @@ const PccRules: React.FC<PccProps> = ({
                         { value: "Disabled", label: "Disabled" },
                         { value: "Enabeled", label: "Enabled" },
                       ]}
+                      value={inputs.pre_emption_capability}
+                      onChange={handleUnitChange("pre_emption_capability")}
                     />
                     <Select
                       label="Vulnerability"
                       className="mt-3 w-[200px] ml-6"
+                      classNames={{
+                        label: "static",
+                      }}
                       required
                       defaultValue={"Enabeled"}
                       clearable
@@ -158,16 +212,27 @@ const PccRules: React.FC<PccProps> = ({
                         { value: "Disabled", label: "Disabled" },
                         { value: "Enabeled", label: "Enabled" },
                       ]}
+                      value={inputs.pre_emption_vulnerability}
+                      onChange={handleUnitChange("pre_emption_vulnerability")}
                     />
                   </div>
 
                   <div className="flex mt-6">
-                    <ReusableInput label="MBR Downlink" className="w-[250px]" />
+                    <TextInput
+                      label="MBR Downlink"
+                      classNames={{
+                        label: "static",
+                      }}
+                      className="w-[250px]"
+                    />
                     <Select
                       label="unit"
                       className="ml-6 w-[150px]"
                       clearable
                       placeholder="Gbps"
+                      classNames={{
+                        label: "static",
+                      }}
                       data={[
                         { value: "bps", label: "bps" },
                         { value: "kbps", label: "Kbps" },
@@ -175,13 +240,24 @@ const PccRules: React.FC<PccProps> = ({
                         { value: "gbps", label: "Gbps" },
                         { value: "tbps", label: "Tbps" },
                       ]}
+                      value={inputs.mbrDownUnit}
+                      onChange={handleUnitChange("mbrDownUnit")}
                     />
                   </div>
                   <div className="flex mt-6">
-                    <ReusableInput label="MBR Uplink" className="w-[250px]" />
+                    <TextInput
+                      label="MBR UpLink"
+                      classNames={{
+                        label: "static",
+                      }}
+                      className="w-[250px]"
+                    />
                     <Select
                       label="unit"
                       className="ml-6 w-[150px]"
+                      classNames={{
+                        label: "static",
+                      }}
                       clearable
                       placeholder="Gbps"
                       data={[
@@ -191,13 +267,24 @@ const PccRules: React.FC<PccProps> = ({
                         { value: "gbps", label: "Gbps" },
                         { value: "tbps", label: "Tbps" },
                       ]}
+                      value={inputs.mbrUpUnit}
+                      onChange={handleUnitChange("mbrUpUnit")}
                     />
                   </div>
                   <div className="flex mt-6">
-                    <ReusableInput label="GBR Downlink" className="w-[250px]" />
+                    <TextInput
+                      label="GBR Downlink"
+                      classNames={{
+                        label: "static",
+                      }}
+                      className="w-[250px]"
+                    />
                     <Select
                       label="unit"
                       className="ml-6 w-[150px]"
+                      classNames={{
+                        label: "static",
+                      }}
                       clearable
                       placeholder="Gbps"
                       data={[
@@ -207,13 +294,24 @@ const PccRules: React.FC<PccProps> = ({
                         { value: "gbps", label: "Gbps" },
                         { value: "tbps", label: "Tbps" },
                       ]}
+                      value={inputs.gbrDownUnit}
+                      onChange={handleUnitChange("gbrDownUnit")}
                     />
                   </div>
                   <div className="flex mt-6">
-                    <ReusableInput label="GBR Uplink" className="w-[250px]" />
+                    <TextInput
+                      label="GBR UpLink"
+                      classNames={{
+                        label: "static",
+                      }}
+                      className="w-[250px]"
+                    />
                     <Select
                       label="unit"
                       className="ml-6 w-[150px]"
+                      classNames={{
+                        label: "static",
+                      }}
                       clearable
                       placeholder="Gbps"
                       data={[
@@ -223,6 +321,8 @@ const PccRules: React.FC<PccProps> = ({
                         { value: "gbps", label: "Gbps" },
                         { value: "tbps", label: "Tbps" },
                       ]}
+                      value={inputs.gbrUpUnit}
+                      onChange={handleUnitChange("gbrUpUnit")}
                     />
                   </div>
                 </div>
