@@ -1,46 +1,59 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 // Mantine Components
 import { Button, Divider, Select, TextInput } from "@mantine/core";
 // Static data
 import qciItems from "@/data/qci.json";
 // Components
 import FlowContent from "./Flow";
-import { pccRules } from "@/redux/Types/subscriberTypes";
 
 const apr = Array.from({ length: 15 }, (_, index) => index + 1);
 
+interface Component {
+  index: number;
+  priority_level: number;
+  pre_emption_capability: number; 
+  pre_emption_vulnerability: number;
+  mbrDownUnit: number;
+}
 interface PccProps {
   id: number;
-  inputs: {
-    index: string;
-    priority_level: string;
-    pre_emption_capability: string;
-    pre_emption_vulnerability: string;
-    gbrDownValue: string;
-    gbrDownUnit: string;
-    gbrUpValue: string;
-    gbrUpUnit: string;
-    mbrDownValue: string;
-    mbrDownUnit: string;
-    mbrUpValue: string;
-    mbrUpUnit: string;
-  };
+  // inputs: {
+  //   index: string;
+  //   priority_level: string;
+  //   pre_emption_capability: string;
+  //   pre_emption_vulnerability: string;
+  //   gbrDownValue: string;
+  //   gbrDownUnit: string;
+  //   gbrUpValue: string;
+  //   gbrUpUnit: string;
+  //   mbrDownValue: string;
+  //   mbrDownUnit: string;
+  //   mbrUpValue: string;
+  //   mbrUpUnit: string;
+  // };
   pccVisible: boolean;
-  handleOnDelete: (id: number) => void;
-  updatePccInput: (field: string, value: string | string[]) => void;
-  handlePccRuleData: (data: pccRules) => void;
+  // handleOnDelete: (id: number) => void;
+  // updatePccInput: (field: string, value: string | string[]) => void;
+  // handlePccRuleData: (data: pccRules) => void;
+  component : Component;
+  handleStateChange: (index: number, name: keyof Component, value: string | null) => void;
 }
 
 const PccRules: React.FC<PccProps> = ({
-  inputs,
-  updatePccInput,
+  // updatePccInput,
   pccVisible,
-  handleOnDelete,
+  // handleOnDelete,
   id,
-  handlePccRuleData,
+  component,
+  handleStateChange,
 }) => {
   const [flowVisible, setFlowVisible] = useState(false);
   const [flowComponent, setFlowComponent] = useState([<div>Homa</div>]);
+const {index, priority_level }  = component;
+
+const handleInputChange = (name: keyof Component, value: string | null) => {
+  handleStateChange(index, name, value);
+};
 
   const handleOnAddFlow = () => {
     setFlowVisible(true);
@@ -51,48 +64,48 @@ const PccRules: React.FC<PccProps> = ({
   const addComponent = () => {
     setFlowComponent([...flowComponent, <FlowContent />]);
   };
-  const handleUnitChange = (field: string) => (value: string) => {
-    updatePccInput(field, value);
-  };
+  // const handleUnitChange = (field: string) => (value: string) => {
+  //   updatePccInput(field, value);
+  // };
 
-  function usePrevious(inputs : any) {
-    const ref = useRef();
-    useEffect(() => {
-      ref.current = inputs;
-    });
-    return ref.current;
-  }
-  const prevPccData = usePrevious(inputs)
+  // function usePrevious(inputs : any) {
+  //   const ref = useRef();
+  //   useEffect(() => {
+  //     ref.current = inputs;
+  //   });
+  //   return ref.current;
+  // }
+  // const prevPccData = usePrevious(inputs)
 
-  useEffect(() => {
-    console.log("inputs in pcc rule is:", inputs);
-    // if (inputs !== prevPccData) {
-    //   handlePccRuleData({
-    //     qos: {
-    //       index: +inputs.index,
-    //       arp: {
-    //         priority_level: +inputs.priority_level,
-    //         pre_emption_capability: +inputs.pre_emption_capability,
-    //         pre_emption_vulnerability: +inputs.pre_emption_vulnerability,
-    //       },
-    //       gbr: {
-    //         downlink: {
-    //           value: +inputs.gbrDownValue,
-    //           unit: +inputs.gbrDownUnit,
-    //         },
-    //         uplink: { value: +inputs.gbrUpValue, unit: +inputs.gbrDownUnit },
-    //       },
-    //       mbr: {
-    //         downlink: {
-    //           value: +inputs.mbrDownValue,
-    //           unit: +inputs.mbrDownUnit,
-    //         },
-    //         uplink: { value: +inputs.mbrUpValue, unit: +inputs.mbrUpUnit },
-    //       },
-    //     },
-    //   });
-    // }
-  }, [inputs]);
+  // useEffect(() => {
+  //   console.log("inputs in pcc rule is:", inputs);
+  //   // if (inputs !== prevPccData) {
+  //   //   handlePccRuleData({
+  //   //     qos: {
+  //   //       index: +inputs.index,
+  //   //       arp: {
+  //   //         priority_level: +inputs.priority_level,
+  //   //         pre_emption_capability: +inputs.pre_emption_capability,
+  //   //         pre_emption_vulnerability: +inputs.pre_emption_vulnerability,
+  //   //       },
+  //   //       gbr: {
+  //   //         downlink: {
+  //   //           value: +inputs.gbrDownValue,
+  //   //           unit: +inputs.gbrDownUnit,
+  //   //         },
+  //   //         uplink: { value: +inputs.gbrUpValue, unit: +inputs.gbrDownUnit },
+  //   //       },
+  //   //       mbr: {
+  //   //         downlink: {
+  //   //           value: +inputs.mbrDownValue,
+  //   //           unit: +inputs.mbrDownUnit,
+  //   //         },
+  //   //         uplink: { value: +inputs.mbrUpValue, unit: +inputs.mbrUpUnit },
+  //   //       },
+  //   //     },
+  //   //   });
+  //   // }
+  // }, [inputs]);
 
   return (
     <div className="mt-10">
@@ -162,8 +175,8 @@ const PccRules: React.FC<PccProps> = ({
                       label: option.title,
                     }))}
                     placeholder="1"
-                    value={inputs.index}
-                    onChange={handleUnitChange("index")}
+                    value={String(index)}
+                    onChange={(value) => handleInputChange("index", value)}
                   />
                   <Select
                     label="ARP Priority Level (1-15)"
@@ -178,7 +191,7 @@ const PccRules: React.FC<PccProps> = ({
                       value: num.toString(),
                       label: num.toString(),
                     }))}
-                    value={inputs.priority_level}
+                    value={String(priority_level)}
                     onChange={handleUnitChange("priority_level")}
                   />
 
@@ -193,10 +206,10 @@ const PccRules: React.FC<PccProps> = ({
                       defaultValue={"Enabeled"}
                       clearable
                       data={[
-                        { value: "Disabled", label: "Disabled" },
-                        { value: "Enabeled", label: "Enabled" },
+                        { value: "1", label: "Disabled" },
+                        { value: "2", label: "Enabled" },
                       ]}
-                      value={inputs.pre_emption_capability}
+                      value={String(pre_emption_capability)}
                       onChange={handleUnitChange("pre_emption_capability")}
                     />
                     <Select
@@ -212,7 +225,7 @@ const PccRules: React.FC<PccProps> = ({
                         { value: "Disabled", label: "Disabled" },
                         { value: "Enabeled", label: "Enabled" },
                       ]}
-                      value={inputs.pre_emption_vulnerability}
+                      value={pre_emption_vulnerability}
                       onChange={handleUnitChange("pre_emption_vulnerability")}
                     />
                   </div>
@@ -240,7 +253,7 @@ const PccRules: React.FC<PccProps> = ({
                         { value: "gbps", label: "Gbps" },
                         { value: "tbps", label: "Tbps" },
                       ]}
-                      value={inputs.mbrDownUnit}
+                      value={mbrDownUnit}
                       onChange={handleUnitChange("mbrDownUnit")}
                     />
                   </div>
@@ -261,13 +274,13 @@ const PccRules: React.FC<PccProps> = ({
                       clearable
                       placeholder="Gbps"
                       data={[
-                        { value: "bps", label: "bps" },
-                        { value: "kbps", label: "Kbps" },
-                        { value: "mbps", label: "Mbps" },
-                        { value: "gbps", label: "Gbps" },
-                        { value: "tbps", label: "Tbps" },
+                        { value: "1", label: "bps" },
+                        { value: "2", label: "Kbps" },
+                        { value: "3", label: "Mbps" },
+                        { value: "4", label: "Gbps" },
+                        { value: "5", label: "Tbps" },
                       ]}
-                      value={inputs.mbrUpUnit}
+                      value={mbrUpUnit}
                       onChange={handleUnitChange("mbrUpUnit")}
                     />
                   </div>
@@ -288,13 +301,13 @@ const PccRules: React.FC<PccProps> = ({
                       clearable
                       placeholder="Gbps"
                       data={[
-                        { value: "bps", label: "bps" },
-                        { value: "kbps", label: "Kbps" },
-                        { value: "mbps", label: "Mbps" },
-                        { value: "gbps", label: "Gbps" },
-                        { value: "tbps", label: "Tbps" },
+                        { value: "1", label: "bps" },
+                        { value: "2", label: "Kbps" },
+                        { value: "3", label: "Mbps" },
+                        { value: "4", label: "Gbps" },
+                        { value: "5", label: "Tbps" },
                       ]}
-                      value={inputs.gbrDownUnit}
+                      value={gbrDownUnit}
                       onChange={handleUnitChange("gbrDownUnit")}
                     />
                   </div>
@@ -357,8 +370,8 @@ const PccRules: React.FC<PccProps> = ({
                       label: option.title,
                     }))}
                     placeholder="1"
-                    value={inputs.index}
-                    onChange={handleUnitChange("index")}
+                    value={index}
+                    onChange={(value) => handleInputChange('index', value)}
                   />
                   <Select
                     label="ARP Priority Level (1-15)"
@@ -373,8 +386,8 @@ const PccRules: React.FC<PccProps> = ({
                       value: num.toString(),
                       label: num.toString(),
                     }))}
-                    value={inputs.priority_level}
-                    onChange={handleUnitChange("priority_level")}
+                    value={String(priority_level)}
+                    onChange={(value) => handleInputChange("priority_level", value)}
                   />
 
                   <div className="flex">

@@ -3,7 +3,7 @@ export const FETCH_SUBSCRIBER_SUCCESS = "FETCH_SUBSCRIBER_SUCCESS";
 export const FETCH_SUBSCRIBER_FAILURE = "FETCH_SUBSCRIBER_FAILURE";
 
 
-export interface pccRules {
+export interface PccRulesType {
   flow?: [direction: number, description: string];
   qos: {
     index: number;
