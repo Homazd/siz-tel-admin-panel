@@ -5,16 +5,10 @@ import { Button, Divider, Select, TextInput } from "@mantine/core";
 import qciItems from "@/data/qci.json";
 // Components
 import FlowContent from "./Flow";
+import { pccRuleComponentType } from "../add";
 
 const apr = Array.from({ length: 15 }, (_, index) => index + 1);
 
-interface Component {
-  index: number;
-  priority_level: number;
-  pre_emption_capability: number; 
-  pre_emption_vulnerability: number;
-  mbrDownUnit: number;
-}
 interface PccProps {
   id: number;
   // inputs: {
@@ -32,28 +26,45 @@ interface PccProps {
   //   mbrUpUnit: string;
   // };
   pccVisible: boolean;
-  // handleOnDelete: (id: number) => void;
-  // updatePccInput: (field: string, value: string | string[]) => void;
-  // handlePccRuleData: (data: pccRules) => void;
-  component : Component;
-  handleStateChange: (index: number, name: keyof Component, value: string | null) => void;
+  updateSubscriberData: (data: string, value: string | string[]) => void;
+  handleOnDelete: (id: number) => void;
+  component: pccRuleComponentType;
+  handleStateChange: (
+    index: number,
+    name: keyof pccRuleComponentType,
+    value: string | null,
+  ) => void;
 }
 
 const PccRules: React.FC<PccProps> = ({
   // updatePccInput,
   pccVisible,
-  // handleOnDelete,
+  handleOnDelete,
   id,
   component,
   handleStateChange,
+  updateSubscriberData,
 }) => {
   const [flowVisible, setFlowVisible] = useState(false);
   const [flowComponent, setFlowComponent] = useState([<div>Homa</div>]);
-const {index, priority_level }  = component;
+  const {
+    index,
+    priority_level,
+    pre_emption_capability,
+    pre_emption_vulnerability,
+    mbrDownUnit,
+    mbrUpUnit,
+    gbrUpUnit,
+    gbrDownUnit,
+  } = component;
 
-const handleInputChange = (name: keyof Component, value: string | null) => {
-  handleStateChange(index, name, value);
-};
+  const handleInputChange = (
+    pccIndex: number,
+    name: keyof pccRuleComponentType,
+    value: string | null,
+  ) => {
+    handleStateChange(pccIndex, name, value);
+  };
 
   const handleOnAddFlow = () => {
     setFlowVisible(true);
@@ -64,9 +75,9 @@ const handleInputChange = (name: keyof Component, value: string | null) => {
   const addComponent = () => {
     setFlowComponent([...flowComponent, <FlowContent />]);
   };
-  // const handleUnitChange = (field: string) => (value: string) => {
-  //   updatePccInput(field, value);
-  // };
+  const handleUnitChange = (field: string) => (value: string) => {
+    updateSubscriberData(field, value);
+  };
 
   // function usePrevious(inputs : any) {
   //   const ref = useRef();
@@ -176,7 +187,7 @@ const handleInputChange = (name: keyof Component, value: string | null) => {
                     }))}
                     placeholder="1"
                     value={String(index)}
-                    onChange={(value) => handleInputChange("index", value)}
+                    onChange={handleUnitChange("index")}
                   />
                   <Select
                     label="ARP Priority Level (1-15)"
@@ -192,7 +203,9 @@ const handleInputChange = (name: keyof Component, value: string | null) => {
                       label: num.toString(),
                     }))}
                     value={String(priority_level)}
-                    onChange={handleUnitChange("priority_level")}
+                    onChange={(value) =>
+                      handleInputChange(id, "priority_level", value)
+                    }
                   />
 
                   <div className="flex">
@@ -210,7 +223,9 @@ const handleInputChange = (name: keyof Component, value: string | null) => {
                         { value: "2", label: "Enabled" },
                       ]}
                       value={String(pre_emption_capability)}
-                      onChange={handleUnitChange("pre_emption_capability")}
+                      onChange={(value) =>
+                        handleInputChange(id, "pre_emption_capability", value)
+                      }
                     />
                     <Select
                       label="Vulnerability"
@@ -222,13 +237,14 @@ const handleInputChange = (name: keyof Component, value: string | null) => {
                       defaultValue={"Enabeled"}
                       clearable
                       data={[
-                        { value: "Disabled", label: "Disabled" },
-                        { value: "Enabeled", label: "Enabled" },
+                        { value: "1", label: "Disabled" },
+                        { value: "2", label: "Enabled" },
                       ]}
-                      value={pre_emption_vulnerability}
-                      onChange={handleUnitChange("pre_emption_vulnerability")}
+                      value={String(pre_emption_vulnerability)}
+                      onChange={(value) =>
+                        handleInputChange(id, "pre_emption_vulnerability", value)}
                     />
-                  </div>
+                   </div>
 
                   <div className="flex mt-6">
                     <TextInput
@@ -247,14 +263,15 @@ const handleInputChange = (name: keyof Component, value: string | null) => {
                         label: "static",
                       }}
                       data={[
-                        { value: "bps", label: "bps" },
-                        { value: "kbps", label: "Kbps" },
-                        { value: "mbps", label: "Mbps" },
-                        { value: "gbps", label: "Gbps" },
-                        { value: "tbps", label: "Tbps" },
+                        { value: "0", label: "bps" },
+                        { value: "1", label: "Kbps" },
+                        { value: "2", label: "Mbps" },
+                        { value: "3", label: "Gbps" },
+                        { value: "4", label: "Tbps" },
                       ]}
-                      value={mbrDownUnit}
-                      onChange={handleUnitChange("mbrDownUnit")}
+                      value={String(mbrDownUnit)}
+                      onChange={(value) =>
+                        handleInputChange(id, "mbrDownUnit", value)}
                     />
                   </div>
                   <div className="flex mt-6">
@@ -280,8 +297,9 @@ const handleInputChange = (name: keyof Component, value: string | null) => {
                         { value: "4", label: "Gbps" },
                         { value: "5", label: "Tbps" },
                       ]}
-                      value={mbrUpUnit}
-                      onChange={handleUnitChange("mbrUpUnit")}
+                      value={String(mbrUpUnit)}
+                      onChange={(value) =>
+                        handleInputChange(id, "mbrUpUnit", value)}
                     />
                   </div>
                   <div className="flex mt-6">
@@ -307,8 +325,9 @@ const handleInputChange = (name: keyof Component, value: string | null) => {
                         { value: "4", label: "Gbps" },
                         { value: "5", label: "Tbps" },
                       ]}
-                      value={gbrDownUnit}
-                      onChange={handleUnitChange("gbrDownUnit")}
+                      value={String(gbrDownUnit)}
+                      onChange={(value) =>
+                        handleInputChange(id, "gbrDownUnit", value)}
                     />
                   </div>
                   <div className="flex mt-6">
@@ -334,8 +353,9 @@ const handleInputChange = (name: keyof Component, value: string | null) => {
                         { value: "gbps", label: "Gbps" },
                         { value: "tbps", label: "Tbps" },
                       ]}
-                      value={inputs.gbrUpUnit}
-                      onChange={handleUnitChange("gbrUpUnit")}
+                      value={String(gbrUpUnit)}
+                      onChange={(value) =>
+                        handleInputChange(id, "gbrUpUnit", value)}
                     />
                   </div>
                 </div>
@@ -370,8 +390,8 @@ const handleInputChange = (name: keyof Component, value: string | null) => {
                       label: option.title,
                     }))}
                     placeholder="1"
-                    value={index}
-                    onChange={(value) => handleInputChange('index', value)}
+                    value={String(index)}
+                    onChange={handleUnitChange( "index")}
                   />
                   <Select
                     label="ARP Priority Level (1-15)"
@@ -387,7 +407,7 @@ const handleInputChange = (name: keyof Component, value: string | null) => {
                       label: num.toString(),
                     }))}
                     value={String(priority_level)}
-                    onChange={(value) => handleInputChange("priority_level", value)}
+                    onChange={handleUnitChange( "priority_level") }
                   />
 
                   <div className="flex">
@@ -403,6 +423,8 @@ const handleInputChange = (name: keyof Component, value: string | null) => {
                         { value: "1", label: "Disabled" },
                         { value: "2", label: "Enabled" },
                       ]}
+                      value={String(pre_emption_capability)}
+                    onChange={handleUnitChange( "pre_emption_capability") }
                     />
                     <Select
                       label="Vulnerability"

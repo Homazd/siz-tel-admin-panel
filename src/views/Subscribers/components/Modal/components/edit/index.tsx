@@ -31,7 +31,7 @@ import EditSlice from "./components/EditSlice";
 import EditSession from "./components/EditSession";
 import Pcc from "../../global/Pcc";
 // Types
-import { pccRules } from "@/redux/Types/subscriberTypes";
+import { PccRulesType } from "@/redux/Types/subscriberTypes";
 
 interface imsiInputProps {
   addedImsi: string;
@@ -85,7 +85,7 @@ const IMSIInput: React.FC<imsiInputProps> = ({
   const [smfIpv4, setSmfIpv4] = useState("");
   const [smfIpv6, setSmfIpv6] = useState("");
   // PCC Rules
-  const [inputs, setInputs] = useState<pccRules[]>([
+  const [inputs, setInputs] = useState<PccRulesType[]>([
     {
       qos: {
         index: 1,
@@ -252,6 +252,7 @@ const IMSIInput: React.FC<imsiInputProps> = ({
           : ""
       );
     }
+    console.log("searched subscriber is:", searchedSubscriber)
   }, [searchedSubscriber, addedImsi]);
 
   const handleOnDelete = () => {
@@ -268,7 +269,7 @@ const IMSIInput: React.FC<imsiInputProps> = ({
   const onClickAddSession = () => {
     setHiddenSession(true);
   };
-  const handleInputChange = (index: number, inputData: pccRules) => {
+  const handleInputChange = (index: number, inputData: PccRulesType) => {
     setInputs((prevInputs) => {
       const updatedInputs = [...prevInputs];
       updatedInputs[index] = inputData;

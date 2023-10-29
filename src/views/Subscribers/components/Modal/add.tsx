@@ -21,14 +21,14 @@ interface addSubscriberProps {
   onNewSub: (data: string) => void;
 }
 export interface pccRuleComponentType {
-  index: number;
-  priority_level: number;
-  pre_emption_capability: number; 
-  pre_emption_vulnerability: number;
-  mbrDownUnit: number;
-  mbrUpUnit: number;
-  gbrUpUnit:number;
-  gbrDownUnit: number;
+  index: string;
+  priority_level: string;
+  pre_emption_capability: string; 
+  pre_emption_vulnerability: string;
+  mbrDownUnit: string;
+  mbrUpUnit: string;
+  gbrUpUnit:string;
+  gbrDownUnit: string;
 }
 const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -118,29 +118,44 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
   };
   useEffect(() => {
     setSubscriberData((prevData) => ({ ...prevData, isFetching: true }));
-    if (pccRules[0] !== undefined) {
-      console.log("pcc rule", pccRules);
-    }
-  }, [subscriber, subscriberData.isFetching, subscriberData.imsi, pccRules]);
+    // if (pccRules[0] !== undefined) {
+    //   console.log("pcc rule", pccRules);
+    // }
+  }, [subscriber, subscriberData.isFetching, subscriberData.imsi]);
 
   // const handlePccRuleData = useCallback((pccData: pccRules) => {
   //   setPccRules((prevPccArray) => [...prevPccArray, pccData]);
   // }, []);
 const addPccRuleComponet = () => {
+  setPccVisible(true);
   const newComponent = {
- index: 1,
- priority_level: 2,
+ index: '',
+ priority_level: '',
+ pre_emption_capability: '',
+ pre_emption_vulnerability: '',
+ mbrDownUnit: '',
+ mbrUpUnit: '',
+ gbrUpUnit:'',
+ gbrDownUnit: '',
   }
   setPccRules([...pccRules, newComponent])
 }
 
 const handleStateChange = (index : number, name : string, value : string | null) => {
-  const updatedComponents = [...pccRules];
-  updatedComponents[index] = {
-    ...updatedComponents[index],
-    [name]: value
-  };
-  setPccRules(updatedComponents);
+  setPccRules((prevRules) => {
+    const updatedComponents = [...prevRules];
+    updatedComponents[index] = {
+      ...updatedComponents[index],
+      [name] : value
+    };
+    return updatedComponents;
+  })
+ 
+  // updatedComponents[index] = {
+  //   ...updatedComponents[index],
+  //   [name]: value
+  // };
+  // setPccRules(updatedComponents);
 };
   const apn = localStorage.getItem("apn");
   // const handleOnAddPcc = () => {
@@ -198,10 +213,10 @@ const handleStateChange = (index : number, name : string, value : string | null)
   //     ]);
   //   }
   // };
-  // const handleOnDeletePcc = (index: number) => {
-  //   setPccVisible(false);
-  //   setPccRules(pccRules.filter((_, i) => i !== index));
-  // };
+  const handleOnDeletePcc = (index: number) => {
+    setPccVisible(false);
+    setPccRules(pccRules.filter((_, i) => i !== index));
+  };
 
   const handleSubmit = async () => {
     let Msisdn: string[] = [];
@@ -272,7 +287,24 @@ const handleStateChange = (index : number, name : string, value : string | null)
                   addr: subscriberData.smfIpv4 || undefined,
                   addr6: subscriberData.smfIpv6 || undefined,
                 } || undefined,
-              pcc_rule: pccRules,
+              pcc_rule: pccRules.map((item) => (
+             { qos: {
+                  index: +item.index,
+                  arp: {
+                    priority_level: +item.priority_level,
+                    pre_emption_capability: +item.pre_emption_capability,
+                    pre_emption_vulnerability: +item.pre_emption_vulnerability,
+                  },
+                  gbr: {
+                    downlink: { value: 1, unit: +item.gbrDownUnit},
+                    uplink: { value: 1, unit: +item.gbrUpUnit },
+                  },
+                  mbr: {
+                    downlink: { value: 1, unit: 1 },
+                    uplink: { value: 1, unit: 1 },
+                  },
+                }}
+              )),
               //  {
               //   qos: {
               //     index: 1,
@@ -291,9 +323,9 @@ const handleStateChange = (index : number, name : string, value : string | null)
               //     },
               //   },
               // },
-            },
-          ],
-        },
+            }
+          ]
+        }
       ],
       access_restriction_data: 32,
       subscriber_status: 0,
@@ -308,6 +340,7 @@ const handleStateChange = (index : number, name : string, value : string | null)
     }));
     if (onNewSub) onNewSub(subscriberData.imsi);
     close();
+    console.log('pcc rules', pccRules)
   };
 
   const updateSubscriberData = (field: string, value: string | string[]) => {
@@ -361,8 +394,9 @@ const handleStateChange = (index : number, name : string, value : string | null)
                   // inputs={inputs}
                   handleStateChange={handleStateChange}
                   pccVisible={pccVisible}
+                  updateSubscriberData={updateSubscriberData}
                   // updatePccInput={updatePccInput}
-                  // handleOnDelete={() => handleOnDeletePcc(index)}
+                  handleOnDelete={() => handleOnDeletePcc(index)}
                   // handlePccRuleData={handlePccRuleData}
                 />
               ))}
