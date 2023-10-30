@@ -1,4 +1,4 @@
-# mongodb siz-tel admin panel
+# siz-tel admin panel
 
 
 
