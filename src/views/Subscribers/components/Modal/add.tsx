@@ -14,27 +14,18 @@ import PccRules from "./components/PccRules";
 import Session from "./components/Session";
 import Slice from "./components/Slice";
 import SubscriberConfig from "./components/SubscriberConfig";
-// import { PccRulesType } from "@/redux/Types/subscriberTypes";
 // Types
+import {inputsType} from "@/redux/Types/subscriberTypes"
+
 
 interface addSubscriberProps {
   onNewSub: (data: string) => void;
 }
-export interface pccRuleComponentType {
-  index: string;
-  priority_level: string;
-  pre_emption_capability: string; 
-  pre_emption_vulnerability: string;
-  mbrDownUnit: string;
-  mbrUpUnit: string;
-  gbrUpUnit:string;
-  gbrDownUnit: string;
-}
+
 const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const [hiddenSession, setHiddenSession] = useState(true);
   const [hiddenSlice, setHiddenSlice] = useState(false);
-  const [pccVisible, setPccVisible] = useState(false);
   const [subscriberData, setSubscriberData] = useState({
     imsi: "",
     msisdnArray: [],
@@ -66,33 +57,26 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
     isFetching: false,
   });
   // PCC Rules
-  const [pccRules, setPccRules] = useState<pccRuleComponentType[]>([]);
-  // const [inputs, setInputs] = useState({
-  //   index: "1",
-  //   priority_level: "2",
-  //   pre_emption_capability: "2",
-  //   pre_emption_vulnerability: "2",
-  //   gbrDownValue: "1",
-  //   gbrDownUnit: "2",
-  //   gbrUpValue: "1",
-  //   gbrUpUnit: "2",
-  //   mbrDownValue: "1",
-  //   mbrDownUnit: "2",
-  //   mbrUpValue: "1",
-  //   mbrUpUnit: "2",
-  // });
+  const [pccRules, setPccRules] = useState<inputsType[]>([]);
+  const pccState : inputsType = {
+    index: "1",
+    priority_level: "2",
+    pre_emption_capability: "2",
+    pre_emption_vulnerability: "2",
+    gbrDownlink: "1",
+    gbrDownUnit: "2",
+    gbrUplink: "1",
+    gbrUpUnit: "2",
+    mbrDownlink: "1",
+    mbrDownUnit: "2",
+    mbrUplink: "1",
+    mbrUpUnit: "2",
+  }
+
   const { data: subscriber } = useGetSubscribersQuery(subscriberData.imsi, {
     skip: subscriberData.isFetching,
   });
   const [addSubscriber] = useAddSubscriberMutation();
-
-  // const handleInputChange = (index: number, inputData: pccRules) => {
-  //   setInputs((prevInputs) => {
-  //     const updatedInputs = [...prevInputs];
-  //     updatedInputs[index] = inputData;
-  //     return updatedInputs;
-  //   });
-  // };
 
   const handleOnDelete = () => {
     setHiddenSlice(true);
@@ -118,103 +102,19 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
   };
   useEffect(() => {
     setSubscriberData((prevData) => ({ ...prevData, isFetching: true }));
-    // if (pccRules[0] !== undefined) {
-    //   console.log("pcc rule", pccRules);
-    // }
+   
   }, [subscriber, subscriberData.isFetching, subscriberData.imsi]);
 
-  // const handlePccRuleData = useCallback((pccData: pccRules) => {
-  //   setPccRules((prevPccArray) => [...prevPccArray, pccData]);
-  // }, []);
-const addPccRuleComponet = () => {
-  setPccVisible(true);
-  const newComponent = {
- index: '',
- priority_level: '',
- pre_emption_capability: '',
- pre_emption_vulnerability: '',
- mbrDownUnit: '',
- mbrUpUnit: '',
- gbrUpUnit:'',
- gbrDownUnit: '',
-  }
-  setPccRules([...pccRules, newComponent])
-}
-
-const handleStateChange = (index : number, name : string, value : string | null) => {
-  setPccRules((prevRules) => {
-    const updatedComponents = [...prevRules];
-    updatedComponents[index] = {
-      ...updatedComponents[index],
-      [name] : value
-    };
-    return updatedComponents;
-  })
  
-  // updatedComponents[index] = {
-  //   ...updatedComponents[index],
-  //   [name]: value
-  // };
-  // setPccRules(updatedComponents);
-};
+const addPccRuleComponet = () => {
+  // setPccVisible(true);
+  setPccRules([...pccRules, pccState])
+}
+const updateChildState = (index : number, newState : inputsType) => {
+  setPccRules(pccRules.map((pccState, i) => i === index ? newState : pccState));
+}
   const apn = localStorage.getItem("apn");
-  // const handleOnAddPcc = () => {
-  //   setPccVisible(true);
-  //   // setInputs((preInputs) => [
-  //   //   ...preInputs,
-  //   //   {
-  //   //     qos: {
-  //   //       index: 1,
-  //   //       arp: {
-  //   //         priority_level: 2,
-  //   //         pre_emption_capability: 2,
-  //   //         pre_emption_vulnerability: 2,
-  //   //       },
-  //   //       gbr: {
-  //   //         downlink: { value: 1, unit: 2 },
-  //   //         uplink: { value: 1, unit: 2 },
-  //   //       },
-  //   //       mbr: {
-  //   //         downlink: { value: 1, unit: 2 },
-  //   //         uplink: { value: 1, unit: 2 },
-  //   //       },
-  //   //     },
-  //   //   },
-  //   // ]);
-  //   console.log("inputs in add component is", inputs);
-  //   const id = pccRules.length + 1;
-  //   if (id < 9) {
-  //     setPccRules([
-  //       ...pccRules,
-  //       {
-  //         qos: {
-  //           index: +inputs.index,
-  //           arp: {
-  //             priority_level: +inputs.priority_level,
-  //             pre_emption_capability: +inputs.pre_emption_capability,
-  //             pre_emption_vulnerability: +inputs.pre_emption_vulnerability,
-  //           },
-  //           gbr: {
-  //             downlink: {
-  //               value: +inputs.gbrDownValue,
-  //               unit: +inputs.gbrDownUnit,
-  //             },
-  //             uplink: { value: +inputs.gbrUpValue, unit: +inputs.gbrDownUnit },
-  //           },
-  //           mbr: {
-  //             downlink: {
-  //               value: +inputs.mbrDownValue,
-  //               unit: +inputs.mbrDownUnit,
-  //             },
-  //             uplink: { value: +inputs.mbrUpValue, unit: +inputs.mbrUpUnit },
-  //           },
-  //         },
-  //       },
-  //     ]);
-  //   }
-  // };
   const handleOnDeletePcc = (index: number) => {
-    setPccVisible(false);
     setPccRules(pccRules.filter((_, i) => i !== index));
   };
 
@@ -346,10 +246,6 @@ const handleStateChange = (index : number, name : string, value : string | null)
   const updateSubscriberData = (field: string, value: string | string[]) => {
     setSubscriberData((prevData) => ({ ...prevData, [field]: value }));
   };
-  // const updatePccInput = (field: string, value: string | string[]) => {
-  //   setInputs((prevData) => ({ ...prevData, [field]: value }));
-  // };
-
   return (
     <>
       <Modal
@@ -387,27 +283,15 @@ const handleStateChange = (index : number, name : string, value : string | null)
                 subscriberData={subscriberData}
                 updateSubscriberData={updateSubscriberData}
               />
-              {pccRules.map((component, index) => (
+              {pccRules.map((pccState, index) => (
                 <PccRules
-                  id={index}
-                  component={component}
-                  // inputs={inputs}
-                  handleStateChange={handleStateChange}
-                  pccVisible={pccVisible}
-                  updateSubscriberData={updateSubscriberData}
-                  // updatePccInput={updatePccInput}
+                  key={index}
+                  pccState = { pccState }
+                  updateState = {(newState) => updateChildState(index, newState)}
                   handleOnDelete={() => handleOnDeletePcc(index)}
-                  // handlePccRuleData={handlePccRuleData}
                 />
               ))}
-              {/* {hiddenSession && (
-                <PccRules
-                  inputs={inputs}
-                  onInputChange={handleInputChange}
-                  pccVisible={pccVisible}
-                  handleOnDelete={handleOnDeletePcc}
-                />
-              )} */}
+            
             </>
             <p className="text-center">
               <Button

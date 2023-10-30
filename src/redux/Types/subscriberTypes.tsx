@@ -87,3 +87,18 @@ export interface DataType {
   subscribed_rau_tau_timer: number;
   __v: number
 }
+
+export interface inputsType {
+  index: string;
+  priority_level: string;
+  pre_emption_capability: string;
+  pre_emption_vulnerability: string;
+  mbrDownlink: string;
+  mbrDownUnit: string;
+  mbrUplink:string;
+  mbrUpUnit: string;
+  gbrDownlink: string;
+  gbrDownUnit: string;
+  gbrUplink: string;
+  gbrUpUnit: string;
+}
