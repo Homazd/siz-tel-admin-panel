@@ -1,5 +1,5 @@
 // Hooks
-import React, {  useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 // Mantine Hooks
 import { useDisclosure } from "@mantine/hooks";
 // Services
@@ -15,8 +15,7 @@ import Session from "./components/Session";
 import Slice from "./components/Slice";
 import SubscriberConfig from "./components/SubscriberConfig";
 // Types
-import {inputsType} from "@/redux/Types/subscriberTypes"
-
+import { inputsType } from "@/redux/Types/subscriberTypes";
 
 interface addSubscriberProps {
   onNewSub: (data: string) => void;
@@ -58,7 +57,7 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
   });
   // PCC Rules
   const [pccRules, setPccRules] = useState<inputsType[]>([]);
-  const pccState : inputsType = {
+  const pccState: inputsType = {
     index: "1",
     priority_level: "2",
     pre_emption_capability: "2",
@@ -71,7 +70,7 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
     mbrDownUnit: "2",
     mbrUplink: "1",
     mbrUpUnit: "2",
-  }
+  };
 
   const { data: subscriber } = useGetSubscribersQuery(subscriberData.imsi, {
     skip: subscriberData.isFetching,
@@ -102,17 +101,17 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
   };
   useEffect(() => {
     setSubscriberData((prevData) => ({ ...prevData, isFetching: true }));
-   
   }, [subscriber, subscriberData.isFetching, subscriberData.imsi]);
 
- 
-const addPccRuleComponet = () => {
-  // setPccVisible(true);
-  setPccRules([...pccRules, pccState])
-}
-const updateChildState = (index : number, newState : inputsType) => {
-  setPccRules(pccRules.map((pccState, i) => i === index ? newState : pccState));
-}
+  const addPccRuleComponet = () => {
+    // setPccVisible(true);
+    setPccRules([...pccRules, pccState]);
+  };
+  const updateChildState = (index: number, newState: inputsType) => {
+    setPccRules(
+      pccRules.map((pccState, i) => (i === index ? newState : pccState))
+    );
+  };
   const apn = localStorage.getItem("apn");
   const handleOnDeletePcc = (index: number) => {
     setPccRules(pccRules.filter((_, i) => i !== index));
@@ -187,8 +186,8 @@ const updateChildState = (index : number, newState : inputsType) => {
                   addr: subscriberData.smfIpv4 || undefined,
                   addr6: subscriberData.smfIpv6 || undefined,
                 } || undefined,
-              pcc_rule: pccRules.map((item) => (
-             { qos: {
+              pcc_rule: pccRules.map((item) => ({
+                qos: {
                   index: +item.index,
                   arp: {
                     priority_level: +item.priority_level,
@@ -196,15 +195,15 @@ const updateChildState = (index : number, newState : inputsType) => {
                     pre_emption_vulnerability: +item.pre_emption_vulnerability,
                   },
                   gbr: {
-                    downlink: { value: 1, unit: +item.gbrDownUnit},
-                    uplink: { value: 1, unit: +item.gbrUpUnit },
+                    downlink: { value: +item.gbrDownlink, unit: +item.gbrDownUnit },
+                    uplink: { value: +item.gbrUplink, unit: +item.gbrUpUnit },
                   },
                   mbr: {
-                    downlink: { value: 1, unit: 1 },
-                    uplink: { value: 1, unit: 1 },
+                    downlink: { value: +item.mbrDownlink, unit: +item.mbrDownUnit },
+                    uplink: { value: +item.mbrUplink, unit: +item.mbrUpUnit },
                   },
-                }}
-              )),
+                },
+              })),
               //  {
               //   qos: {
               //     index: 1,
@@ -223,9 +222,9 @@ const updateChildState = (index : number, newState : inputsType) => {
               //     },
               //   },
               // },
-            }
-          ]
-        }
+            },
+          ],
+        },
       ],
       access_restriction_data: 32,
       subscriber_status: 0,
@@ -239,13 +238,15 @@ const updateChildState = (index : number, newState : inputsType) => {
       msisdn2: [],
     }));
     if (onNewSub) onNewSub(subscriberData.imsi);
+    setPccRules([]);
     close();
-    console.log('pcc rules', pccRules)
+    console.log("pcc rules", pccRules);
   };
 
   const updateSubscriberData = (field: string, value: string | string[]) => {
     setSubscriberData((prevData) => ({ ...prevData, [field]: value }));
   };
+
   return (
     <>
       <Modal
@@ -285,13 +286,12 @@ const updateChildState = (index : number, newState : inputsType) => {
               />
               {pccRules.map((pccState, index) => (
                 <PccRules
-                  key={index}
-                  pccState = { pccState }
-                  updateState = {(newState) => updateChildState(index, newState)}
+                  id={index}
+                  pccState={pccState}
+                  updateState={(newState) => updateChildState(index, newState)}
                   handleOnDelete={() => handleOnDeletePcc(index)}
                 />
               ))}
-            
             </>
             <p className="text-center">
               <Button

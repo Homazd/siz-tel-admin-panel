@@ -10,7 +10,7 @@ import { inputsType } from "@/redux/Types/subscriberTypes";
 const apr = Array.from({ length: 15 }, (_, index) => index + 1);
 
 interface PccProps {
-  key: number;
+  id: number;
   handleOnDelete: (id: number) => void;
   pccState: inputsType;
   updateState: (newState: inputsType) => void;
@@ -18,7 +18,7 @@ interface PccProps {
 
 const PccRules: React.FC<PccProps> = ({
   handleOnDelete,
-  key,
+  id,
   pccState,
   updateState,
 }) => {
@@ -35,13 +35,16 @@ const PccRules: React.FC<PccProps> = ({
     setFlowComponent([...flowComponent, <FlowContent />]);
   };
 
-  const handleTextInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    updateState({
-      ...pccState,
-      [event.target.name]: event.target.value,
-    });
+  // const handleTextInputChange = (
+  //   event: React.ChangeEvent<HTMLInputElement>
+  // ) => {
+  //   updateState({
+  //     ...pccState,
+  //     [event.target.name]: event.target.value,
+  //   });
+  // };
+  const handleTextInputChange = (name: string, value: string | string[]) => {
+    updateState({ ...pccState, [name]: value });
   };
   const handleSelectChange = (name: string) => (value: string) => {
     updateState({
@@ -55,7 +58,7 @@ const PccRules: React.FC<PccProps> = ({
       <h3>PCC Rules</h3>
       <Divider />
       <div>
-        <div key={key}>
+        <div key={id}>
           {flowVisible ? (
             <>
               <div className="grid grid-cols-2 mt-3">
@@ -297,7 +300,7 @@ const PccRules: React.FC<PccProps> = ({
                 </Button>
                 <Button
                   className="w-14 bg-red-500 text-white font-bold"
-                  onClick={() => handleOnDelete(key)}
+                  onClick={() => handleOnDelete(id)}
                 >
                   ×
                 </Button>
@@ -376,7 +379,8 @@ const PccRules: React.FC<PccProps> = ({
                       label: "static",
                     }}
                     className="w-[250px]"
-                    // value={pccState}
+                    value={pccState.mbrDownlink}
+                    onChange={(e) => handleTextInputChange(`mbrDownlink`, e.target.value)}
                   />
                   <Select
                     label="unit"
@@ -404,6 +408,8 @@ const PccRules: React.FC<PccProps> = ({
                       label: "static",
                     }}
                     className="w-[250px]"
+                    value={pccState.mbrUplink}
+                    onChange={(e) => handleTextInputChange(`mbrUplink`, e.target.value)}
                   />
                   <Select
                     label="unit"
@@ -414,12 +420,14 @@ const PccRules: React.FC<PccProps> = ({
                     clearable
                     placeholder="Gbps"
                     data={[
-                      { value: "bps", label: "bps" },
-                      { value: "kbps", label: "Kbps" },
-                      { value: "mbps", label: "Mbps" },
-                      { value: "gbps", label: "Gbps" },
-                      { value: "tbps", label: "Tbps" },
+                      { value: "0", label: "bps" },
+                      { value: "1", label: "Kbps" },
+                      { value: "2", label: "Mbps" },
+                      { value: "3", label: "Gbps" },
+                      { value: "4", label: "Tbps" },
                     ]}
+                    value={pccState.mbrUpUnit}
+                    onChange={handleSelectChange(`mbrUpUnit`)}
                   />
                 </div>
                 <div className="flex mt-6">
@@ -429,6 +437,8 @@ const PccRules: React.FC<PccProps> = ({
                       label: "static",
                     }}
                     className="w-[250px]"
+                    value={pccState.gbrDownlink}
+                    onChange={(e) => handleTextInputChange(`gbrDownlink`, e.target.value)}
                   />
                   <Select
                     label="unit"
@@ -439,12 +449,14 @@ const PccRules: React.FC<PccProps> = ({
                     clearable
                     placeholder="Gbps"
                     data={[
-                      { value: "bps", label: "bps" },
-                      { value: "kbps", label: "Kbps" },
-                      { value: "mbps", label: "Mbps" },
-                      { value: "gbps", label: "Gbps" },
-                      { value: "tbps", label: "Tbps" },
+                      { value: "0", label: "bps" },
+                      { value: "1", label: "Kbps" },
+                      { value: "2", label: "Mbps" },
+                      { value: "3", label: "Gbps" },
+                      { value: "4", label: "Tbps" },
                     ]}
+                    value={pccState.gbrDownUnit}
+                    onChange={handleSelectChange(`gbrDownUnit`)}
                   />
                 </div>
                 <div className="flex mt-6">
@@ -454,6 +466,8 @@ const PccRules: React.FC<PccProps> = ({
                       label: "static",
                     }}
                     className="w-[250px]"
+                    value={pccState.gbrUplink}
+                    onChange={(e) => handleTextInputChange(`gbrUplink`, e.target.value)}
                   />
                   <Select
                     label="unit"
@@ -464,12 +478,14 @@ const PccRules: React.FC<PccProps> = ({
                     clearable
                     placeholder="Gbps"
                     data={[
-                      { value: "bps", label: "bps" },
-                      { value: "kbps", label: "Kbps" },
-                      { value: "mbps", label: "Mbps" },
-                      { value: "gbps", label: "Gbps" },
-                      { value: "tbps", label: "Tbps" },
+                      { value: "0", label: "bps" },
+                      { value: "1", label: "Kbps" },
+                      { value: "2", label: "Mbps" },
+                      { value: "3", label: "Gbps" },
+                      { value: "4", label: "Tbps" },
                     ]}
+                    value={pccState.gbrUpUnit}
+                    onChange={handleSelectChange(`gbrUpUnit`)}
                   />
                 </div>
               </div>
