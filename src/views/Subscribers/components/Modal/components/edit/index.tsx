@@ -31,7 +31,8 @@ import EditSlice from "./components/EditSlice";
 import EditSession from "./components/EditSession";
 import Pcc from "../../global/Pcc";
 // Types
-import { PccRulesType } from "@/redux/Types/subscriberTypes";
+import { PccRulesType, inputsType } from "@/redux/Types/subscriberTypes";
+import PccRules from "../PccRules";
 
 interface imsiInputProps {
   addedImsi: string;
@@ -52,6 +53,7 @@ const IMSIInput: React.FC<imsiInputProps> = ({
   const [deleteOpened, setDeleteOpened] = useState(false);
   const theme = useMantineTheme();
   // Config States
+
   const [imsi, setImsi] = useState("");
   const [msisdn, setMsisdn] = useState<string[]>([]);
   const [msisdnArray, setMsisdnArray] = useState<string[]>([]);
@@ -85,26 +87,28 @@ const IMSIInput: React.FC<imsiInputProps> = ({
   const [smfIpv4, setSmfIpv4] = useState("");
   const [smfIpv6, setSmfIpv6] = useState("");
   // PCC Rules
-  const [inputs, setInputs] = useState<PccRulesType[]>([
-    {
-      qos: {
-        index: 1,
-        arp: {
-          priority_level: 2,
-          pre_emption_capability: 2,
-          pre_emption_vulnerability: 2,
-        },
-        gbr: {
-          downlink: { value: 1, unit: 2 },
-          uplink: { value: 1, unit: 2 },
-        },
-        mbr: {
-          downlink: { value: 1, unit: 2 },
-          uplink: { value: 1, unit: 2 },
-        },
-      },
-    },
-  ]);
+  const [pccRules, setPccRules] = useState<inputsType[]>([]);
+
+  // const [inputs, setInputs] = useState<PccRulesType[]>([
+  //   {
+  //     qos: {
+  //       index: 1,
+  //       arp: {
+  //         priority_level: 2,
+  //         pre_emption_capability: 2,
+  //         pre_emption_vulnerability: 2,
+  //       },
+  //       gbr: {
+  //         downlink: { value: 1, unit: 2 },
+  //         uplink: { value: 1, unit: 2 },
+  //       },
+  //       mbr: {
+  //         downlink: { value: 1, unit: 2 },
+  //         uplink: { value: 1, unit: 2 },
+  //       },
+  //     },
+  //   },
+  // ]);
   // Validation
   const imeisv = [""];
   const {
@@ -119,6 +123,31 @@ const IMSIInput: React.FC<imsiInputProps> = ({
 
   useEffect(() => {
     if (searchedSubscriber) {
+      console.log(
+        "pcc rules in edit is:",
+        searchedSubscriber.slice[0].session[0].pcc_rule
+      );
+      const mappedPcc = searchedSubscriber.slice[0].session[0].pcc_rule.map(
+        (pcc) => {
+          return {
+            index: String(pcc.qos.index),
+            priority_level: String(pcc.qos.arp.priority_level),
+            pre_emption_capability: String(pcc.qos.arp.pre_emption_capability),
+            pre_emption_vulnerability: String(pcc.qos.arp.pre_emption_vulnerability),
+            mbrDownlink: String(pcc.qos.mbr.downlink.value),
+            mbrDownUnit: String(pcc.qos.mbr.downlink.unit),
+            mbrUplink: String(pcc.qos.mbr.uplink.value),
+            mbrUpUnit: String(pcc.qos.mbr.uplink.unit),
+            gbrDownlink: String(pcc.qos.gbr.downlink.value),
+            gbrDownUnit: String(pcc.qos.gbr.downlink.unit),
+            gbrUplink: String(pcc.qos.gbr.uplink.value),
+            gbrUpUnit: String(pcc.qos.gbr.uplink.value),
+          };
+        }
+      );
+
+      setPccRules(mappedPcc);
+
       let downLinkUnit: string;
       let upLinkUnit: string;
 
@@ -175,9 +204,9 @@ const IMSIInput: React.FC<imsiInputProps> = ({
         ? setMsisdn(searchedSubscriber.msisdn)
         : null;
 
-      if(searchedSubscriber.msisdn.length === 2){
-        setMsisdn1([searchedSubscriber.msisdn[0]])
-        setMsisdn2([searchedSubscriber.msisdn[1]])
+      if (searchedSubscriber.msisdn.length === 2) {
+        setMsisdn1([searchedSubscriber.msisdn[0]]);
+        setMsisdn2([searchedSubscriber.msisdn[1]]);
       }
 
       // setMsisdn(searchedSubscriber.msisdn[0]);
@@ -252,7 +281,7 @@ const IMSIInput: React.FC<imsiInputProps> = ({
           : ""
       );
     }
-    console.log("searched subscriber is:", searchedSubscriber)
+    console.log("searched subscriber is:", searchedSubscriber);
   }, [searchedSubscriber, addedImsi]);
 
   const handleOnDelete = () => {
@@ -269,13 +298,17 @@ const IMSIInput: React.FC<imsiInputProps> = ({
   const onClickAddSession = () => {
     setHiddenSession(true);
   };
-  const handleInputChange = (index: number, inputData: PccRulesType) => {
-    setInputs((prevInputs) => {
-      const updatedInputs = [...prevInputs];
-      updatedInputs[index] = inputData;
-      return updatedInputs;
-    });
+  // const handleInputChange = (index: number, inputData: PccRulesType) => {
+  //   setInputs((prevInputs) => {
+  //     const updatedInputs = [...prevInputs];
+  //     updatedInputs[index] = inputData;
+  //     return updatedInputs;
+  //   });
+  // };
+  const handleOnDeletePcc = (index: number) => {
+    setPccRules(pccRules.filter((_, i) => i !== index));
   };
+
 
   const contentStyles: Partial<ModalProps["styles"]> = {
     content: {
@@ -352,7 +385,11 @@ const IMSIInput: React.FC<imsiInputProps> = ({
   };
 
   let Msisdn: string[] = [];
-
+  const updateChildState = (index: number, newState: inputsType) => {
+    setPccRules(
+      pccRules.map((pccState, i) => (i === index ? newState : pccState))
+    );
+  };
   const apn = localStorage.getItem("apn");
   const handleSubmitUpdate = () => {
     console.log("submit edit");
@@ -361,8 +398,12 @@ const IMSIInput: React.FC<imsiInputProps> = ({
     console.log("msisdn1 in index", msisdn1);
     console.log("msisdn2 in index", msisdn2);
     msisdnArray[0] != "" ? (Msisdn = [...msisdnArray]) : null;
-    msisdnArray.length == 0 && msisdn1[0] != "" ? (Msisdn = [...Msisdn, ...msisdn1]) : null;
-    msisdnArray.length == 0 && msisdn2[0] != "" ? (Msisdn = [...Msisdn, ...msisdn2]) : null;
+    msisdnArray.length == 0 && msisdn1[0] != ""
+      ? (Msisdn = [...Msisdn, ...msisdn1])
+      : null;
+    msisdnArray.length == 0 && msisdn2[0] != ""
+      ? (Msisdn = [...Msisdn, ...msisdn2])
+      : null;
     updateSubscriber({
       imsi: imsi,
       msisdn: Msisdn,
@@ -422,7 +463,24 @@ const IMSIInput: React.FC<imsiInputProps> = ({
                       addr6: smfIpv6 || undefined,
                     }
                   : undefined,
-              pcc_rule: [],
+              pcc_rule: pccRules.map((item) => ({
+                qos: {
+                  index: +item.index,
+                  arp: {
+                    priority_level: +item.priority_level,
+                    pre_emption_capability: +item.pre_emption_capability,
+                    pre_emption_vulnerability: +item.pre_emption_vulnerability
+                  },
+                  gbr: {
+                    downlink: { value: +item.gbrDownlink, unit: +item.gbrDownUnit },
+                    uplink: { value: +item.gbrUplink, unit: +item.gbrUpUnit }
+                  },
+                  mbr: {
+                    downlink: { value: +item.mbrDownlink, unit: +item.mbrDownUnit },
+                    uplink: { value: +item.mbrUplink, unit: +item.mbrUpUnit }
+                  }
+                }
+              })),
             },
           ],
         },
@@ -684,10 +742,14 @@ const IMSIInput: React.FC<imsiInputProps> = ({
                             smfIpv6={smfIpv6}
                             setSmfIpv6={setSmfIpv6}
                           />
-                          <Pcc
-                            inputs={inputs}
-                            onInputChange={handleInputChange}
+                          {pccRules.map((pccState, index) => (
+                            <PccRules
+                            id={index}
+                            pccState={pccState}
+                            updateState={(newState) => updateChildState(index, newState)}
+                            handleOnDelete={() => handleOnDeletePcc(index)}
                           />
+                          ))}
                           <p className="text-center ml-[300px] mt-6">
                             <Button className="bg-sky-500 text-white font-semibold w-28">
                               +

@@ -184,7 +184,7 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
               smf:
                 {
                   addr: subscriberData.smfIpv4 || undefined,
-                  addr6: subscriberData.smfIpv6 || undefined,
+                  addr6: subscriberData.smfIpv6 || undefined
                 } || undefined,
               pcc_rule: pccRules.map((item) => ({
                 qos: {
@@ -192,36 +192,18 @@ const AddSubscriber: React.FC<addSubscriberProps> = ({ onNewSub }) => {
                   arp: {
                     priority_level: +item.priority_level,
                     pre_emption_capability: +item.pre_emption_capability,
-                    pre_emption_vulnerability: +item.pre_emption_vulnerability,
+                    pre_emption_vulnerability: +item.pre_emption_vulnerability
                   },
                   gbr: {
                     downlink: { value: +item.gbrDownlink, unit: +item.gbrDownUnit },
-                    uplink: { value: +item.gbrUplink, unit: +item.gbrUpUnit },
+                    uplink: { value: +item.gbrUplink, unit: +item.gbrUpUnit }
                   },
                   mbr: {
                     downlink: { value: +item.mbrDownlink, unit: +item.mbrDownUnit },
-                    uplink: { value: +item.mbrUplink, unit: +item.mbrUpUnit },
-                  },
-                },
+                    uplink: { value: +item.mbrUplink, unit: +item.mbrUpUnit }
+                  }
+                }
               })),
-              //  {
-              //   qos: {
-              //     index: 1,
-              //     arp: {
-              //       priority_level: 1,
-              //       pre_emption_capability: 1,
-              //       pre_emption_vulnerability: 1,
-              //     },
-              //     gbr: {
-              //       downlink: { value: 1, unit: 1 },
-              //       uplink: { value: 1, unit: 1 },
-              //     },
-              //     mbr: {
-              //       downlink: { value: 1, unit: 1 },
-              //       uplink: { value: 1, unit: 1 },
-              //     },
-              //   },
-              // },
             },
           ],
         },
